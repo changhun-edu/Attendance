@@ -1143,23 +1143,27 @@ details.ex-block[open] .ex-plus{transform:rotate(45deg)}
 .tin-s:hover{background:var(--accent-soft);color:var(--accent)}
 .tin-chips{display:flex;flex-wrap:wrap;gap:6px;padding:6px 0 2px}
 /* 퇴근 시각 트랙: 결과 막대의 축소판을 입력 도구로 */
-.tr{display:grid;gap:4px;padding-top:32px}
+.tr{display:grid;gap:4px;padding-top:8px;align-content:start}
+#v-calc .field-row>.field{grid-template-rows:auto auto 1fr}
+#v-calc .field-row .tin-chips:not(.tr){display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(38px,1fr);gap:6px;align-self:stretch;padding:6px 0 0}
+#v-calc .field-row .tin-chips:not(.tr) button{height:100%;white-space:normal;line-height:1.25;padding:4px 8px}
 .tr-bar{position:relative;height:32px;border-radius:8px;background:var(--sunken);overflow:visible}
 .tr-fill{position:absolute;left:0;top:0;bottom:0;border-radius:8px 0 0 8px;background:var(--ok);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-family:var(--f-num);font-size:13px;font-weight:700;color:var(--surface);white-space:nowrap;overflow:hidden;transition:width .12s}
 .tr-fill.zero{background:var(--muted-bar);color:var(--ink-3)}
 .tr-ded{position:absolute;top:5px;bottom:5px;left:0;border-radius:5px;border:1.5px dashed color-mix(in srgb,var(--surface) 70%,transparent);display:grid;place-items:center;font-family:var(--f-num);font-size:11px;font-weight:700;color:var(--surface);pointer-events:none}
 .tr-fill.zero+.tr-ded,.tr-ded.off{border-color:var(--hatch);color:var(--ink-3)}
 .tr-thumb{position:absolute;top:50%;width:4px;height:40px;margin:-20px 0 0 -2px;border-radius:2px;background:var(--ink);pointer-events:none;transition:left .12s}
-.tr-thumb b{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-family:var(--f-num);font-size:13px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap}
-.tr-thumb b::after{content:"";position:absolute;top:100%;left:50%;margin-left:-4px;border:4px solid transparent;border-top-color:var(--ink)}
-.tr-thumb.edge b{transform:translateX(-85%)}
+.tr-thumb b{display:none}
+.tr-fill em{font-style:normal;font-weight:500;opacity:.85;margin-right:6px}
+.tr-fill.short{justify-content:flex-start;padding-left:8px;overflow:visible}
+.tr-fill.short span{position:absolute;left:calc(100% + 10px);color:var(--ink-2);white-space:nowrap;font-weight:600}
 .tr.empty .tr-thumb,.tr.empty .tr-fill{display:none}
 .tr-in{position:absolute;inset:-8px 0;width:100%;height:calc(100% + 16px);margin:0;opacity:0;cursor:pointer;-webkit-appearance:none;appearance:none;background:none}
 .tr-in::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:44px}
 .tr-in::-moz-range-thumb{width:44px;height:44px;border:0;opacity:0}
 .tr-bar:focus-within{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
 .tr-ticks{position:relative;height:18px}
-.tr-ticks span{position:absolute;transform:translateX(-50%);font-family:var(--f-num);font-size:12.5px;color:var(--ink-3)}
+.tr-ticks span{position:absolute;transform:translateX(-50%);white-space:nowrap;font-family:var(--f-num);font-size:12.5px;color:var(--ink-3)}
 .tr-ticks span:first-child{transform:none}
 .tr-ticks span:last-child{transform:translateX(-100%)}
 .tr-hint{font-size:13px;color:var(--ink-2)}
@@ -2375,9 +2379,10 @@ function syncTimes(){ TIN.forEach(o=>{ if(document.activeElement!==o.t) o.t.valu
       const ded=C.querySelector('.tr-ded'); ded.hidden=holiday; ded.style.width=pct(lo+60)+'%' }
     const hint=C.querySelector('.tr-hint');
     if(has){ const rec=recogAt(cur), f=C.querySelector('.tr-fill'), th=C.querySelector('.tr-thumb');
-      f.style.width=pct(cur)+'%'; f.classList.toggle('zero',!rec); f.textContent=rec?hm(rec)+' 인정':(cur-lo>0?'1시간 미만':'');
+      f.style.width=pct(cur)+'%'; f.classList.toggle('zero',!rec); const txt=rec?hm(rec)+' 인정':(cur-lo>0?'1시간 미만':'');
+      const short=pct(cur)<34; f.classList.toggle('short',short); f.innerHTML=short?`<span><em>${clock(cur)}</em>${txt}</span>`:`<em>${clock(cur)}</em>${txt}`;
       th.style.left=pct(cur)+'%'; th.classList.toggle('edge',pct(cur)>88); th.querySelector('b').textContent=clock(cur);
-      hint.textContent=holiday?'막대를 끌거나 눌러 근무 종료 시각을 고르세요. 휴일은 공제가 없습니다.':'막대를 끌거나 눌러 퇴근 시각을 고르세요. 앞의 점선 한 칸이 평일 1시간 공제입니다.' }
+      hint.textContent=holiday?'끌거나 눌러 고르세요 · 휴일은 공제 없음':'끌거나 눌러 고르세요 · 점선 한 칸은 1시간 공제' }
     else hint.textContent=holiday?'막대를 눌러 근무 종료 시각을 고르세요':'막대를 눌러 퇴근 시각을 고르세요 · 자정까지';
     const d=new Date(), nv=hhmm(d.getHours()*60+d.getMinutes()), nl=$('#now-lnk'); if(nl){ nl.textContent=`지금 ${nv} ›`; nl.dataset.v=nv }
     return }
