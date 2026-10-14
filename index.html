@@ -1380,7 +1380,7 @@ footer.foot .disc b{color:var(--ink)}
 
 <!-- CALC -->
 <section class="view" id="v-calc" hidden>
-  <div class="subtabs" aria-label="초과근무"><button data-go="calc">계산기</button><button data-go="neis">나이스 신청 절차</button><button data-go="jeong">정액분 15일</button></div>
+  <div class="subtabs" aria-label="초과근무"><button data-go="neis">나이스 신청 절차</button><button data-go="calc">계산기</button><button data-go="jeong">정액분 15일</button></div>
   <div class="ph">
     <div class="eyebrow">초과근무 계산기</div>
     <h1 id="calc-h">오늘 몇 시간 인정될까요?</h1>
@@ -1437,7 +1437,7 @@ footer.foot .disc b{color:var(--ink)}
 
     <details class="ex-block" id="ex-fold">
       <summary class="ex-head">
-        <b><span class="ex-plus" aria-hidden="true">＋</span>개인 용무로 자리 비운 시간</b>
+        <b><span class="ex-plus" aria-hidden="true">＋</span>초과근무 제외(개인용무) 시간</b>
         <span class="ex-sum"><span class="num" id="ex-total">없음</span><button class="link-btn" id="ex-clear" hidden>지우기</button></span>
       </summary>
       <div class="pick" id="ex-chips">
@@ -1450,7 +1450,7 @@ footer.foot .disc b{color:var(--ink)}
         <div class="ex-list" id="ex-list"></div>
         <button class="btn sm ghost" id="ex-add">+ 시각 추가</button>
       </details>
-      <p class="hint" id="ex-hint">외출·은행·사적 용무처럼 일하지 않은 시간만 넣으세요. 저녁 식사·휴식은 평일 1시간 공제에 포함되어 따로 빼지 않습니다.</p>
+      <p class="hint" id="ex-hint">나이스의 「초과근무 제외(개인용무) 시간」에 넣을 시간입니다. 외출·은행·사적 용무처럼 일하지 않은 시간만 넣으세요. 저녁 식사·휴식은 평일 1시간 공제에 포함되어 따로 빼지 않습니다.</p>
     </details>
 
     <button class="link-btn mode-link" id="m-toggle" type="button">몇 시까지 있어야 할지 거꾸로 계산하기 ›</button>
@@ -1557,7 +1557,7 @@ footer.foot .disc b{color:var(--ink)}
 
 <!-- JEONG: 정액분 15일 채우기 -->
 <section class="view" id="v-jeong" hidden>
-  <div class="subtabs" aria-label="초과근무"><button data-go="calc">계산기</button><button data-go="neis">나이스 신청 절차</button><button data-go="jeong">정액분 15일</button></div>
+  <div class="subtabs" aria-label="초과근무"><button data-go="neis">나이스 신청 절차</button><button data-go="calc">계산기</button><button data-go="jeong">정액분 15일</button></div>
   <div class="ph">
     <div class="eyebrow">시간외근무수당 정액분</div>
     <h1>이번 달 15일, 채워지나요?</h1>
@@ -1957,7 +1957,7 @@ footer.foot .disc b{color:var(--ink)}
 
 <!-- NEIS -->
 <section class="view" id="v-neis" hidden>
-  <div class="subtabs" aria-label="초과근무"><button data-go="calc">계산기</button><button data-go="neis">나이스 신청 절차</button><button data-go="jeong">정액분 15일</button></div>
+  <div class="subtabs" aria-label="초과근무"><button data-go="neis">나이스 신청 절차</button><button data-go="calc">계산기</button><button data-go="jeong">정액분 15일</button></div>
   <div class="ph">
     <div class="eyebrow">초과근무 · 나이스 신청 절차</div>
     <h1>근무 전 신청, 다음 날 확인</h1>
@@ -2027,13 +2027,15 @@ footer.foot .disc b{color:var(--ink)}
       <span class="no">4</span>
       <div class="step-body">
         <span class="step-when">다음 날</span>
-        <h3>실적 확인과 제외시간 입력</h3>
+        <h3>실적 확인과 제외(개인용무) 시간 입력</h3>
         <details class="more"><summary>자세히 보기</summary><ul>
           <li>초과근무 실적 화면에서 해당 날짜를 누릅니다.</li>
           <li>신청 시각과 실제 인식 시각을 비교합니다.</li>
-          <li>근무 중 외출·사적 용무로 자리를 비운 시간이 있으면 <b>제외시간</b>으로 입력하고 저장합니다.</li>
+          <li>근무 중 외출·사적 용무로 자리를 비운 시간이 있으면 <b>「초과근무 제외(개인용무) 시간」</b> 창을 엽니다. 창에는 <b>일과전·일과후 초과근무 신청시간</b>이 보이고, 그 옆 <b>용무시간</b> 칸에 자리를 비운 시각(예: 11:00~11:30)을 넣습니다.</li>
+          <li>입력한 용무시간은 <b>적용</b> 체크박스에 체크한 뒤 저장해야 반영됩니다. 적용된 용무시간을 지우려면 적용 체크를 해제하고 저장합니다.</li>
           <li>저녁 식사·휴식은 평일 1시간 공제에 포함되므로 따로 빼지 않습니다. 학교 지침이 다르면 그에 따릅니다.</li>
-        </ul></details>
+        </ul>
+<div class="miss"><b>자주 하는 실수</b><span>용무시간만 적고 적용에 체크하지 않은 채 저장하기. 체크가 없으면 저장되지 않습니다.</span></div></details>
         <div class="miss danger"><b>주의</b><span>외출한 시간을 그대로 두면 부정 수령이 됩니다. 부정 수령액이 50만 원 이상이면 1회만으로도 징계 요구 대상입니다.</span></div>
         <div><button class="btn sm" data-go="calc">계산기로 미리 확인하기 →</button></div>
       </div>
@@ -2454,8 +2456,8 @@ function setType(h){
   $('#l-start').textContent=h?'근무 시작':'실제 출근';
   $('#l-end').textContent=h?'근무 종료':'실제 퇴근';
   $('#ex-hint').textContent=h
-    ? '외출·사적 용무처럼 일하지 않은 시간을 넣으세요. 휴일 근무 중 식사 시간 처리는 학교·교육청 지침을 따릅니다. 임신 중이거나 출산 후 1년 이내라면 본인이 신청·동의한 경우에만 휴일 근무를 할 수 있습니다.'
-    : '외출·은행·사적 용무처럼 일하지 않은 시간만 넣으세요. 저녁 식사·휴식은 평일 1시간 공제에 포함되어 따로 빼지 않습니다.';
+    ? '나이스의 「초과근무 제외(개인용무) 시간」에 넣을 시간입니다. 외출·사적 용무처럼 일하지 않은 시간을 넣으세요. 휴일 근무 중 식사 시간 처리는 학교·교육청 지침을 따릅니다. 임신 중이거나 출산 후 1년 이내라면 본인이 신청·동의한 경우에만 휴일 근무를 할 수 있습니다.'
+    : '나이스의 「초과근무 제외(개인용무) 시간」에 넣을 시간입니다. 외출·은행·사적 용무처럼 일하지 않은 시간만 넣으세요. 저녁 식사·휴식은 평일 1시간 공제에 포함되어 따로 빼지 않습니다.';
   calc();
 }
 function setMode(m){
@@ -2544,7 +2546,7 @@ function calc(){
 
     rows.push(['조기 출근', early? (earlyOK? '+'+kor(early) : kor(early)+' (1시간 미만, 불인정)') : '없음']);
     rows.push(['퇴근 후 근무', late? '+'+kor(late):'없음']);
-    if(exMin) rows.push(['개인 용무 제외','−'+kor(exMin),'minus']);
+    if(exMin) rows.push(['초과근무 제외(개인용무) 시간','−'+kor(exMin),'minus']);
     rows.push(['실제 시간외근무', kor(Math.max(0,work))]);
     if(ded){ rows.push(['평일 1시간 공제 (식사·휴게)','−1시간','minus']); result=work-60 }
     rows.push(['인정 시간', kor(result),'total']);
@@ -2569,7 +2571,7 @@ function calc(){
     exR.forEach(([s,e])=>{const o1=Math.max(s,as),o2=Math.min(e,ae); if(o2>o1) segs.push({c:'ex',s:o1,e:o2})});
     P.blocks.forEach(([s,e])=>segs.push({c:'ex',s,e}));
     rows.push(['근무 시간', kor(ae-as)]);
-    if(exMin) rows.push(['개인 용무 제외','−'+kor(exMin),'minus']);
+    if(exMin) rows.push(['초과근무 제외(개인용무) 시간','−'+kor(exMin),'minus']);
     rows.push(['공제','없음 (휴일)']);
     if(work>=60) result=work;
     rows.push(['인정 시간',kor(result),'total']);
@@ -2578,7 +2580,7 @@ function calc(){
     if(result>240) oldMsg=`개정 전에는 휴일도 하루 4시간까지만 인정됐습니다. 10월 1일부터 상한이 없어졌지만, 휴일 근무 적용 방식은 교육청 시행 공문을 함께 확인하세요.`;
     legend=work>=60?[['ok','휴일 근무 (공제 없음)']]:[['nocount','불인정']];
   }
-  if(segs.some(x=>x.c==='ex')) legend.push(['ex','개인 용무']);
+  if(segs.some(x=>x.c==='ex')) legend.push(['ex','초과근무 제외(개인용무) 시간']);
 
   const all=segs.flatMap(x=>[x.s,x.e]).concat([as,ae]); if(!holiday) all.push(rs,re);
   const lo=Math.floor((Math.min(...all)-30)/60)*60, hi=Math.ceil((Math.max(...all)+30)/60)*60;
@@ -2594,7 +2596,7 @@ function calc(){
     sub=`목표 ${kor(target)} 인정`; state='ok';
   }
   paint(result,state,msg,segs,rows,legend,lo,hi,oldMsg,ded,sub,big);
-  if(typeof renderNeis==='function') renderNeis(nR,nE,result,holiday,until);
+  if(typeof renderNeis==='function') renderNeis(nR,nE,result,holiday,until,segs.filter(x=>x.c==='ex').map(x=>[x.s,x.e]),rs,durAll>0);
 }
 
 let shown=null;
@@ -2658,6 +2660,7 @@ const QA=[
   {c:'초과근무',q:'방과후학교 강사료를 받는 시간에 초과근무수당도',m:'x',a:'<strong>함께 받을 수 없습니다.</strong> 같은 시간에 다른 방법으로 금전 보상을 받으면 시간외근무수당 지급 대상에서 제외됩니다. 그 시간을 뺀 나머지 근무 시간만 따집니다.',s:'인사실무 72쪽'},
   {c:'초과근무',q:'학년말 행사 준비로 2주 동안 매일 남아야 함',m:'o',a:'<strong>일괄 명령을 받을 수 있습니다.</strong> 행사 주관 등으로 일정 기간 계속 초과근무를 하게 되면, 기간·부서·담당자를 정해 한꺼번에 명령할 수 있습니다. 날마다 실적 확인은 그대로 합니다.',s:'인사실무 72쪽'},
   {c:'초과근무',q:'수능일 출근시각이 10시로 늦춰졌는데 8시 30분에 출근',m:'x',a:'<strong>인정되지 않습니다.</strong> 출근시각만 늦춰 준 것이고 기본 근무시간은 그대로이므로 일찍 나온 시간은 시간외근무가 아닙니다.',s:'인사실무 73쪽 사례 1'},
+  {c:'초과근무',q:'나이스에 용무시간을 적었는데 적용에 체크하지 않고 저장',m:'x',a:'<strong>반영되지 않습니다.</strong> 「초과근무 제외(개인용무) 시간」 창에서 용무시간을 넣은 뒤 적용 체크박스에 체크하고 저장해야 제외됩니다. 반대로 이미 적용된 용무시간을 지우려면 적용 체크를 해제하고 저장합니다. 외출한 시간이 그대로 남으면 부정 수령이 됩니다.',s:'나이스 개인초과근무 제외(개인용무) 시간 화면, 인사실무'},
   {c:'초과근무',q:'조퇴를 10분만 했는데 정액분 출근일로 인정되나요',m:'x',a:'<strong>그날은 출근일에서 빠집니다.</strong> 정액분(월 10시간분)의 출근일은 하루 8시간을 채워 근무한 날만 셉니다. 조퇴 시간이 아무리 짧아도 8시간을 못 채우면 제외됩니다. 외출은 돌아와서 명령을 받고 나머지를 채워 8시간 근무하면 출근일입니다.',s:'인사실무 71쪽, 공무원수당 등에 관한 규정 제15조, 공무원보수 등의 업무지침'},
   {c:'초과근무',q:'오전 반일연가를 쓴 날, 정액분 출근일에 들어가나요',m:'t',a:'<strong>나머지를 채워 8시간 근무하면 들어갑니다.</strong> 반일연가 시간을 뺀 정규 근무에 명령받은 초과근무를 더해 1일 8시간을 채우면 출근일로 셉니다. 못 채우면 그날은 제외됩니다.',s:'인사실무 71쪽, 공무원보수 등의 업무지침'},
   {c:'초과근무',q:'한 달에 16일 출근하면 정액분을 더 받나요',m:'x',a:'<strong>15일 이상이면 금액이 같습니다.</strong> 정액분은 월 출근일 15일 이상이면 전액, 14일 이하면 하루마다 1/15씩 줄어듭니다. 15일을 넘겨도 추가 지급은 없습니다.',s:'공무원수당 등에 관한 규정 제15조·별표 12, 공무원보수 등의 업무지침'},
@@ -3067,7 +3070,7 @@ const IDX=[
   {t:'출장 여비',k:'안내',s:'여비 1만원 2만원 운임 식비 숙박비 일비 준비금',run:()=>go('trip','tripcare')},
   {t:'초과근무 계산기',k:'도구',s:'초과근무 야근 계산 인정 시간 몇시까지 퇴근 공제 57시간 개인용무 제외 휴일',run:()=>go('calc')},
   {t:'정액분 15일 채우기',k:'도구',s:'정액분 10시간 15일 출근일 감액 조퇴 몇번 무료 조퇴 여유 시간외근무수당 수당 호봉 기준호봉 평일 수 방학 1월 2월 8월 127950 142130 152580 163000',run:()=>go('jeong')},
-  {t:'나이스 초과근무 신청 절차',k:'안내',s:'나이스 초과근무 신청 결재 실적 제외시간 사전 명령 지문 인식 월말',run:()=>go('neis')},
+  {t:'나이스 초과근무 신청 절차',k:'안내',s:'나이스 초과근무 신청 결재 실적 제외시간 제외(개인용무) 시간 용무시간 일과전 일과후 적용 체크 사전 명령 지문 인식 월말',run:()=>go('neis')},
   {t:'사후결재 (신청 못 하고 일했을 때)',k:'안내',s:'사후결재 사후승인 사전명령 못받음 다음날 초과근무',run:()=>go('neis','late')},
   {t:'복무 신청 전 체크',k:'안내',s:S.rules.map(r=>r.b+r.t).join('')+'증빙 서면 보존 결재 효력 보결',run:()=>go('line','rules')},
   ...(S.links&&S.links.gyeomjik?[{t:'외부강의·겸직 도우미',k:'외부',s:'외부강의 겸직 영리 영리업무 사교육 학원 강의 사례금 신고 허가 유튜브 개인미디어 다단계 임대업',href:S.links.gyeomjik}]:[]),
@@ -3162,13 +3165,21 @@ function copyText(t,btn){
 const WORK_EX=['학년말 성적 처리 및 학교생활기록부 점검','학교 행사 준비(물품 정리·안전 점검)','교육과정 운영 계획 수립','공문 처리 및 업무 보고서 작성','학부모 상담 및 상담 기록 정리','학교폭력 사안 처리 및 관련 서류 작성'];
 $('#neis-ex').innerHTML=WORK_EX.map(t=>`<button data-copy="${esc(t)}">${esc(t)}</button>`).join('');
 let neisText='';
-function renderNeis(ranges,ex,result,isHoliday,until){
+function renderNeis(ranges,ex,result,isHoliday,until,exSegs,regStart,approx){
   const card=$('#neis-card');
   if(!ranges.length){ card.hidden=true; return } card.hidden=false;
-  const rs=ranges.map(([a,b])=>`${clock(a)}~${clock(b)}`).join(', ');
-  const rows=[[isHoliday?'휴일 근무 시각':'신청 시각',rs],['다음 날 제외시간',ex?kor(ex):'없음']];
-  $('#neis-dl').innerHTML=rows.map(([k,v])=>`<dt>${k}</dt><dd class="num">${v}</dd>`).join('');
-  neisText=`초과근무 ${isHoliday?'(휴일) ':''}${rs} / 제외시간 ${ex?kor(ex):'없음'} / ${until?'목표':'예상'} 인정 ${kor(result)}`;
+  exSegs=exSegs||[];
+  const span=([a,b])=>`${clock(a)}~${clock(b)}`;
+  const rows=[], parts=[];
+  const add=(label,win)=>{ const exs=exSegs.filter(([s,e])=>s<win[1]&&e>win[0]).map(([s,e])=>[Math.max(s,win[0]),Math.min(e,win[1])]);
+    rows.push([`${label} 초과근무 신청시간`,span(win)]);
+    rows.push([`${label} 용무시간`,exs.length?exs.map(span).join(', ')+' <span class="chip ok">적용 ✓</span>':'없음 (적용 해제)']);
+    parts.push(`${label} ${span(win)}`+(exs.length?` / 용무시간 ${exs.map(span).join(', ')} 적용`:'')) };
+  if(isHoliday) add('휴일',ranges[0]);
+  else ranges.forEach(w=>add(w[1]<=regStart?'일과전':'일과후',w));
+  $('#neis-dl').innerHTML=rows.map(([k,v])=>`<dt>${k}</dt><dd class="num">${v}</dd>`).join('')+
+    `<dt>다음 날</dt><dd>실적 확인 › 「초과근무 제외(개인용무) 시간」에 용무시간을 넣고 <b>적용</b>에 체크한 뒤 저장${approx?'. 길이로만 넣은 용무시간은 실제 자리를 비운 시각으로 바꿔 넣으세요':''}</dd>`;
+  neisText=`초과근무 ${parts.join(' / ')} / ${until?'목표':'예상'} 인정 ${kor(result)}`;
 }
 $('#neis-copy').addEventListener('click',e=>copyText(neisText,e.currentTarget));
 document.addEventListener('click',e=>{ const b=e.target.closest('[data-copy]'); if(b) copyText(b.dataset.copy,b) });
@@ -3226,7 +3237,7 @@ document.addEventListener('click',e=>{ const b=e.target.closest('[data-share]');
 /* 유의어 */
 function nrm(t){ return String(t).replace(/\s+/g,'').toLowerCase() }
 function qVariants(q){
-  const SYN={'야근':['초과근무'],'시간외':['초과근무'],'초근':['초과근무'],'반차':['반일연가'],'관외':['관외출장','근무지외'],'근무지외':['관외출장'],'관내':['근무지내'],'시내':['근무지내'],'출장비':['여비'],'연수':['41조','출장(연수)'],'유연':['유연근무'],'시차':['유연근무'],'늦게':['지각'],'일찍':['조퇴'],'사후':['사후결재'],'과외':['과외교습'],'겸직':['겸직'],'결재':['결재라인'],'정액':['정액분'],'무료조퇴':['정액분'],'수당':['정액분','초과근무'],'15일':['정액분'],'공문':['출장'],'허가':['출장','승인']};
+  const SYN={'야근':['초과근무'],'시간외':['초과근무'],'초근':['초과근무'],'반차':['반일연가'],'관외':['관외출장','근무지외'],'근무지외':['관외출장'],'관내':['근무지내'],'시내':['근무지내'],'출장비':['여비'],'연수':['41조','출장(연수)'],'유연':['유연근무'],'시차':['유연근무'],'늦게':['지각'],'일찍':['조퇴'],'사후':['사후결재'],'과외':['과외교습'],'겸직':['겸직'],'결재':['결재라인'],'정액':['정액분'],'무료조퇴':['정액분'],'수당':['정액분','초과근무'],'15일':['정액분'],'공문':['출장'],'허가':['출장','승인'],'용무':['개인용무','제외'],'제외':['개인용무']};
   const n=nrm(q), out=[n];
   Object.entries(SYN).forEach(([k,vs])=>{ if(n.includes(nrm(k))) vs.forEach(v=>out.push(nrm(v))) });
   return [...new Set(out)];
