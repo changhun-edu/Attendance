@@ -1,4 +1,5 @@
 <title>복무 한눈에</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2028%2028%22%3E%3Crect%20width%3D%2228%22%20height%3D%2228%22%20rx%3D%227%22%20fill%3D%22%231E4E79%22/%3E%3Cg%20fill%3D%22%23fff%22%20fill-opacity%3D%22.85%22%3E%3Crect%20x%3D%224%22%20y%3D%2210%22%20width%3D%225%22%20height%3D%228%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%2210%22%20y%3D%2210%22%20width%3D%225%22%20height%3D%228%22%20rx%3D%221.5%22/%3E%3Crect%20x%3D%2216%22%20y%3D%2210%22%20width%3D%223.5%22%20height%3D%228%22%20rx%3D%221.5%22/%3E%3C/g%3E%3Crect%20x%3D%2220.5%22%20y%3D%2210%22%20width%3D%223.5%22%20height%3D%228%22%20rx%3D%221.5%22%20fill%3D%22%235CC796%22/%3E%3Cpath%20d%3D%22M4%2021.5h20%22%20stroke%3D%22%23fff%22%20stroke-opacity%3D%22.45%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -37,7 +38,7 @@
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{word-break:keep-all;overflow-wrap:anywhere;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.65;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+body{margin:0;word-break:keep-all;overflow-wrap:anywhere;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.65;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
 .wrap{max-width:720px;margin:0 auto;padding-inline:16px}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -47,14 +48,30 @@ p{margin:0}
 .num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
 
 /* header */
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);transition:box-shadow .2s}
+body.scrolled header.top{box-shadow:0 6px 18px -10px rgb(15 30 50 / .28)}
 header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:56px}
 .logo{display:flex;align-items:center;gap:9px;background:none;border:0;padding:0;font-family:var(--f-display);font-weight:800;font-size:19px;letter-spacing:-.03em}
-.logo-mark{width:26px;height:26px;border-radius:7px;background:var(--accent);display:grid;place-items:center}
-.logo-mark svg{width:16px;height:16px;stroke:var(--surface)}
+.logo-mark{width:28px;height:28px;display:block;flex:0 0 auto}
+.logo-mark svg{width:28px;height:28px;display:block}
+.lm-bg{fill:var(--accent)}
+.lm-reg{fill:var(--surface);fill-opacity:.85}
+.lm-ot{fill:#5CC796}
+.lm-tick{stroke:var(--surface);stroke-opacity:.45;stroke-width:1.4;stroke-linecap:round}
+.logo:hover .lm-ot{fill:#7BE0B0}
+.lw{display:inline-flex;align-items:baseline;gap:5px;color:var(--ink);white-space:nowrap}
+.lw b{font-weight:800}
+.lw-h{color:var(--accent);font-weight:800;background:linear-gradient(transparent 64%,var(--rev-mark) 64%,var(--rev-mark) 90%,transparent 90%);padding:0 1px}
+.tagline{display:none;font-family:var(--f-body);font-size:13px;font-weight:500;letter-spacing:-.01em;color:var(--ink-3);border-left:1px solid var(--line);padding-left:10px;margin-left:2px;white-space:nowrap}
+@media (min-width:641px){ .tagline{display:inline} }
 .topnav{display:flex;gap:4px}
-.topnav button{border:0;background:none;padding:6px 10px;border-radius:8px;font-size:14px;color:var(--ink-2);font-weight:500}
-.topnav button[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.topnav{align-self:stretch}
+.topnav button{position:relative;border:0;background:none;padding:0 12px;height:100%;border-radius:0;font-size:14.5px;color:var(--ink-2);font-weight:500}
+.topnav button:hover{color:var(--ink)}
+.topnav button::after{content:"";position:absolute;left:10px;right:10px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:var(--accent);transform:scaleX(0);transition:transform .2s}
+.topnav button[aria-current="page"]{color:var(--accent);font-weight:700}
+.topnav button[aria-current="page"]::after{transform:scaleX(1)}
+.hdr-r{align-self:stretch}
 
 main{padding-block:24px 110px}
 .view{display:grid;gap:28px}
@@ -697,7 +714,8 @@ details.more[open]{display:grid;gap:10px}
 
 /* 사용성 */
 [id^="sec-"],.ln,.q,.result,.tres,.wq,.kd,details.fold{scroll-margin-top:72px}
-.hdr-r{display:flex;align-items:center;gap:4px}
+.hdr-r{display:flex;align-items:stretch;gap:4px}
+.hdr-r>*:not(.topnav){align-self:center}
 .hdr-search{width:44px;height:44px;border:0;background:none;border-radius:10px;display:grid;place-items:center;color:var(--ink-2)}
 .hdr-search:hover{background:var(--sunken);color:var(--ink)}
 .resume{display:flex;align-items:center;gap:8px;justify-self:start;max-width:100%;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;color:var(--ink-2)}
@@ -722,11 +740,14 @@ details.how>summary,details.more>summary{min-height:44px}
 #case-all[aria-pressed="true"]{color:var(--accent)}
 
 /* bottom tab */
-nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);display:none}
+nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 18px -12px rgb(15 30 50 / .25);padding-bottom:env(safe-area-inset-bottom,0px);display:none}
 nav.tabbar .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
 nav.tabbar button{border:0;background:none;height:58px;display:grid;place-items:center;gap:1px;font-size:12.5px;color:var(--ink-3);padding-top:6px}
 nav.tabbar svg{width:21px;height:21px;stroke:currentColor}
-nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
+nav.tabbar button{position:relative}
+nav.tabbar button::before{content:"";position:absolute;top:0;left:50%;width:28px;height:3px;margin-left:-14px;border-radius:0 0 3px 3px;background:var(--accent);transform:scaleX(0);transition:transform .2s}
+nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:700}
+nav.tabbar button[aria-current="page"]::before{transform:scaleX(1)}
 
 @media (min-width:641px){
   #v-calc .ph-top{order:-4}
@@ -1146,13 +1167,57 @@ details.ex-block[open] .ex-plus{transform:rotate(45deg)}
 .chk-sum{margin:0;font-size:14px;color:var(--ink-2);padding:10px 12px;border-radius:10px;background:var(--bg)}
 .chk-sum.ok{background:var(--ok-soft);color:var(--ok)}.chk-sum.bad{background:var(--warn-soft);color:var(--warn)}
 @media (max-width:480px){ .chk-q{grid-template-columns:24px 1fr;row-gap:8px} .chk-yn{grid-column:2;justify-self:start} .chk-msg{padding-left:12px} }
+
+/* ---- 홈 아래쪽 · 바닥글 v45 ---- */
+.htools{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.htool{display:grid;gap:10px;align-content:start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;color:var(--ink);transition:border-color .15s,transform .1s}
+.htool:hover{border-color:var(--gc)}
+.htool:active{transform:scale(.98)}
+.htool .ti{width:40px;height:40px;border-radius:11px}
+.htool .ti svg{width:22px;height:22px}
+.ht-t{display:grid;gap:2px}
+.ht-t b{font-size:15px;font-weight:650;letter-spacing:-.01em}
+.ht-t small{font-size:12.5px;color:var(--ink-2)}
+@media (max-width:640px){ .htools{grid-template-columns:1fr 1fr} }
+.hlinks{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:-14px;padding:4px 2px}
+.hlinks button{display:inline-flex;align-items:center;gap:7px;border:0;background:none;padding:6px 0;font-size:14.5px;font-weight:600;color:var(--ink);min-height:40px}
+.hlinks button:hover span:not(.hl-k){text-decoration:underline;text-underline-offset:3px}
+.hl-k{font-size:12px;font-weight:700;color:var(--ink-3)}
+.hlinks i{font-style:normal;color:var(--ink-3)}
+.ext{grid-template-columns:repeat(3,1fr)!important}
+.ext-card{display:grid!important;grid-template-columns:36px 1fr;grid-template-rows:auto auto;gap:4px 12px!important;align-items:center;background:transparent!important;border:1.5px dashed var(--hatch)!important}
+.ext-card:hover{border-style:solid!important;border-color:var(--accent)!important;background:var(--surface)!important}
+.ex-i{grid-row:1/3;width:36px;height:36px;border-radius:50%;background:var(--sunken);color:var(--ink-2);display:grid;place-items:center;font-weight:800;font-size:14px}
+.ex-t{display:grid;gap:2px;min-width:0}
+.ex-n{grid-column:2;font-size:11.5px;font-weight:600;color:var(--ink-3)}
+@media (max-width:640px){ .ext{grid-template-columns:1fr!important} }
+main{padding-bottom:0!important}
+footer.foot{position:relative;margin-top:44px;border-top:0;padding:28px 0 40px;display:grid;gap:12px;background:var(--surface);box-shadow:0 0 0 100vmax var(--surface);clip-path:inset(0 -100vmax);font-size:13.5px;color:var(--ink-2)}
+@media (max-width:640px){ footer.foot{padding-bottom:calc(58px + 40px + env(safe-area-inset-bottom,0px))} body.on-calc footer.foot{padding-bottom:180px} }
+footer.foot::before{content:"";position:absolute;top:0;left:-100vmax;right:-100vmax;height:1px;background:var(--line)}
+@media (max-width:640px){ .oss-btn{display:none!important} }
+.ext-card{padding:12px 13px!important}
+.ext-card .ex-t b{font-size:14.5px;white-space:nowrap;letter-spacing:-.02em}
+.ext-card .ex-t small{font-size:12.5px;line-height:1.45}
+@media (min-width:641px){ .ext-card{grid-template-columns:30px 1fr!important} .ex-i{width:30px;height:30px;font-size:13px} }
+.foot-brand{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.foot-brand .logo-mark,.foot-brand .logo-mark svg{width:22px;height:22px}
+.foot-brand b{font-size:15.5px;font-weight:800;color:var(--ink);letter-spacing:-.02em}
+.foot-brand>span:last-child{font-size:13px;color:var(--ink-3)}
+footer.foot .disc{display:flex!important;gap:8px;background:none!important;padding:0!important;border-radius:0;font-size:13.5px;line-height:1.65;color:var(--ink-2);margin:0}
+footer.foot .disc i{font-style:normal;color:var(--accent);font-weight:700}
+footer.foot .disc b{color:var(--ink)}
+.foot-meta{font-size:13px;color:var(--ink-3);border-top:1px solid var(--line);padding-top:12px}
+.foot-hub{font-weight:600;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;color:var(--ink-2)!important}
+.foot-meta .link-btn{text-decoration-thickness:1px;color:var(--ink-2)}
 </style>
 
 <header class="top">
   <div class="wrap">
     <button class="logo" id="logo" aria-label="복무 한눈에 홈">
-      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
-      복무 한눈에
+      <span class="logo-mark"><svg viewBox="0 0 28 28" aria-hidden="true"><rect class="lm-bg" x="0" y="0" width="28" height="28" rx="7"/><rect class="lm-reg" x="4" y="10" width="5" height="8" rx="1.5"/><rect class="lm-reg" x="10" y="10" width="5" height="8" rx="1.5"/><rect class="lm-reg" x="16" y="10" width="3.5" height="8" rx="1.5"/><rect class="lm-ot" x="20.5" y="10" width="3.5" height="8" rx="1.5"/><path class="lm-tick" d="M4 21.5h20"/></svg></span>
+      <span class="lw"><b>복무</b> <span class="lw-h">한눈에</span></span>
+      <span class="tagline">교육공무원 복무를 한눈에</span>
     </button>
     <div class="hdr-r">
     <nav class="topnav" aria-label="주요 메뉴">
@@ -1229,19 +1294,23 @@ details.ex-block[open] .ex-plus{transform:rotate(45deg)}
   <article class="tcase" id="tcase" aria-labelledby="tcase-h"></article>
 
   <div class="sec-h"><h2>둘러보기</h2><button class="link-btn" data-go="tools">도구 모두 보기</button></div>
-  <div class="tiles">
-    <button class="tile" data-go="calc"><span class="tile-k">초과근무</span><b>초과근무 계산기</b><small>인정 시간 · 몇 시까지</small></button>
-    <button class="tile" data-go="trip"><span class="tile-k">출장</span><b>출장 판정</b><small>구분 · 결재 · 여비</small></button>
-    <button class="tile" data-go="vac"><span class="tile-k">방학</span><b>41조 일정 블록</b><small>겹침 · 빈 시간 확인</small></button>
-    <button class="tile" data-go="cases"><span class="tile-k">사례</span><b>이럴 땐 인정될까요?</b><small id="tile-case-n">○/× 사례 모음</small></button>
-    <button class="tile" data-go="line" data-sec="rules"><span class="tile-k">체크</span><b>복무 신청 전 체크</b><small>허가·결재·증빙·연락 7가지</small></button>
-    <button class="tile" data-go="know"><span class="tile-k">알아 두기</span><b>교원의 임무와 의무</b><small>직무상·신분상 의무, 질의회신</small></button>
+  <div class="htools">
+    <button class="htool g-calc" data-go="calc"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="22" height="8" rx="2"/><path d="M17 10v8" /><rect x="17" y="10" width="8" height="8" rx="2" fill="currentColor" stroke="none" opacity=".35"/><path d="M7 22h4M7 6h8"/></svg></span><span class="ht-t"><b>초과근무 계산기</b><small>인정 시간 · 몇 시까지</small></span></button>
+    <button class="htool g-judge" data-go="trip"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 25V14M14 14 7 7M14 14l7-7"/><path d="M4 7h5V2M24 7h-5V2" opacity=".6"/></svg></span><span class="ht-t"><b>출장 판정</b><small>구분 · 결재 · 여비</small></span></button>
+    <button class="htool g-judge" data-go="work" data-sec="judge"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="15" r="10"/><path d="M14 9v6l4 3"/><path d="M11 2h6"/></svg></span><span class="ht-t"><b>지각·조퇴·외출</b><small>무엇으로 올릴까</small></span></button>
+    <button class="htool g-judge" data-go="vac"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="13" height="6" rx="2" fill="currentColor" fill-opacity=".25"/><rect x="12" y="16" width="13" height="6" rx="2"/></svg></span><span class="ht-t"><b>41조 일정 블록</b><small>겹침 · 빈 시간</small></span></button>
+  </div>
+  <div class="hlinks">
+    <button data-go="cases"><span class="hl-k">사례</span><span id="tile-case-n">○/× 사례 모음</span><i aria-hidden="true">›</i></button>
+    <button data-go="line" data-sec="rules"><span class="hl-k">체크</span><span>신청 전 7가지 확인</span><i aria-hidden="true">›</i></button>
+    <button data-go="know"><span class="hl-k">알아 두기</span><span>교원의 임무와 의무</span><i aria-hidden="true">›</i></button>
   </div>
 
   <div class="sec-h"><h2>함께 쓰면 좋은 사이트</h2></div>
   <div class="ext">
-    <a class="ext-card" href="https://leave-of-absence-nu.vercel.app/" target="_blank" rel="noopener"><span class="tile-k">휴가</span><b>휴가 규정 도우미 <span aria-hidden="true">↗</span></b><small>연가·병가·공가·특별휴가·육아시간</small></a>
-    <a class="ext-card" href="https://external-lecture.vercel.app/" target="_blank" rel="noopener"><span class="tile-k">외부강의·겸직</span><b>외부강의·겸직 도우미 <span aria-hidden="true">↗</span></b><small>외부강의 신고, 겸직 허가 판단</small></a>
+    <a class="ext-card" href="https://leave-of-absence-nu.vercel.app/" target="_blank" rel="noopener"><span class="ex-i" aria-hidden="true">휴</span><span class="ex-t"><b>휴가 규정 도우미</b><small>연가·병가·공가·특별휴가·육아시간</small></span><span class="ex-n">새 창에서 열림 ↗</span></a>
+    <a class="ext-card" href="https://external-lecture.vercel.app/" target="_blank" rel="noopener"><span class="ex-i" aria-hidden="true">겸</span><span class="ex-t"><b>외부강의·겸직 도우미</b><small>외부강의 신고, 겸직 허가 판단</small></span><span class="ex-n">새 창에서 열림 ↗</span></a>
+    <a class="ext-card" href="https://edu-hub-alpha-ten.vercel.app/" target="_blank" rel="noopener"><span class="ex-i" aria-hidden="true">연</span><span class="ex-t"><b>학교 연장통</b><small>학교 업무 도구 37개 모음</small></span><span class="ex-n">새 창에서 열림 ↗</span></a>
   </div>
 </section>
 
@@ -1885,10 +1954,9 @@ details.ex-block[open] .ex-plus{transform:rotate(45deg)}
 </section>
 
 <footer class="foot">
-  <div class="disc" role="note"><b>교육청 공식 사이트가 아닙니다.</b><span>교원 개인이 만든 비영리 참고용 안내로, 교육부·교육청과 관계가 없고 법적 효력이 없습니다. 실제 복무 처리는 소속 교육청 지침과 학교장 결정을 따르세요.</span></div>
-  <div class="foot-top"><b>복무 한눈에</b><span>최종 확인 2026.10.13</span></div>
-  <p>법령과 지침은 바뀔 수 있으니 최신 공문을 함께 확인하세요. <span class="tag sch">학교</span> 표시는 학교마다 다를 수 있는 운영 기준입니다.</p>
-  <p class="foot-meta"><span>만든이 2026 최창훈</span><a class="foot-hub" href="https://edu-hub-alpha-ten.vercel.app/" target="_blank" rel="noopener">학교 연장통의 도구</a><span>비영리</span><button class="link-btn" data-oss>출처·라이선스 보기</button></p>
+  <div class="foot-brand"><span class="logo-mark"><svg viewBox="0 0 28 28" aria-hidden="true"><rect class="lm-bg" x="0" y="0" width="28" height="28" rx="7"/><rect class="lm-reg" x="4" y="10" width="5" height="8" rx="1.5"/><rect class="lm-reg" x="10" y="10" width="5" height="8" rx="1.5"/><rect class="lm-reg" x="16" y="10" width="3.5" height="8" rx="1.5"/><rect class="lm-ot" x="20.5" y="10" width="3.5" height="8" rx="1.5"/><path class="lm-tick" d="M4 21.5h20"/></svg></span><b>복무 한눈에</b><span>교육공무원 복무를 한눈에</span></div>
+  <p class="disc" role="note"><i aria-hidden="true">ⓘ</i><span><b>교육청 공식 사이트가 아닙니다.</b> 교원 개인이 만든 비영리 참고용 안내로, 교육부·교육청과 관계가 없고 법적 효력이 없습니다. 실제 복무 처리는 소속 교육청 지침과 학교장 결정을 따르세요. 법령과 지침은 바뀔 수 있으니 최신 공문을 함께 확인하세요.</span></p>
+  <p class="foot-meta"><span>최종 확인 2026.10.13</span><span>만든이 2026 최창훈</span><a class="foot-hub" href="https://edu-hub-alpha-ten.vercel.app/" target="_blank" rel="noopener">학교 연장통의 도구</a><span>비영리</span><button class="link-btn" data-oss>출처·라이선스 보기</button></p>
 </footer>
 </main>
 
@@ -3012,6 +3080,7 @@ document.addEventListener('click',e=>{ const b=e.target.closest('.rules-tg'); if
   b.setAttribute('aria-expanded',open); b.textContent=open?'설명 접기':'설명 펼치기' });
 /* ---------- 사용성 ---------- */
 $('#hdr-search').addEventListener('click',()=>{ if(cur!=='home') go('home'); else window.scrollTo({top:0,behavior:'smooth'}); setTimeout(()=>$('#g-q').focus(),cur==='home'?60:120) });
+window.addEventListener('scroll',()=>document.body.classList.toggle('scrolled',scrollY>4),{passive:true});
 function atEnd(){ document.body.classList.toggle('at-end', window.innerHeight+scrollY >= document.documentElement.scrollHeight-160) }
 window.addEventListener('scroll',atEnd,{passive:true}); window.addEventListener('resize',atEnd);
 new MutationObserver(()=>requestAnimationFrame(atEnd)).observe(document.querySelector('main'),{attributes:true,subtree:true,attributeFilter:['hidden','open']});
