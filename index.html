@@ -1,1 +1,2850 @@
+<title>복무 한눈에</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* Layout: 720px 중앙 단일 칼럼(헤더 동일), 모바일 하단 탭바. 근무상황부의 시간 눈금을 시그니처로 사용 */
+:root{
+  --bg:#F5F7F8; --surface:#FFFFFF; --sunken:#EBEFF2; --line:#D6DDE3;
+  --ink:#16273A; --ink-2:#4A5B6D; --ink-3:#5F6D7B;
+  --accent:#1E4E79; --accent-soft:#E2EBF4;
+  --ok:#1F7A55; --ok-soft:#DCF0E6;
+  --warn:#C26414; --warn-soft:#FBE8D6;
+  --bad:#B4332E; --bad-soft:#F8DEDC;
+  --rev:#7A5800; --rev-soft:#FFEFA8; --rev-mark:#FFE36B;
+  --reg:#C9D2DA; --hatch:#B9C3CC; --muted-bar:#DCE2E7;
+  --sch:#0E6B66; --sch-soft:#DCF1EE;
+  --f-display:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-body:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-num:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1720; --surface:#16212C; --sunken:#1D2A37; --line:#2B3B4B;
+  --ink:#E6ECF2; --ink-2:#AAB7C4; --ink-3:#7C8B9A;
+  --accent:#8DB6E0; --accent-soft:#1D3247;
+  --ok:#5CC796; --ok-soft:#173528; --warn:#F0A25C; --warn-soft:#3A2715;
+  --bad:#F08A84; --bad-soft:#3B1D1C; --rev:#F4D35E; --rev-soft:#3A3212; --rev-mark:#6B5A12;
+  --reg:#33475A; --hatch:#4A5D70; --muted-bar:#2A3846; --sch:#6FD3C8; --sch-soft:#123432; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1720; --surface:#16212C; --sunken:#1D2A37; --line:#2B3B4B;
+  --ink:#E6ECF2; --ink-2:#AAB7C4; --ink-3:#7C8B9A;
+  --accent:#8DB6E0; --accent-soft:#1D3247;
+  --ok:#5CC796; --ok-soft:#173528; --warn:#F0A25C; --warn-soft:#3A2715;
+  --bad:#F08A84; --bad-soft:#3B1D1C; --rev:#F4D35E; --rev-soft:#3A3212; --rev-mark:#6B5A12;
+  --reg:#33475A; --hatch:#4A5D70; --muted-bar:#2A3846; --sch:#6FD3C8; --sch-soft:#123432; color-scheme:dark}
 
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{word-break:keep-all;overflow-wrap:anywhere;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.65;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:56px}
+.logo{display:flex;align-items:center;gap:9px;background:none;border:0;padding:0;font-family:var(--f-display);font-weight:800;font-size:19px;letter-spacing:-.03em}
+.logo-mark{width:26px;height:26px;border-radius:7px;background:var(--accent);display:grid;place-items:center}
+.logo-mark svg{width:16px;height:16px;stroke:var(--surface)}
+.topnav{display:flex;gap:4px}
+.topnav button{border:0;background:none;padding:6px 10px;border-radius:8px;font-size:14px;color:var(--ink-2);font-weight:500}
+.topnav button[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:600}
+
+main{padding-block:24px 110px}
+.view{display:grid;gap:28px}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;padding:2px 9px;border-radius:999px;letter-spacing:.01em;white-space:nowrap}
+.chip.rev{background:var(--rev-soft);color:var(--rev)}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+.chip.mute{background:var(--sunken);color:var(--ink-3)}
+
+/* home */
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;color:var(--ink-3)}
+.home-h{font-family:var(--f-display);font-size:clamp(25px,6.6vw,32px);font-weight:800;letter-spacing:-.035em;line-height:1.25}
+.home-top{display:grid;gap:4px}
+mark.hl{background:linear-gradient(transparent 52%,var(--rev-mark) 52%);color:inherit;padding:0 2px}
+
+.lead{display:grid;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 18px 18px;box-shadow:0 1px 0 var(--line),0 8px 24px -16px rgb(22 39 58 / .35)}
+.lead-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.lead-head b{font-size:21px;font-weight:650;line-height:1.3;letter-spacing:-.01em}
+.lead-head p{font-size:15px;color:var(--ink-2);margin-top:4px}
+.mini{display:grid;gap:6px;background:var(--bg);border-radius:12px;padding:14px 14px 10px}
+.mini-cap{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14px;color:var(--ink-2)}
+.mini-cap b{font-family:var(--f-num);font-size:17px;color:var(--ok);font-weight:600}
+.mini-row{display:flex;gap:6px;align-items:stretch}
+.mini-track{flex:1;position:relative;height:26px;background:var(--sunken);border-radius:6px;overflow:hidden}
+.mini-track i{position:absolute;top:0;bottom:0}
+.mini-ticks{position:relative;height:18px;margin-right:70px}
+.mini-ticks span{position:absolute;transform:translateX(-50%);font-family:var(--f-num);font-size:12.5px;color:var(--ink-3)}
+.lead-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lead-actions .btn{height:48px;justify-content:center;font-size:15px}
+
+.side{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini-card{display:grid;gap:4px;text-align:left;background:transparent;border:1px solid var(--line);border-radius:var(--r);padding:14px 15px;transition:border-color .15s,background .15s}
+.mini-card:hover{border-color:var(--accent);background:var(--surface)}
+.mini-card b{font-size:15px;font-weight:650}
+.mini-card small{font-size:14px;color:var(--ink-2);line-height:1.5}
+.soon{font-size:14px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.soon b{font-weight:600;color:var(--ink-2)}
+
+.notice{display:grid;gap:10px;background:var(--rev-soft);border-radius:var(--r);padding:16px}
+.notice-h{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:700;color:var(--rev)}
+.notice-h .chip{background:var(--rev-mark);color:var(--ink)}
+.notice ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.notice li{background:var(--surface);border-radius:10px;padding:10px 12px;display:grid;gap:1px}
+.notice li .v{font-family:var(--f-num);font-weight:600;font-size:17px}
+.notice li .k{font-size:13px;color:var(--ink-2)}
+.notice li.new .v{background:linear-gradient(transparent 55%,var(--rev-mark) 55%);justify-self:start}
+
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.view>.sec-h{margin-bottom:-16px}
+.sec-h h2{font-size:17px;font-weight:650}
+.sec-h span{font-size:13px;color:var(--ink-3)}
+
+
+/* page header */
+.ph{display:grid;gap:8px}
+.ph h1{font-family:var(--f-display);font-size:clamp(26px,6.4vw,34px);font-weight:800;letter-spacing:-.035em;line-height:1.25}
+.ph p{color:var(--ink-2)}
+
+/* calculator */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:16px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--sunken);border-radius:10px;padding:4px;gap:4px}
+.seg button{border:0;background:none;border-radius:7px;height:40px;font-weight:600;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0 / .08)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:grid;gap:5px;min-width:0}
+.field label{font-size:14px;font-weight:600;color:var(--ink-2)}
+.field input[type="time"],.field input[type="date"]{height:46px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 12px;font-family:var(--f-num);font-size:16px;width:100%;min-width:0}
+.hint{font-size:14px;color:var(--ink-2);line-height:1.6}
+details.reg summary{cursor:pointer;font-size:14px;color:var(--ink-2);list-style:none;display:flex;align-items:center;gap:6px;min-height:44px}
+details.reg summary::-webkit-details-marker{display:none}
+details.reg summary::before{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s}
+details.reg[open] summary::before{transform:rotate(45deg)}
+details.reg .ex-list{margin-block:10px}
+
+.base{display:grid;gap:12px}
+.base-view{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;color:var(--ink-2)}
+.base-view b{font-size:16px;color:var(--ink);font-weight:600}
+.base-editor{display:grid;gap:12px;background:var(--accent-soft);border-radius:var(--r);padding:16px}
+.base-q{font-size:15px;font-weight:600;color:var(--ink)}
+.link-btn{border:0;background:none;padding:6px 4px;min-height:36px;color:var(--accent);font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:3px}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:15px;color:var(--ink)}
+.pick button:hover{border-color:var(--accent)}
+.pick button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+#base-pick button{font-family:var(--f-num);font-size:14.5px}
+#ex-chips button{border-color:color-mix(in srgb,var(--warn) 45%,var(--line));color:var(--warn)}
+.seg-sm button{height:38px;font-size:14px}
+
+.ex-block{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:16px}
+.ex-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.ex-head b{font-size:15px}
+.ex-sum{display:flex;align-items:center;gap:6px}
+.ex-sum .num{font-size:16px;font-weight:600;color:var(--warn)}
+.ex-list{display:grid;gap:8px}
+.ex-item{display:grid;grid-template-columns:1fr auto 1fr auto;gap:8px;align-items:center;background:var(--warn-soft);border-radius:10px;padding:8px}
+.ex-item input{height:44px;border:1px solid transparent;border-radius:8px;background:var(--surface);padding:0 8px;font-family:var(--f-num);font-size:15px;width:100%;min-width:0}
+.ex-item span{color:var(--warn);font-size:14px}
+.icon-btn{width:44px;height:44px;border-radius:8px;border:0;background:transparent;display:grid;place-items:center;color:var(--ink-3)}
+.icon-btn:hover{background:var(--surface);color:var(--bad)}
+.btn{height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:6px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+a.btn{text-decoration:none;color:var(--ink)}
+a.btn.primary{color:var(--surface)}
+.soon a,a.inl{color:var(--accent);font-weight:600;text-underline-offset:3px;white-space:nowrap}
+.btn.ghost{border-color:transparent;background:var(--sunken)}
+.btn.sm{height:40px;font-size:14px;padding:0 13px}
+.samples{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-width:0}
+.samples>*{flex:0 0 auto}
+.samples span{font-size:13.5px;color:var(--ink-2);margin-right:2px}
+
+/* result */
+.result{display:grid;gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 18px;border-top:4px solid var(--ok)}
+.result.zero{border-top-color:var(--hatch)}
+.res-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.res-top .lab{font-size:14px;color:var(--ink-2);font-weight:600}
+.big{font-family:var(--f-num);font-size:44px;font-weight:600;line-height:1.05;letter-spacing:-.03em;color:var(--ok)}
+.result.zero .big{color:var(--ink-3)}
+.big small{font-size:18px;font-weight:500;margin-left:3px;color:var(--ink-2)}
+.res-msg{font-size:15px;line-height:1.6;color:var(--ink)}
+
+.tl{display:grid;gap:6px}
+.tl-row{display:flex;gap:6px;align-items:stretch}
+.tl-track{flex:1;min-width:0;position:relative;height:44px;background:var(--sunken);border-radius:8px;overflow:hidden}
+.seg-b{position:absolute;top:0;bottom:0;display:grid;place-items:center;overflow:hidden}
+.seg-b.reg{background:var(--reg)}
+.seg-b.ok{background:var(--ok)}
+.seg-b.nocount{background:var(--muted-bar)}
+.seg-b.nocount em{font-style:normal;font-size:12.5px;font-weight:600;color:var(--ink-3);white-space:nowrap}
+.seg-b.ex{background:var(--warn);top:8px;bottom:8px;border-radius:4px}
+.ded-box{flex:0 0 64px;border-radius:8px;border:1.5px dashed var(--hatch);display:grid;place-items:center;font-family:var(--f-num);font-size:13px;font-weight:600;color:var(--ink-2);background:var(--surface)}
+.ded-box[hidden]{display:none}
+.tl-ticks{position:relative;height:20px;margin-right:var(--ded-w,0px)}
+.tl-ticks span{position:absolute;transform:translateX(-50%);font-family:var(--f-num);font-size:13px;color:var(--ink-3)}
+.tl-ticks span.odd{opacity:1}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--ink-2)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+.legend i.reg{background:var(--reg)}
+.legend i.ok{background:var(--ok)}
+.legend i.ded{border:1.5px dashed var(--hatch);background:var(--surface)}
+.legend i.ex{background:var(--warn)}
+.legend i.nocount{background:var(--muted-bar);border:1px solid var(--hatch)}
+
+details.how summary{cursor:pointer;list-style:none;font-size:14px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px}
+details.how summary::-webkit-details-marker{display:none}
+details.how summary::after{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .15s}
+details.how[open] summary::after{transform:rotate(-135deg) translateY(-2px)}
+details.how .calc-rows{margin-top:10px}
+.calc-rows.stack div{flex-direction:column;gap:2px}
+.calc-rows.stack div span:first-child{font-weight:600;color:var(--ink);font-size:14px}
+.calc-rows.stack div span:last-child{color:var(--ink-2);font-size:14.5px;line-height:1.55}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1)}}
+.pop{animation:pop .28s ease-out;display:inline-block}
+
+.livebar{position:fixed;left:0;right:0;bottom:calc(58px + env(safe-area-inset-bottom,0px));z-index:29;padding-inline:12px;display:none}
+.livebar button{max-width:696px;margin:0 auto 8px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;border-radius:14px;padding:11px 16px;background:var(--ink);color:var(--bg);box-shadow:0 8px 24px -8px rgb(0 0 0 / .45);text-align:left}
+.livebar .lb-l{font-size:13px;opacity:.8}
+.livebar .lb-v{font-family:var(--f-num);font-size:22px;font-weight:600;letter-spacing:-.02em}
+.livebar .lb-v small{font-size:13px;font-weight:500;opacity:.75;margin:0 2px}
+.livebar .lb-s{font-size:13px;opacity:.8;text-align:right;line-height:1.35}
+.livebar.zero .lb-v{opacity:.6}
+
+.calc-rows{display:grid;border-top:1px solid var(--line)}
+.calc-rows div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.calc-rows div span:first-child{color:var(--ink-2)}
+.calc-rows div.minus span:last-child{color:var(--warn)}
+.calc-rows div.total{border-bottom:0;font-weight:700}
+.calc-rows div.total span:first-child{color:var(--ink)}
+.calc-rows .num{font-weight:600}
+.oldnote{display:flex;gap:10px;align-items:flex-start;background:var(--rev-soft);border-radius:10px;padding:11px 13px;font-size:14px}
+.res-chips{display:flex;gap:6px;flex-wrap:wrap}
+
+.month{display:grid;gap:14px}
+.gauge{display:grid;gap:8px}
+.gauge-bar{height:12px;background:var(--sunken);border-radius:999px;overflow:hidden}
+.gauge-bar div{height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
+.gauge-bar div.over{background:var(--bad)}
+.gauge-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.gauge-top .num{font-size:24px;font-weight:600}
+.gauge-top .num small{font-size:14px;color:var(--ink-3);font-weight:500}
+.rec-list{display:grid}
+.rec{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.rec:last-child{border-bottom:0}
+.rec .d{font-family:var(--f-num);color:var(--ink-2)}
+.rec .t{color:var(--ink-2);font-size:13.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rec .m{font-family:var(--f-num);font-weight:600}
+.add-row{display:flex;gap:8px;align-items:end;flex-wrap:wrap}
+.add-row .field{flex:1 1 150px}
+.dur{display:flex;align-items:center;gap:6px}
+.dur select,.dur input{height:46px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 8px;font-family:var(--f-num);font-size:16px;min-width:0;width:68px}
+.dur span{font-size:14px;color:var(--ink-2);white-space:nowrap}
+@media (max-width:480px){ .meter .field-row{grid-template-columns:1fr} }
+.know{display:grid;gap:10px}
+.kd{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:0 16px}
+.kd summary{cursor:pointer;list-style:none;min-height:56px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:16px;font-weight:650;flex-wrap:wrap;padding-block:12px}
+.kd summary::-webkit-details-marker{display:none}
+.kd summary .src{font-weight:400}
+.kd[open]{padding-bottom:14px}
+.kd .calc-rows{border-top:1px solid var(--line)}
+
+/* steps */
+.steps{list-style:none;margin:0;padding:0;display:grid}
+.step{display:grid;grid-template-columns:40px 1fr;gap:14px;position:relative;padding-bottom:22px}
+.step:last-child{padding-bottom:0}
+.step::before{content:"";position:absolute;left:19px;top:40px;bottom:0;width:2px;background:var(--line)}
+.step:last-child::before{display:none}
+.step .no{width:40px;height:40px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);color:var(--accent);display:grid;place-items:center;font-family:var(--f-num);font-weight:600;font-size:15px;position:relative;z-index:1}
+.step.alt .no{border-style:dashed;border-color:var(--ink-3);color:var(--ink-3)}
+.step-body{display:grid;gap:8px;padding-top:6px;min-width:0}
+.step-when{font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--ink-3)}
+.step-body h3{font-size:17px;font-weight:650;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.step-body ul{margin:0;padding-left:18px;display:grid;gap:4px;color:var(--ink-2);font-size:15px}
+.step-body li::marker{color:var(--ink-3)}
+.miss{display:flex;gap:10px;font-size:14px;color:var(--ink-2);border-top:1px dashed var(--line);padding-top:9px}
+.miss b{color:var(--ink-2);white-space:nowrap;font-weight:600;font-size:13px;padding-top:1px}
+.miss.danger{background:var(--bad-soft);color:var(--ink);border:0;border-radius:9px;padding:10px 12px}
+.miss.danger b{color:var(--bad)}
+.stamp{display:inline-grid;place-items:center;width:38px;height:38px;border:2px solid var(--accent);border-radius:50%;color:var(--accent);font-family:var(--f-display);font-size:11px;font-weight:700;line-height:1.05;text-align:center;transform:rotate(-12deg);opacity:.85}
+.menu-note{font-size:14px;color:var(--ink-2);border-left:3px solid var(--line);padding-left:12px}
+
+.qa{display:grid;gap:10px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.q button{width:100%;border:0;background:none;text-align:left;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.q button span:first-child{font-size:15px;font-weight:500}
+.mark{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:17px;background:var(--sunken);color:var(--ink-3);font-family:var(--f-num)}
+.q.open .mark.o{background:var(--ok-soft);color:var(--ok)}
+.q.open .mark.x{background:var(--bad-soft);color:var(--bad)}
+.q.open .mark.t{background:var(--warn-soft);color:var(--warn)}
+.q .a{padding:0 16px 14px;font-size:15px;line-height:1.65;color:var(--ink-2);display:grid;gap:6px}
+.q .a strong{color:var(--ink)}
+.q .src{font-size:13px;color:var(--ink-3)}
+
+.ext{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ext-card{display:grid;gap:3px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 15px;transition:border-color .15s}
+.ext-card:hover{border-color:var(--accent)}
+.ext-card b{font-size:15.5px;font-weight:650}
+.ext-card b span{color:var(--accent)}
+.ext-card small{font-size:13.5px;color:var(--ink-2)}
+@media (max-width:420px){ .ext{grid-template-columns:1fr} }
+footer.foot{margin-top:32px;border-top:1px solid var(--line);padding-top:20px;display:grid;gap:8px;font-size:13.5px;color:var(--ink-2);line-height:1.6}
+.disc{display:grid;gap:2px;background:var(--sunken);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.6;color:var(--ink-2)}
+.disc b{color:var(--ink);font-size:14.5px}
+.home-top .eyebrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.unoff{display:inline-block;font-weight:600;letter-spacing:0;color:var(--ink-2);background:var(--sunken);border-radius:5px;padding:1px 7px}
+.foot-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.foot-top b{font-family:var(--f-display);font-size:16px;color:var(--ink)}
+.foot-top span{font-size:13px;color:var(--ink-3)}
+.foot-meta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 0}
+.foot-meta>*+*::before{content:"·";display:inline-block;margin:0 8px;color:var(--ink-3);text-decoration:none}
+.foot-meta .link-btn{min-height:0;padding:0;font-size:inherit}
+.foot-hub{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.foot-hub:hover{color:var(--accent)}
+
+
+/* 결재라인 (우리 학교 층) */
+.sch-badge{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--sch);background:var(--sch-soft);border-radius:999px;padding:3px 11px;justify-self:start}
+.sch-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--sch)}
+.filter{display:grid;gap:10px}
+.search{position:relative}
+.search input{width:100%;height:48px;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:0 16px 0 44px;font-size:16px}
+.search svg{position:absolute;left:15px;top:15px;width:18px;height:18px;stroke:var(--ink-3)}
+.cats{display:flex;gap:6px;overflow-x:auto;min-width:0;padding-bottom:2px}
+.cats button{flex:0 0 auto;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:14px;color:var(--ink-2)}
+.cats button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.lines{display:grid;gap:8px}
+.ln{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ln-h{width:100%;border:0;background:none;text-align:left;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 14px 12px 16px;min-height:64px}
+.ln-h b{font-size:16px;font-weight:650;display:block}
+.ln-h small{font-size:13px;color:var(--ink-3)}
+.chain{display:flex;align-items:center;gap:2px}
+.chain i{width:12px;height:2px;background:var(--hatch);border-radius:2px}
+.st{width:38px;height:38px;border:2px solid var(--accent);border-radius:50%;color:var(--accent);font-family:var(--f-display);font-size:12.5px;font-weight:700;display:grid;place-items:center;line-height:1.05;text-align:center;transform:rotate(-7deg);background:color-mix(in srgb,var(--accent) 6%,var(--surface))}
+.st.sm{font-size:10.5px}
+.ln-b{padding:0 16px 16px;display:grid;gap:12px;border-top:1px dashed var(--line);padding-top:14px}
+.ln-b ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ln-b li{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start;font-size:15px;line-height:1.6}
+.tag{font-size:11.5px;font-weight:700;border-radius:5px;padding:2px 6px;margin-top:3px;white-space:nowrap}
+.tag.law{background:var(--sunken);color:var(--ink-2)}
+.tag.sch{background:var(--sch-soft);color:var(--sch)}
+.tag.rev{background:var(--rev-soft);color:var(--rev)}
+.ln-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.proof{font-size:13.5px;color:var(--ink-2);display:flex;gap:6px;align-items:center}
+.proof b{font-weight:600;color:var(--ink)}
+.ln[aria-expanded="true"]{border-color:color-mix(in srgb,var(--accent) 45%,var(--line))}
+.empty{color:var(--ink-2);font-size:15px;padding:16px 4px}
+
+.rules{display:grid;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.rules h2{font-size:17px}
+.rules ol{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:r}
+.rules li{display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:15px;line-height:1.6;counter-increment:r}
+.rules li::before{content:counter(r);width:24px;height:24px;margin-top:1px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-family:var(--f-num);font-size:13px;font-weight:600;display:grid;place-items:center}
+.rules li b{font-weight:700}
+.rules li .tag{margin-left:6px;vertical-align:1px}
+.rules .src{font-size:13px;color:var(--ink-3)}
+
+.line-card{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;transition:border-color .15s}
+.line-card:hover{border-color:var(--accent)}
+.line-card b{font-size:16px;font-weight:650}
+.line-card small{display:block;font-size:14px;color:var(--ink-2)}
+
+/* 홈: 하루 막대 */
+.gsearch{position:relative}
+.g-res{position:absolute;left:0;right:0;top:54px;z-index:15;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 12px 32px -12px rgb(22 39 58 / .35);padding:6px;display:grid;max-height:60vh;overflow:auto}
+.g-it{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;text-align:left;border:0;background:none;border-radius:8px;padding:10px;min-height:48px;font-size:15px;color:var(--ink);text-decoration:none}
+.g-it:hover,.g-it:focus-visible{background:var(--sunken)}
+.g-it .k{font-size:12px;font-weight:700;color:var(--ink-2);background:var(--sunken);border-radius:5px;padding:2px 7px;white-space:nowrap}
+.g-it:hover .k{background:var(--surface)}
+.g-none{padding:12px;color:var(--ink-2);font-size:14px}
+
+.day{display:grid;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 16px 16px}
+.day-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.day-head b{font-size:16px;font-weight:650}
+.day-bar{display:flex;gap:6px;align-items:stretch}
+.day-in{flex:0 0 74%;display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:6px}
+.dz{border:1px solid var(--line);border-top:4px solid var(--reg);border-radius:10px;background:var(--surface);display:grid;place-items:center;align-content:center;gap:1px;min-height:76px;padding:8px 4px;color:var(--ink);text-align:center;cursor:pointer;transition:background .15s,border-color .15s,transform .1s;box-shadow:0 1px 2px rgb(0 0 0 / .04)}
+
+.dz b{font-size:16px;font-weight:700}
+.dz small{font-size:12.5px;color:var(--ink-2);line-height:1.3}
+.dz:hover{background:var(--accent-soft);border-color:var(--accent);border-top-color:var(--accent)}
+.dz:active{transform:scale(.97)}
+.dz.ot{flex:1;min-width:0;border-top-color:var(--ok)}
+.dz.ot b{color:var(--ok)}
+.dz.ot:hover{background:var(--ok-soft);border-color:var(--ok)}
+.day-ticks{position:relative;height:20px}
+.day-ticks span{position:absolute;font-size:13px;color:var(--ink-2)}
+#day-s{left:0}
+#day-e{left:74%;transform:translateX(-50%)}
+.day-out{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-top:1px dashed var(--line);padding-top:12px}
+.day-out>span{font-size:14px;color:var(--ink-2);margin-right:2px}
+.dz-pill{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);font-weight:600;font-size:14.5px}
+.dz-pill:hover{border-color:var(--accent);color:var(--accent)}
+
+.rep{display:grid;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 16px;box-shadow:0 8px 24px -18px rgb(22 39 58 / .4)}
+.rep-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.rep-head b{font-size:19px;font-weight:650;letter-spacing:-.01em}
+.rep-head p{font-size:14.5px;color:var(--ink-2);margin-top:2px}
+.rep .pick button{font-size:14.5px;min-height:42px}
+.rep>.btn{justify-content:center;height:48px}
+
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{display:grid;gap:3px;align-content:start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;min-height:92px;transition:border-color .15s}
+button.tile:hover{border-color:var(--accent)}
+.tile b{font-size:15px;font-weight:650;line-height:1.35}
+.tile small{font-size:13px;color:var(--ink-2);line-height:1.45}
+.tile-k{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.02em}
+.tile.off{background:transparent;border-style:dashed}
+.tile.off b{color:var(--ink-2)}
+.tile.off .tile-k{color:var(--ink-3)}
+
+.changes{display:grid;gap:10px;background:var(--rev-soft);border-radius:var(--r);padding:14px 16px}
+.changes .chip{background:var(--rev-mark);color:var(--ink)}
+.changes ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.changes li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-size:14.5px;line-height:1.55}
+.changes .d{font-size:13px;color:var(--rev);font-weight:600}
+@media (max-width:480px){ .changes li{grid-template-columns:1fr auto} .changes .d{grid-column:1/-1} }
+
+.subtabs{display:flex;gap:4px;background:var(--sunken);border-radius:10px;padding:4px;justify-self:start;max-width:100%}
+.subtabs button{border:0;background:none;border-radius:7px;min-height:38px;padding:0 14px;font-weight:600;font-size:14.5px;color:var(--ink-2)}
+.subtabs button[aria-current="page"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0 / .08)}
+
+@media (max-width:480px){
+  .tiles{grid-template-columns:1fr;gap:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .tiles .tile{grid-template-columns:64px 1fr auto;grid-template-rows:auto auto;column-gap:10px;row-gap:1px;align-items:center;min-height:64px;padding:12px 14px;border:0;border-radius:0;border-bottom:1px solid var(--line)}
+  .tiles .tile:last-child{border-bottom:0}
+  .tiles .tile .tile-k{grid-row:1/3;align-self:center}
+  .tiles .tile b{font-size:15.5px;grid-column:2}
+  .tiles .tile small{grid-column:2}
+  .tiles .tile::after{content:"›";grid-column:3;grid-row:1/3;font-size:22px;color:var(--ink-3);line-height:1}
+  .day-in{flex-basis:70%}
+  #day-e{left:70%}
+  .dz small{font-size:11.5px}
+  .rep-head .chain{display:none}
+}
+
+/* 출장 판정 */
+.wiz{display:grid;gap:10px}
+.wq{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:12px}
+.wq-q{font-size:17px;font-weight:650;display:flex;gap:10px;align-items:baseline}
+.wq-q .n{font-family:var(--f-num);font-size:13px;color:var(--accent);font-weight:600}
+.opts{display:grid;gap:8px}
+.opt{display:grid;gap:2px;text-align:left;min-height:52px;padding:11px 14px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-size:15.5px;font-weight:600;color:var(--ink);transition:border-color .15s,background .15s}
+.opt small{font-size:13.5px;font-weight:400;color:var(--ink-2)}
+.opt:hover{border-color:var(--accent);background:var(--surface)}
+.wq.done{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent}
+.wq.done .a{display:flex;gap:10px;align-items:baseline;font-size:15px;min-width:0}
+.wq.done .a span:first-child{color:var(--ink-2);font-size:13.5px;white-space:nowrap}
+.wq.done .a b{font-weight:600}
+.tres{display:grid;gap:14px;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--ok);border-radius:var(--r);padding:20px 18px}
+.tres.no{border-top-color:var(--bad)}
+.tres .lab{font-size:14px;color:var(--ink-2);font-weight:600}
+.tres h2{font-family:var(--f-display);font-size:clamp(24px,6vw,30px);font-weight:800;letter-spacing:-.035em}
+.tres.no h2{color:var(--bad)}
+.tres-grid{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;align-items:center;border-top:1px solid var(--line);padding-top:14px}
+.tres-grid dt{font-size:14px;color:var(--ink-2);font-weight:600}
+.tres-grid dd{margin:0;font-size:15.5px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tres ul{margin:0;padding-left:18px;display:grid;gap:4px;font-size:15px;color:var(--ink-2)}
+.tres-act{display:flex;gap:8px;flex-wrap:wrap}
+.rules li.warn b{color:var(--bad)}
+.rules .sub{color:var(--ink-2)}
+.tag.bad{background:var(--bad-soft);color:var(--bad)}
+.miss.boxed{border:0;background:var(--sunken);border-radius:var(--r);padding:14px 16px;font-size:14.5px;color:var(--ink)}
+.audits{display:grid;gap:10px}
+.audit{display:grid;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.audit .chip{justify-self:start}
+.audit p{font-size:15px;line-height:1.6}
+.audit .lesson{font-size:14.5px;color:var(--ok);font-weight:600}
+.audit .lesson::before{content:"→ "}
+.src{font-size:13px;color:var(--ink-3)}
+.case-cats{display:flex;gap:6px;flex-wrap:wrap}
+
+/* 41조 일정 블록 */
+.blk-wrap{display:grid;gap:6px}
+.blk-track{position:relative;background:var(--sunken);border-radius:10px;overflow:hidden}
+.bk{position:absolute;height:24px;border-radius:6px;display:flex;align-items:center;padding:0 8px;font-size:12.5px;font-weight:700;color:var(--surface);white-space:nowrap;overflow:hidden}
+.bk.work{background:var(--accent)}
+.bk.s41{background:var(--sch)}
+.bk.trip{background:var(--ok)}
+.bk.leave{background:var(--warn)}
+.bov{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--bad) 22%,transparent);border-left:2px solid var(--bad);border-right:2px solid var(--bad)}
+.bgap{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--warn) 35%,transparent) 0 5px,transparent 5px 10px)}
+.blk-verdict{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:12px 14px;font-size:15px;line-height:1.55}
+.blk-verdict.ok{background:var(--ok-soft)}
+.blk-verdict.bad{background:var(--bad-soft)}
+.blk-verdict.warn{background:var(--warn-soft)}
+.blk-verdict b{white-space:nowrap}
+.blk-verdict.ok b{color:var(--ok)}
+.blk-verdict.bad b{color:var(--bad)}
+.blk-verdict.warn b{color:var(--warn)}
+.blk-list{display:grid;gap:8px}
+.bl{display:grid;grid-template-columns:auto 1fr auto 1fr auto;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:8px 0}
+.bl:last-child{border-bottom:0}
+.bl input{height:44px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:0 6px;font-family:var(--f-num);font-size:15px;width:100%;min-width:0}
+.bl .dot{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;white-space:nowrap}
+.bl .dot i{width:12px;height:12px;border-radius:3px}
+.bl span.til{color:var(--ink-3)}
+.blk-add{display:grid;gap:8px}
+.blk-add>span{font-size:14px;color:var(--ink-2);font-weight:600}
+.legend i.work{background:var(--accent)} .legend i.s41{background:var(--sch)} .legend i.trip{background:var(--ok)} .legend i.leave{background:var(--warn)}
+@media (max-width:480px){ .bl{grid-template-columns:1fr auto 1fr;grid-template-areas:"dot dot del" "s t e"} .bl .dot{grid-area:dot} .bl .icon-btn{grid-area:del;justify-self:end} .bl input:nth-of-type(1){grid-area:s} .bl .til{grid-area:t} .bl input:nth-of-type(2){grid-area:e} }
+
+/* 근무시간 */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tri{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:4px;align-content:start}
+.tri b{font-family:var(--f-display);font-size:20px}
+.tri p{font-size:14px;color:var(--ink-2);line-height:1.55}
+@media (max-width:480px){ .trio{grid-template-columns:1fr} .tri{grid-template-columns:56px 1fr;align-items:baseline} }
+.meter{gap:14px}
+.mt-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.mt-top>div{display:grid;gap:2px}
+.mt-top .lab{font-size:13.5px;color:var(--ink-2);font-weight:600}
+.big-sm{font-size:34px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.mt-days{text-align:right}
+.mt-days .big-sm{color:var(--warn)}
+.mt-bar{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}
+.mt-bar i{height:14px;border-radius:3px;background:var(--sunken)}
+.mt-bar i.on{background:var(--warn)}
+.mt-bar i.half{background:linear-gradient(90deg,var(--warn) var(--p),var(--sunken) var(--p))}
+.mt-form{display:grid;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.mt-seg{grid-template-columns:repeat(4,1fr)}
+.mt-seg button{font-size:14px}
+
+/* 오픈소스 라이선스 */
+.oss-btn{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;min-height:36px;padding:0 13px;font-size:13px;font-weight:600;box-shadow:0 4px 14px -6px rgb(0 0 0 / .25)}
+.oss-btn:hover{color:var(--ink);border-color:var(--accent)}
+.oss-back{position:fixed;inset:0;z-index:50;background:rgb(10 20 30 / .5);display:grid;place-items:center;padding:16px}
+.oss-box{width:100%;max-width:640px;max-height:min(86vh,800px);display:grid;grid-template-rows:auto 1fr;background:var(--surface);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px -20px rgb(0 0 0 / .5)}
+.oss-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 10px 12px 20px;border-bottom:1px solid var(--line)}
+.oss-head h2{font-size:17px}
+.oss-body{overflow:auto;padding:16px 20px 22px;display:grid;gap:18px;font-size:14.5px;line-height:1.65;color:var(--ink-2)}
+.oss-body h3{font-size:15px;color:var(--ink);margin:0 0 6px}
+.oss-body section{display:grid;gap:6px}
+.oss-c{font-family:var(--f-num);color:var(--ink);font-weight:600}
+.oss-t{width:100%;border-collapse:collapse;font-size:13.5px}
+.oss-t th,.oss-t td{text-align:left;vertical-align:top;padding:8px 6px;border-bottom:1px solid var(--line)}
+.oss-t th{color:var(--ink);font-weight:600;white-space:nowrap}
+.oss-t td:first-child{color:var(--ink);font-weight:600}
+.oss-t td:last-child{font-family:var(--f-num);white-space:nowrap}
+.oss-lic summary{cursor:pointer;font-weight:600;color:var(--accent);min-height:36px;display:flex;align-items:center}
+.oss-lic pre{white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.55;background:var(--bg);border-radius:10px;padding:12px;margin:8px 0 0;color:var(--ink-2);overflow-wrap:anywhere;word-break:normal}
+@media (max-width:640px){
+  .oss-btn{bottom:calc(58px + 12px + env(safe-area-inset-bottom,0px))}
+  body.on-calc .oss-btn{display:none}
+  .oss-t thead{display:none}
+  .oss-t tr{display:grid;gap:2px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .oss-t td{border:0;padding:0}
+}
+
+/* 웹 전용 기능 */
+.neis-card{display:grid;gap:12px;border-top:1px solid var(--line);padding-top:16px}
+.neis-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.neis-h .chip{background:var(--accent-soft);color:var(--accent)}
+.neis-dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0}
+.neis-dl dt{font-size:14px;color:var(--ink-2)}
+.neis-dl dd{margin:0;font-size:15.5px;font-weight:600}
+.neis-ex{display:grid;gap:8px}
+.neis-ex>span{font-size:13px;color:var(--ink-2)}
+.pick.sm button{min-height:36px;font-size:13.5px;padding:0 11px;font-weight:500}
+.phr summary{cursor:pointer;list-style:none;font-weight:700;font-size:15.5px;color:var(--accent);display:flex;align-items:center;gap:8px;min-height:44px}
+.phr summary::-webkit-details-marker{display:none}
+.phr summary::before{content:"+";font-family:var(--f-num);width:22px;height:22px;border-radius:6px;background:var(--accent-soft);display:grid;place-items:center;font-size:15px}
+.phr[open] summary::before{content:"−"}
+.phr-box{display:grid;gap:12px;margin-top:10px}
+.txt{height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 12px;font-size:15px;width:100%;min-width:0}
+.phr-out{display:grid;gap:8px;background:var(--accent-soft);border-radius:10px;padding:12px}
+.phr-out pre{margin:0;white-space:pre-wrap;font-family:var(--f-body);font-size:14.5px;line-height:1.65;color:var(--ink)}
+.phr-out .btn{justify-self:start}
+a.law{color:inherit;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}
+a.law:hover{color:var(--accent)}
+.ph-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:-18px}
+.ph-top .crumb{margin-bottom:0}
+.share-btn{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:0 12px;min-height:36px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.share-btn:hover,.share-q:hover{color:var(--accent)}
+.share-q{justify-self:start;font-size:13px;min-height:32px;color:var(--ink-2)}
+.g-sug{padding:0 10px 10px}
+
+/* 도식 */
+.dg{display:grid;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.dg.flat{background:transparent;border:0;padding:0}
+.dg-k{font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--ink-3)}
+.flow{display:flex;align-items:stretch;gap:4px}
+.fs{flex:1;min-width:0;display:grid;gap:2px;align-content:start;background:var(--accent-soft);border-radius:10px;padding:10px 8px;text-align:center}
+.fs .fw{font-size:11.5px;font-weight:700;color:var(--accent)}
+.fs b{font-size:14.5px}
+.fs small{font-size:12px;color:var(--ink-2);line-height:1.35}
+.fa{flex:0 0 12px;align-self:center;height:12px;position:relative}
+.fa::before{content:"";position:absolute;inset:0;margin:auto;width:8px;height:8px;border-top:2px solid var(--accent);border-right:2px solid var(--accent);transform:rotate(45deg)}
+.flow-br{display:flex;gap:8px;align-items:baseline;font-size:14px;color:var(--ink-2);background:var(--bg);border-radius:10px;padding:10px 12px}
+.br-mark{color:var(--warn);font-weight:700}
+@media (max-width:560px){
+  .flow{flex-direction:column}
+  .fs{grid-template-columns:64px 1fr;text-align:left;align-items:baseline;gap:2px 10px}
+  .fs .fw{grid-row:span 2}
+  .fa{flex-basis:14px;width:14px;align-self:flex-start;margin-left:28px}
+  .fa::before{transform:rotate(135deg)}
+}
+.h24{display:grid;gap:4px;margin-top:2px}
+.h24-bar{position:relative;height:20px;border-radius:6px;overflow:hidden;background:var(--sunken)}
+.h24-bar i{position:absolute;top:0;bottom:0}
+.h24-bar .hb-no{background:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--bad) 55%,transparent) 0 5px,color-mix(in srgb,var(--bad) 22%,transparent) 5px 10px)}
+.h24-bar .hb-ok{background:var(--ok-soft)}
+.h24-t{position:relative;height:18px}
+.h24-t span:first-child{transform:none}
+.h24-t span{position:absolute;white-space:nowrap;transform:translateX(-50%);font-family:var(--f-num);font-size:12px;color:var(--ink-2)}
+.legend i.h-no{background:color-mix(in srgb,var(--bad) 45%,transparent)}
+.legend i.h-ok{background:var(--ok-soft);border:1px solid var(--line)}
+.ba{display:grid;gap:8px}
+.ba-r{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center}
+.ba-l{font-size:13px;font-weight:700;color:var(--rev)}
+.ba-bar{position:relative;height:30px;border-radius:7px;background:var(--surface);overflow:hidden}
+.ba-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--hatch)}
+.ba-bar s{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(-45deg,var(--sunken) 0 5px,transparent 5px 10px);border-left:2px dashed var(--bad)}
+.ba-bar.now i{background:var(--ok)}
+.ba-bar em{position:absolute;left:10px;top:0;bottom:0;display:flex;align-items:center;font-style:normal;font-size:13px;font-weight:700;color:var(--ink)}
+.ba-bar.now em{color:var(--surface)}
+.ba-note{font-size:13.5px;color:var(--ink)}
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.tk{display:inline-grid;place-items:center;text-align:center;min-height:40px;padding:6px 11px;border-radius:9px;background:var(--sunken);font-size:14px;font-weight:600;line-height:1.3}
+.tk small{font-size:11.5px;font-weight:500;color:var(--ink-2)}
+.tk.ok{background:var(--ok-soft);color:var(--ok)}
+.tk.ok small{color:var(--ok)}
+.tk.ded{background:var(--surface);border:1.5px dashed var(--hatch);color:var(--ink-2)}
+.tk.warn{background:var(--warn-soft);color:var(--warn)}
+.tk.res{background:var(--ink);color:var(--bg)}
+.tk.sch{background:var(--sch-soft);color:var(--sch)}
+.op{font-family:var(--f-num);font-size:18px;font-weight:600;color:var(--ink-3)}
+.op.eqtxt{font-family:var(--f-body);font-size:14px}
+.eq-note{font-size:13.5px;color:var(--ink-2)}
+.nest{font-size:14px}
+.n3{border:1.5px dashed var(--hatch);border-radius:16px;padding:12px;display:grid;gap:10px}
+.nl{font-size:12.5px;font-weight:700;color:var(--ink-3)}
+.n3r{display:flex;flex-wrap:wrap;gap:6px 14px}
+.n3r .far{color:var(--warn)} .n3r .near{color:var(--ok)}
+.n2{background:var(--ok-soft);border-radius:12px;padding:12px;display:grid;gap:8px;justify-items:start}
+.n2r{color:var(--ok)}
+.n1{justify-self:center;background:var(--accent);color:var(--surface);border-radius:999px;padding:6px 18px;font-weight:700;font-size:14px}
+.fare{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-items:end;margin-top:4px}
+.fc{display:grid;gap:6px;justify-items:center;text-align:center}
+.fc i{width:100%;border-radius:8px 8px 3px 3px;background:var(--ok)}
+.fc.far i{background:var(--warn)}
+.fc .amt{font-family:var(--f-num);font-weight:600;font-size:15px}
+.fc .lb{font-size:12.5px;color:var(--ink-2);line-height:1.35}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cc{border-left:3px solid var(--line);padding:2px 0 2px 14px;display:grid;gap:10px;align-content:start}
+.cc.strong{border-left-color:var(--bad)}
+.cc-h{font-family:var(--f-display);font-size:20px}
+.cc.strong .cc-h{color:var(--bad)}
+.cc dl{margin:0;display:grid;gap:4px}
+.cc dt{font-size:12px;font-weight:700;color:var(--ink-3);margin-top:6px}
+.cc dd{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.cc dd.hl-d{color:var(--ink);font-weight:700}
+@media (max-width:480px){ .cmp{grid-template-columns:1fr} }
+.wd{display:grid;gap:4px}
+.wd-bar{display:grid;grid-template-columns:1fr 2fr 1fr 2fr 1fr;height:44px;border-radius:10px;overflow:hidden}
+.wd-on{background:var(--reg)}
+.wd-gap{display:grid;place-items:center;background:repeating-linear-gradient(-45deg,color-mix(in srgb,var(--warn) 40%,transparent) 0 5px,var(--warn-soft) 5px 10px)}
+.wd-gap b{font-size:14px;color:var(--warn);background:var(--surface);border-radius:5px;padding:1px 6px}
+.wd-t{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-3)}
+.wd-cap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:13px;color:var(--ink-2);line-height:1.4}
+.wd-cap span:nth-child(2){text-align:center} .wd-cap span:nth-child(3){text-align:right}
+.org{display:grid;gap:6px;justify-items:center;padding:14px 0 4px;border-top:1px solid var(--line)}
+.ob{display:grid;gap:2px;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 14px;max-width:340px;width:100%}
+.ob.top{background:var(--accent-soft);border-color:transparent}
+.ob b{font-family:var(--f-display);font-size:17px}
+.ob span{font-size:13px;color:var(--ink-2);line-height:1.45}
+.oa{display:grid;justify-items:center;font-size:12.5px;color:var(--accent);font-weight:600}
+.oa::before{content:"";width:2px;height:10px;background:var(--accent)}
+.oa::after{content:"";width:2px;height:10px;background:var(--accent)}
+.org-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;width:100%;margin-top:10px}
+.oa.side{display:flex;align-items:center;gap:4px}
+.oa.side::before,.oa.side::after{width:14px;height:2px}
+.oa.side span{white-space:nowrap}
+@media (max-width:480px){ .org-row{grid-template-columns:1fr} .oa.side{flex-direction:column} .oa.side::before,.oa.side::after{width:2px;height:10px} }
+
+/* 접기 */
+details.fold{padding:0}
+details.fold>summary.fold-s{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;padding:16px 18px;min-height:64px}
+details.fold>summary.fold-s::-webkit-details-marker{display:none}
+.fold-s .fh{font-size:17px;font-weight:700;color:var(--ink);grid-column:1}
+.fold-s .fg{font-size:14px;color:var(--ink-2);grid-column:1;line-height:1.5}
+.fold-s::after{content:"";grid-column:2;grid-row:1/span 2;width:9px;height:9px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:rotate(45deg);transition:transform .15s;margin-right:4px}
+details.fold[open]>.fold-s::after{transform:rotate(-135deg)}
+details.panel.fold[open]{padding:0 18px 18px}
+details.panel.fold[open]>.fold-s{padding:16px 0 4px}
+details.audits.fold{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+details.audits.fold .fold-s .fh{color:var(--bad)}
+.audit-list{display:grid;gap:10px;padding:0 14px 14px}
+.audit-list .audit{background:var(--bg)}
+details.more>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;min-height:36px;font-size:14px;font-weight:600;color:var(--accent)}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::after{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .15s}
+details.more[open]>summary::after{transform:rotate(-135deg) translateY(-1px)}
+details.more[open]{display:grid;gap:10px}
+.rules-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rules-tg{min-height:32px;padding:0;font-size:14px}
+.rules .sub{color:var(--ink-2)}
+.rules.brief .sub,.rules.brief li br{display:none}
+.rules.brief ol{gap:8px}
+
+/* 사용성 */
+[id^="sec-"],.ln,.q,.result,.tres,.wq,.kd,details.fold{scroll-margin-top:72px}
+.hdr-r{display:flex;align-items:center;gap:4px}
+.hdr-search{width:44px;height:44px;border:0;background:none;border-radius:10px;display:grid;place-items:center;color:var(--ink-2)}
+.hdr-search:hover{background:var(--sunken);color:var(--ink)}
+.resume{display:flex;align-items:center;gap:8px;justify-self:start;max-width:100%;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:14px;color:var(--ink-2)}
+.resume b{color:var(--ink);font-weight:700}
+.resume i{font-style:normal;color:var(--accent);font-size:18px}
+.share-btn{min-height:40px}
+.share-q{min-height:44px}
+.rules-tg{min-height:44px}
+details.how>summary,details.more>summary{min-height:44px}
+.link-btn{min-height:44px}
+@media (max-width:640px){
+  .oss-btn{opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .2s,transform .2s}
+  body.at-end .oss-btn{opacity:1;pointer-events:auto;transform:none}
+}
+
+.crumb{justify-self:start;border:0;background:none;padding:0 4px 0 0;min-height:36px;font-size:14px;font-weight:600;color:var(--ink-2);display:inline-flex;align-items:center;gap:4px;margin-bottom:-18px}
+.crumb span{font-size:18px;line-height:1}
+.crumb:hover{color:var(--accent)}
+.base-msg{flex-basis:100%;font-size:13.5px;font-weight:600;color:var(--ok);background:var(--ok-soft);border-radius:8px;padding:6px 10px}
+.case-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:-14px}
+.case-tools span{font-size:13.5px;color:var(--ink-2)}
+#case-all[aria-pressed="true"]{color:var(--accent)}
+
+/* bottom tab */
+nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);display:none}
+nav.tabbar .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+nav.tabbar button{border:0;background:none;height:58px;display:grid;place-items:center;gap:1px;font-size:12.5px;color:var(--ink-3);padding-top:6px}
+nav.tabbar svg{width:21px;height:21px;stroke:currentColor}
+nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
+
+@media (min-width:641px){
+  #v-calc .ph-top{order:-4}
+  #v-calc .subtabs{order:-3}
+  #v-calc .ph{order:-2}
+  #v-calc .result{order:-1}
+}
+@media (max-width:640px){
+  .topnav{display:none}
+  nav.tabbar{display:block}
+  body.on-calc:not(.res-in) .livebar{display:block}
+  body.on-calc main{padding-bottom:180px}
+  .tl-ticks span.odd{opacity:0}
+}
+@media (max-width:420px){
+  .side{grid-template-columns:1fr}
+  .notice ul{grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .notice li{padding:9px 9px}
+  .notice li .v{font-size:15px}
+  .lead-head b{font-size:19px}
+  .big{font-size:38px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:420px){
+  .day-in{gap:4px}
+  .dz{padding:8px 2px}
+  .dz small{font-size:11.5px;white-space:nowrap;letter-spacing:-.02em}
+}
+.map{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.map li{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1.25fr);align-items:center;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
+.map li:last-child{border-bottom:0}
+.map-s{font-weight:600;font-size:15px}
+.map-a{height:2px;background:var(--line);position:relative}
+.map-a::after{content:"";position:absolute;right:-1px;top:-4px;border:5px solid transparent;border-left-color:var(--ink-3);border-right:0}
+.map-t{display:grid;gap:3px;justify-items:start}
+.map-t small{font-size:12.5px;color:var(--ink-2);line-height:1.4}
+.mb{font-size:14px;font-weight:700;border-radius:7px;padding:3px 9px}
+.mb.trip{background:var(--accent-soft);color:var(--accent)}
+.mb.t41{background:var(--ok-soft);color:var(--ok)}
+.mb.lv{background:var(--warn-soft);color:var(--warn)}
+.map-tips{display:grid;gap:8px;background:var(--bg);border-radius:10px;padding:12px 14px}
+.map-tips p{margin:0;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.map-tips p>b:first-child{display:block;color:var(--ink);font-size:14.5px}
+.day-bar{position:relative}
+.now-l{position:absolute;top:-7px;height:18px;width:2px;background:var(--bad);border-radius:2px;pointer-events:none;transform:translateX(-1px)}
+.now-l::before{content:"";position:absolute;top:-3px;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--bad)}
+.day-now{font-size:13.5px;color:var(--ink-2);margin-top:-4px}
+.day-now b{color:var(--ink);font-weight:650}
+
+/* ---- 홈 v30 ---- */
+.eyebrow{letter-spacing:0;font-weight:700}
+.view>.sec-h{margin-top:14px}
+.view>.sec-h h2{font-size:20px;font-weight:800;letter-spacing:-.03em}
+.home-top{gap:8px}
+.news{display:flex;align-items:center;gap:10px;justify-self:stretch;margin-top:6px;border:0;border-radius:12px;background:var(--rev-soft);padding:10px 14px;min-height:46px;text-align:left;color:var(--ink);font-size:14.5px}
+.news-k{flex:0 0 auto;font-size:12.5px;font-weight:800;color:var(--rev);background:var(--rev-mark);border-radius:6px;padding:2px 8px}
+.news-t{flex:1;min-width:0;font-weight:600}
+.news i{font-style:normal;color:var(--rev);font-size:20px;line-height:1}
+.news:hover{filter:brightness(.97)}
+.rep{box-shadow:none;border-radius:var(--r)}
+.rep-head{align-items:center}
+.rep-head .link-btn{text-decoration:none;white-space:nowrap}
+.rl-out{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:center;background:var(--bg);border-radius:12px;padding:14px}
+.rl-out .chain{grid-row:1/3}
+.rl-out .st{animation:stampIn .32s cubic-bezier(.3,1.6,.5,1) both}
+.rl-out .st:nth-child(3){animation-delay:.08s}.rl-out .st:nth-child(5){animation-delay:.16s}
+@keyframes stampIn{from{opacity:0;transform:scale(1.6) rotate(-20deg)}to{opacity:1;transform:scale(1) rotate(-7deg)}}
+@media (prefers-reduced-motion:reduce){.rl-out .st{animation:none}}
+.rl-t{font-size:15px;font-weight:650}
+.rl-t small{font-weight:500;color:var(--ink-2);margin-left:6px;font-size:13px}
+.rl-n{font-size:14px;color:var(--ink-2);line-height:1.5}
+.rl-more{grid-column:1/-1;justify-self:start;margin-top:2px}
+.tcase{display:grid;gap:12px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--r);padding:16px 18px}
+.tc-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.tc-k{font-size:13px;font-weight:800;color:var(--accent)}
+.tc-k span{font-weight:600;color:var(--ink-3);margin-left:6px}
+.tc-q{font-size:17px;font-weight:700;line-height:1.45;letter-spacing:-.02em}
+.tc-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tc-btns button{min-height:48px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px}
+.tc-btns button i{font-style:normal;font-size:19px;line-height:1}
+.tc-btns button:hover{border-color:var(--accent)}
+.tc-btns button.pick-ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.tc-btns button.pick-no{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.tc-ans{display:grid;gap:6px;font-size:14.5px;line-height:1.6;color:var(--ink-2)}
+.tc-ans .v{font-weight:800;font-size:15px}
+.tc-ans .v.ok{color:var(--ok)}.tc-ans .v.no{color:var(--bad)}
+.tc-ans strong{color:var(--ink)}
+.tc-foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.g-rec-h{font-size:12.5px;font-weight:700;color:var(--ink-3);padding:4px 4px 0}
+.link-btn.inl{min-height:0;padding:0;font-size:inherit}
+@media (max-width:480px){.rep-head b{font-size:17px}.tc-q{font-size:16px}}
+
+/* ---- 결재라인 v31 ---- */
+.st.wide{width:auto;min-width:38px;padding:0 9px;border-radius:999px;font-size:12px;white-space:nowrap;transform:rotate(-3deg)}
+.st.fin{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.lg-legend{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-size:13.5px;color:var(--ink-2);margin:2px 0 0}
+.lg-legend .tag{margin:0 2px 0 0}
+.lg-legend .tag.sch{margin-left:6px}
+.lg-chk{color:var(--ink-3)}
+.lines{gap:12px}
+.lg{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.lg-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:var(--bg);border-bottom:1px solid var(--line)}
+.lg-h b{display:block;font-size:15.5px;font-weight:700;letter-spacing:-.01em}
+.lg-h small{display:block;font-size:12.5px;color:var(--ink-2)}
+.lg-flow{display:flex;align-items:center;gap:2px;flex:0 0 auto}
+.me{font-size:12px;font-weight:700;color:var(--ink-2);border:1.5px dashed var(--hatch);border-radius:999px;padding:5px 9px;white-space:nowrap}
+.fl{width:10px;height:2px;background:var(--hatch);border-radius:2px}
+.lg-rows{display:grid;gap:1px;background:var(--line)}
+.lg .ln{border:0;border-radius:0;background:var(--surface)}
+.lg .ln[aria-expanded="true"]{background:color-mix(in srgb,var(--accent) 4%,var(--surface))}
+.ln-h{grid-template-columns:1fr auto;min-height:52px;padding:10px 14px 10px 16px}
+.ln-n{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.ln-tags{display:flex;flex-wrap:wrap;gap:4px}
+.lt{font-size:12px;font-weight:600;color:var(--ink-2);background:var(--sunken);border-radius:5px;padding:1px 7px}
+.lt.proof-t{color:var(--warn);background:var(--warn-soft)}
+.lt.ext-t{color:var(--accent);background:var(--accent-soft)}
+.chev{font-style:normal;font-size:20px;color:var(--ink-3);transition:transform .15s;line-height:1}
+.ln[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.ln-b{border-top:1px dashed var(--line)}
+@media (min-width:641px){
+  .lg-rows{grid-template-columns:1fr 1fr}
+  .lg-rows.odd .ln:last-child,.lg .ln[aria-expanded="true"]{grid-column:1/-1}
+}
+@media (max-width:420px){ .lg-flow .me,.lg-flow .fl{display:none} .lg-h{padding:12px 14px} }
+.lg-chk{margin-left:6px}
+.rstrip{background:var(--rev-soft);border-radius:var(--r);overflow:hidden}
+.rstrip>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 16px;min-height:56px;cursor:pointer}
+.rstrip>summary::-webkit-details-marker{display:none}
+.rs-n{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--rev-mark);color:var(--ink);font-weight:800;display:grid;place-items:center;font-size:15px}
+.rs-t{flex:1;display:grid}
+.rs-t b{font-size:15.5px;font-weight:700}
+.rs-t small{font-size:13px;color:var(--ink-2)}
+.rstrip>summary i{font-style:normal;font-size:20px;color:var(--rev);transition:transform .15s}
+.rstrip[open]>summary i{transform:rotate(90deg)}
+.rstrip .rules{border:0;border-radius:0;margin:0 8px 8px;border-radius:10px}
+.ph .eyebrow.has-share{display:flex;justify-content:space-between;align-items:center;gap:10px}
+
+/* ---- 도구 v32 ---- */
+.tgroup{display:grid;gap:10px}
+.tg-h{font-size:13.5px;font-weight:800;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+.tg-h::before{content:"";width:8px;height:8px;border-radius:3px;background:var(--gc)}
+.g-calc{--gc:var(--accent);--gs:var(--accent-soft)}
+.g-judge{--gc:var(--ok);--gs:var(--ok-soft)}
+.g-phr{--gc:var(--warn);--gs:var(--warn-soft)}
+.g-guide{--gc:var(--ink-2);--gs:var(--sunken)}
+.tools-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tools-g>.tool:last-child:nth-child(odd){grid-column:1/-1}
+.tool{display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 14px 14px 14px;min-height:76px;color:var(--ink);transition:border-color .15s}
+.tool:hover{border-color:var(--gc)}
+.tool::after{content:"›";font-size:22px;color:var(--ink-3);line-height:1}
+.ti{width:46px;height:46px;border-radius:12px;background:var(--gs);color:var(--gc);display:grid;place-items:center}
+.tb{display:grid;gap:2px;min-width:0}
+.tb b{font-size:16px;font-weight:650;color:var(--ink);letter-spacing:-.01em}
+.tb small{font-size:13.5px;color:var(--ink-2);line-height:1.45}
+.tstat{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);margin-top:5px;font-weight:600}
+.tstat:empty{display:none}
+.tstat>span:last-child{min-width:0}
+.phr{scroll-margin-top:80px}
+.tbar{flex:0 0 60px;height:6px;border-radius:3px;background:var(--sunken);overflow:hidden}
+.tbar i{display:block;height:100%;background:var(--gc);border-radius:3px}
+.tbar.warn i{background:var(--warn)}.tbar.bad i{background:var(--bad)}
+.tnew{font-size:11.5px;font-weight:700;color:var(--gc);background:var(--gs);border-radius:5px;padding:1px 6px;margin-left:6px;vertical-align:2px}
+@media (max-width:640px){ .tools-g{grid-template-columns:1fr} }
+
+/* ---- 사례 v33 ---- */
+.case-ans{display:flex;flex-wrap:wrap;gap:6px;margin-top:-16px}
+.case-ans button{display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.case-ans i{font-style:normal;font-weight:800}
+.case-ans i.o{color:var(--ok)}.case-ans i.x{color:var(--bad)}.case-ans i.t{color:var(--warn)}.case-ans i.au{color:var(--bad)}
+.case-ans button[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);background:var(--sunken)}
+.case-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:-10px}
+.case-bar span{font-size:13.5px;color:var(--ink-2)}
+.seg{display:inline-flex;background:var(--sunken);border-radius:10px;padding:4px;gap:4px}
+.seg button{border:0;background:none;border-radius:7px;min-height:36px;padding:0 14px;font-weight:600;font-size:14px;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0 / .08)}
+.quiz-prog{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;color:var(--ink-2);margin-top:-16px}
+.quiz-prog b{color:var(--ink)}
+.qp-bar{flex:0 0 90px;height:6px;border-radius:3px;background:var(--sunken);overflow:hidden}.qp-bar i{display:block;height:100%;background:var(--accent)}
+.qa{display:grid;gap:14px}
+.qg{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.qg-h{font-size:14px;font-weight:800;padding:11px 16px;background:var(--bg);border-bottom:1px solid var(--line);color:var(--ink)}
+.qg-h .num{color:var(--ink-3);font-weight:600;margin-left:4px}
+.qg-rows{display:grid;gap:1px;background:var(--line)}
+.qg .q{border:0;border-radius:0;background:var(--surface)}
+.qg .q.open{background:color-mix(in srgb,var(--accent) 3%,var(--surface))}
+.q .qh{width:100%;border:0;background:none;text-align:left;padding:13px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;min-height:56px}
+.qq{font-size:16px;font-weight:600;line-height:1.45;color:var(--ink);letter-spacing:-.01em}
+.qc{display:none;font-size:12px;font-weight:700;color:var(--ink-3);margin-right:6px}
+.qa.searching .qc{display:inline}
+.aud{display:inline-block;margin-left:6px;font-size:11.5px;font-weight:700;color:var(--bad);background:var(--bad-soft);border-radius:5px;padding:1px 6px;vertical-align:2px}
+.vb{display:inline-flex;align-items:center;gap:3px;font-size:12.5px;font-weight:700;border-radius:7px;padding:4px 8px;white-space:nowrap;min-width:64px;justify-content:center}
+.vb i{font-style:normal;font-weight:800}
+.vb.o{background:var(--ok-soft);color:var(--ok)}.vb.x{background:var(--bad-soft);color:var(--bad)}.vb.t{background:var(--warn-soft);color:var(--warn)}
+.qa.see .mark{display:none}
+.qa.quiz .vb{display:none}
+.qa.quiz .q.rev .vb{display:inline-flex}
+.qa.quiz .q.rev .mark{display:none}
+.qa.see .q .qh{grid-template-columns:auto 1fr}
+.qa.quiz .q:not(.rev) .qh{grid-template-columns:1fr auto}
+.qa.quiz .q.rev .qh{grid-template-columns:auto 1fr}
+.q .a{padding:0 16px 16px;display:grid;gap:10px;font-size:15px;line-height:1.65;color:var(--ink-2)}
+.qz{display:grid;gap:8px}.qz p{margin:0;font-weight:600;color:var(--ink);font-size:14px}
+.qa.see .qz,.qa.quiz .q.rev .qz{display:none}
+.qa.quiz .q:not(.rev) .ans{display:none}
+.ans{display:grid;gap:8px}
+.qres:empty{display:none}.qres{margin:0}
+.qres .ok{color:var(--ok)}.qres .no{color:var(--bad)}
+.vl{margin:0;display:flex;align-items:flex-start;gap:8px;font-weight:700;font-size:15.5px;border-radius:10px;padding:10px 12px;line-height:1.5}
+.vl i{font-style:normal;font-weight:800;font-size:17px;line-height:1.35}
+.vl.o{background:var(--ok-soft);color:var(--ok)}.vl.x{background:var(--bad-soft);color:var(--bad)}.vl.t{background:var(--warn-soft);color:var(--warn)}
+.vl span{color:var(--ink)}
+.why{margin:0}
+.ans .src{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap;margin:0;font-size:13px;color:var(--ink-2)}
+.src-k{font-size:11.5px;font-weight:700;color:var(--ink-3);background:var(--sunken);border-radius:5px;padding:1px 6px}
+.a-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:2px}
+.share-q.qs-btn{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--surface);border-radius:999px;min-height:36px;padding:0 11px;font-size:13px;font-weight:600;color:var(--ink-2);margin-left:auto}
+@media (max-width:420px){ .vb{min-width:66px;padding:3px 4px;font-size:12px} .qq{font-size:15.5px} }
+.q.fold{display:none}
+.qg-more{width:100%;border:0;border-top:1px solid var(--line);background:var(--bg);min-height:46px;font-weight:700;font-size:14px;color:var(--accent)}
+.qz .tc-btns button{font-size:14px;white-space:nowrap;gap:4px;padding:0 4px}
+
+/* ---- 홈: 출장 이동시간 ---- */
+.mv{display:grid;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.mv-top{display:grid;gap:2px}
+.mv-k{font-size:13px;font-weight:800;color:var(--accent)}
+.mv-top b{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.mv-seg{justify-self:start}
+.mv-fig{background:var(--bg);border-radius:12px;padding:14px 10px 6px}
+.mv-fig svg{display:block;max-width:440px;margin:0 auto;overflow:visible}
+.mv-ic{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mv-in{fill:color-mix(in srgb,var(--accent) 55%,var(--surface))}
+.mv-main{fill:var(--accent)}
+.mv-out{fill:url(#mvh);stroke:var(--hatch);stroke-width:1}
+.mv-bg{fill:var(--surface)}.mv-hl{stroke:var(--hatch);stroke-width:3}
+.mv-tw{font-size:12.5px;font-weight:700;fill:var(--bg);text-anchor:middle}
+.mv-t{font-size:12.5px;fill:var(--ink-2);text-anchor:middle;font-weight:600}
+.mv-br{fill:none;stroke:var(--ink);stroke-width:1.6}
+.mv-tb{font-size:13px;font-weight:800;fill:var(--ink);text-anchor:middle}
+.mv-v{margin:0;font-size:14.5px;line-height:1.6;color:var(--ink-2)}
+.mv-v b{display:block;font-size:15.5px}
+.mv-v b.ok{color:var(--ok)}.mv-v b.no{color:var(--bad)}
+.mv-safe{display:flex;gap:10px;align-items:flex-start;background:var(--ok-soft);border-radius:10px;padding:12px 14px}
+.mv-shield{color:var(--ok);flex:0 0 auto;margin-top:1px}
+.mv-safe>div{display:grid;gap:3px;font-size:14px;line-height:1.55;color:var(--ink-2)}
+.mv-safe b{color:var(--ok);font-size:15px}
+.mv-safe .src{font-size:12.5px;margin:0}
+.mv-mix{margin:0;font-size:13px;color:var(--ink-3)}
+.mv-foot{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;border-top:1px solid var(--line);padding-top:8px}
+.mv-foot>span{font-size:12.5px;font-weight:700;color:var(--ink-3)}
+.mv-foot .link-btn{text-decoration:none;font-size:13.5px}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <button class="logo" id="logo" aria-label="복무 한눈에 홈">
+      <span class="logo-mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span>
+      복무 한눈에
+    </button>
+    <div class="hdr-r">
+    <nav class="topnav" aria-label="주요 메뉴">
+      <button data-go="home">홈</button>
+      <button data-go="line">결재라인</button>
+      <button data-go="tools">도구</button>
+      <button data-go="cases">사례</button>
+    </nav>
+    <button class="hdr-search" id="hdr-search" aria-label="검색"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- HOME -->
+<section class="view" id="v-home">
+  <div class="home-top">
+    <div class="eyebrow">교육공무원 복무 길잡이 <span class="unoff">개인 제작 · 교육청 공식 사이트 아님</span></div>
+    <h1 class="home-h">오늘 어떤 복무를 올리시나요?</h1>
+    <button class="news" data-go="calc"><span class="news-k">10.1 개정</span><span class="news-t">초과근무 1일 상한 폐지 · 월 57시간은 그대로</span><i aria-hidden="true">›</i></button>
+  </div>
+
+  <article class="day" aria-labelledby="day-h">
+    <div class="day-head"><b id="day-h">하루 근무시간에서 찾기</b><span class="sch-badge" id="day-src"></span></div>
+    <div class="day-bar">
+      <div class="day-in">
+        <button class="dz" data-go="work"><b>지각</b><small>늦게 출근</small></button>
+        <button class="dz" data-go="work"><b>외출</b><small>잠시 자리 비움</small></button>
+        <button class="dz" data-go="work"><b>조퇴</b><small>일찍 퇴근</small></button>
+      </div>
+      <button class="dz ot" data-go="calc"><b>초과근무</b><small>남아서 근무</small></button>
+      <i class="now-l" id="now-l" hidden></i>
+    </div>
+    <div class="day-ticks"><span class="num" id="day-s">08:30</span><span class="num" id="day-e">16:30</span></div>
+    <p class="day-now" id="day-now" hidden></p>
+    <div class="day-out">
+      <span>학교 밖에서</span>
+      <button class="dz-pill" data-go="trip">출장</button>
+      <button class="dz-pill" data-go="vac">방학·41조 연수</button>
+      <button class="dz-pill" data-line="출장(연수)">대학원·자율연수</button>
+    </div>
+  </article>
+
+  <div class="sec-h"><h2>찾기</h2></div>
+  <div class="gsearch">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="g-q" type="search" placeholder="예: 병가, 출장 여비, 41조, 사후결재" aria-label="복무 검색" autocomplete="off">
+    </div>
+    <div class="g-res" id="g-res" hidden></div>
+  </div>
+  <button class="resume" id="resume" hidden><span>보던 화면 이어 보기</span><b></b><i aria-hidden="true">›</i></button>
+
+  <article class="rep" aria-labelledby="rep-h">
+    <div class="rep-head"><b id="rep-h">무엇을, 누구에게 올릴까요?</b><button class="link-btn" data-go="line">전체 보기 ›</button></div>
+    <div class="pick" id="rl-pick" role="group" aria-label="복무 유형"></div>
+    <div class="rl-out" id="rl-out" aria-live="polite"></div>
+  </article>
+
+  <article class="mv" id="mv" aria-labelledby="mv-h">
+    <div class="mv-top"><span class="mv-k">출장</span><b id="mv-h">출장 이동시간, 어디서 출발하나요?</b></div>
+    <div class="seg mv-seg" id="mv-seg" role="group" aria-label="출발지"><button data-mv="sch" aria-pressed="true">학교에서 출발</button><button data-mv="home" aria-pressed="false">집에서 출발</button></div>
+    <div class="mv-fig" id="mv-fig" role="img"></div>
+    <p class="mv-v" id="mv-v"></p>
+    <div class="mv-safe" id="mv-safe" hidden>
+      <span class="mv-shield" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span>
+      <div><b>이동시간이 빠져도 걱정 마세요</b><span>출장지로 가는 이동은 공무를 위한 준비 행위라, 가는 길의 사고는 공무상 재해로 인정됩니다.</span><span class="src">공무원 재해보상법 제4조 제1항 제1호 가목</span></div>
+    </div>
+    <p class="mv-mix">섞이면 구간별로 따집니다. 학교 → 연수지는 포함, 연수지 → 집은 제외입니다.</p>
+    <div class="mv-foot"><span>관련 사례</span><button class="link-btn" data-qcase="집에서 바로 출장지로 갈 때 이동시간">집에서 바로 갈 때 ›</button><button class="link-btn" data-qcase="09시 출장인데 집에서 출발해 가다 08시 40분에 사고">가는 길에 사고 나면 ›</button><button class="link-btn mv-trip" data-go="trip">출장 판정 ›</button></div>
+  </article>
+
+  <article class="tcase" id="tcase" aria-labelledby="tcase-h"></article>
+
+  <div class="sec-h"><h2>둘러보기</h2><button class="link-btn" data-go="tools">도구 모두 보기</button></div>
+  <div class="tiles">
+    <button class="tile" data-go="calc"><span class="tile-k">초과근무</span><b>초과근무 계산기</b><small>인정 시간 · 몇 시까지</small></button>
+    <button class="tile" data-go="trip"><span class="tile-k">출장</span><b>출장 판정</b><small>구분 · 결재 · 여비</small></button>
+    <button class="tile" data-go="vac"><span class="tile-k">방학</span><b>41조 일정 블록</b><small>겹침 · 빈 시간 확인</small></button>
+    <button class="tile" data-go="cases"><span class="tile-k">사례</span><b>이럴 땐 인정될까요?</b><small id="tile-case-n">○/× 사례 모음</small></button>
+    <button class="tile" data-go="line" data-sec="rules"><span class="tile-k">체크</span><b>복무 신청 전 체크</b><small>허가·결재·증빙·연락 7가지</small></button>
+    <button class="tile" data-go="know"><span class="tile-k">알아 두기</span><b>교원의 임무와 의무</b><small>직무상·신분상 의무, 질의회신</small></button>
+  </div>
+
+  <div class="sec-h"><h2>함께 쓰면 좋은 사이트</h2></div>
+  <div class="ext">
+    <a class="ext-card" href="https://leave-of-absence-nu.vercel.app/" target="_blank" rel="noopener"><span class="tile-k">휴가</span><b>휴가 규정 도우미 <span aria-hidden="true">↗</span></b><small>연가·병가·공가·특별휴가·육아시간</small></a>
+    <a class="ext-card" href="https://external-lecture.vercel.app/" target="_blank" rel="noopener"><span class="tile-k">외부강의·겸직</span><b>외부강의·겸직 도우미 <span aria-hidden="true">↗</span></b><small>외부강의 신고, 겸직 허가 판단</small></a>
+  </div>
+</section>
+
+<!-- CALC -->
+<section class="view" id="v-calc" hidden>
+  <div class="subtabs" aria-label="초과근무"><button data-go="calc">계산기</button><button data-go="neis">나이스 신청 절차</button></div>
+  <div class="ph">
+    <div class="eyebrow">초과근무 계산기</div>
+    <h1 id="calc-h">오늘 몇 시간 인정될까요?</h1>
+  </div>
+
+  <div class="panel">
+    <div class="base">
+      <div class="base-view" id="base-view">
+        <span>근무시간</span>
+        <b class="num" id="base-txt">09:00–17:00</b>
+        <span class="sch-badge" id="base-src"></span>
+        <span class="base-msg" id="base-msg" role="status" hidden></span>
+        <button class="link-btn" id="base-edit">바꾸기</button>
+      </div>
+      <div class="base-editor" id="base-editor" hidden>
+        <p class="base-q" id="base-q">우리 학교 출퇴근 시각을 한 번만 골라 주세요. 이 기기에 기억해 두고 계산에 씁니다.</p>
+        <div class="pick" id="base-pick">
+          <button data-reg="08:30-16:30">08:30–16:30</button>
+          <button data-reg="08:40-16:40">08:40–16:40</button>
+          <button data-reg="08:50-16:50">08:50–16:50</button>
+          <button data-reg="09:00-17:00">09:00–17:00</button>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="r-start">직접 입력 · 출근</label><input id="r-start" type="time" value="09:00"></div>
+          <div class="field"><label for="r-end">퇴근</label><input id="r-end" type="time" value="17:00"></div>
+        </div>
+        <button class="btn primary" id="base-save">이 시각으로 정하기</button>
+      </div>
+    </div>
+
+    <div class="seg" role="group" aria-label="계산 방식">
+      <button id="m-calc" aria-pressed="true">몇 시간 인정?</button>
+      <button id="m-until" aria-pressed="false">몇 시까지?</button>
+    </div>
+    <div class="seg seg-sm" role="group" aria-label="근무일 유형">
+      <button id="t-wd" aria-pressed="true">평일</button>
+      <button id="t-hd" aria-pressed="false">토요일·공휴일</button>
+    </div>
+
+    <div class="field-row">
+      <div class="field"><label for="a-start" id="l-start">실제 출근</label><input id="a-start" type="time" value="09:00"></div>
+      <div class="field" id="f-end"><label for="a-end" id="l-end">실제 퇴근</label><input id="a-end" type="time" value="19:30"></div>
+    </div>
+    <div class="field" id="f-target" hidden>
+      <label>받고 싶은 인정 시간</label>
+      <div class="pick" id="target-pick">
+        <button data-t="60" aria-pressed="false">1시간</button>
+        <button data-t="90" aria-pressed="false">1시간 30분</button>
+        <button data-t="120" aria-pressed="true">2시간</button>
+        <button data-t="180" aria-pressed="false">3시간</button>
+        <button data-t="240" aria-pressed="false">4시간</button>
+      </div>
+    </div>
+
+    <div class="ex-block">
+      <div class="ex-head">
+        <b>개인 용무로 자리 비운 시간</b>
+        <span class="ex-sum"><span class="num" id="ex-total">없음</span><button class="link-btn" id="ex-clear" hidden>지우기</button></span>
+      </div>
+      <div class="pick" id="ex-chips">
+        <button data-add="10">+10분</button>
+        <button data-add="30">+30분</button>
+        <button data-add="60">+1시간</button>
+      </div>
+      <details class="reg" id="ex-precise">
+        <summary>정확한 시각으로 입력하기</summary>
+        <div class="ex-list" id="ex-list"></div>
+        <button class="btn sm ghost" id="ex-add">+ 시각 추가</button>
+      </details>
+      <p class="hint" id="ex-hint">외출·은행·사적 용무처럼 일하지 않은 시간만 넣으세요. 저녁 식사·휴식은 평일 1시간 공제에 포함되어 따로 빼지 않습니다.</p>
+    </div>
+
+    <div class="samples">
+      <span>예시</span>
+      <button class="btn sm ghost" data-sample="1">19:30 퇴근 + 외출 30분</button>
+      <button class="btn sm ghost" data-sample="2">1시간 30분 일찍 출근</button>
+      <button class="btn sm ghost" data-sample="3">퇴근 50분 뒤 귀가</button>
+      <button class="btn sm ghost" data-sample="4">토요일 행사 준비</button>
+    </div>
+  </div>
+
+  <div class="result" id="result" aria-live="polite">
+    <div class="res-top">
+      <div style="display:grid;gap:4px">
+        <span class="lab" id="res-lab">오늘 인정 시간</span>
+        <span class="big" id="big">0:00</span>
+      </div>
+      <span class="res-chips"><span class="chip mute" id="res-base"></span><span class="chip ok" id="res-chip">인정</span></span>
+    </div>
+    <p class="res-msg" id="res-msg"></p>
+    <div class="neis-card" id="neis-card">
+      <div class="neis-h"><span class="chip">나이스에 이렇게 입력</span><button class="btn sm" id="neis-copy">복사</button></div>
+      <dl class="neis-dl" id="neis-dl"></dl>
+      <div class="neis-ex"><span>업무 내용 예시 · 누르면 복사됩니다</span><div class="pick sm" id="neis-ex"></div></div>
+    </div>
+
+    <div class="tl">
+      <div class="tl-row">
+        <div class="tl-track" id="track"></div>
+        <div class="ded-box" id="ded-box" hidden title="평일 시간외근무 총량에서 1시간 공제">−1시간</div>
+      </div>
+      <div class="tl-ticks" id="ticks"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <details class="how" id="how">
+      <summary>계산 과정 보기</summary>
+      <div class="calc-rows" id="rows"></div>
+    </details>
+    <div class="oldnote" id="oldnote" hidden><span class="chip rev">개정</span><span id="oldnote-t"></span></div>
+  </div>
+
+  <div class="panel month">
+    <div class="sec-h"><h2>이번 달 누적</h2><span class="num" id="m-label"></span></div>
+    <div class="gauge">
+      <div class="gauge-top">
+        <span class="num" id="m-sum">0:00 <small>/ 57:00</small></span>
+        <span class="chip ok" id="m-chip">여유 57시간</span>
+      </div>
+      <div class="gauge-bar"><div id="m-bar" style="width:0%"></div></div>
+      <p class="hint" id="m-pay"></p>
+    </div>
+    <div class="add-row">
+      <div class="field"><label for="m-date">근무 날짜</label><input id="m-date" type="date"></div>
+      <button class="btn primary" id="m-add">계산 결과 기록하기</button>
+    </div>
+    <div class="rec-list" id="m-list"></div>
+    <details class="how">
+      <summary>정액분(월 10시간)은 어떻게 받나요?</summary>
+      <div class="calc-rows stack">
+        <div><span>받는 사람</span><span>정규 근무일 기준 월 출근(출장 포함) 15일 이상</span></div>
+        <div><span>금액</span><span>명령 없이 월 10시간분. 15일에 못 미치면 하루마다 1/15씩 줄어듦</span></div>
+        <div><span>출근일로 인정</span><span>반일연가·외출을 쓴 날도 나머지를 채워 하루 8시간 근무하면 출근일</span></div>
+        <div><span>출근일에서 제외</span><span>연가·병가·공가·특별휴가·휴직·방학·결근 등으로 근무하지 않은 날, 조퇴 등으로 8시간을 채우지 못한 날</span></div>
+        <div><span>육아·모성보호시간</span><span>하루 2시간을 써도 나머지를 근무했다면 영향 없음</span></div>
+        <div><span>방학 중</span><span>학교장 명령으로 출근해 8시간 이상 근무하면 출근일에 포함</span></div>
+      </div>
+    </details>
+    <p class="hint">기록은 이 기기의 브라우저에만 저장되며 다른 사람이나 학교에 전송되지 않습니다. 수당은 나이스 실적 기준으로 지급됩니다.</p>
+  </div>
+
+  <div class="notice">
+    <div class="notice-h"><span class="chip">10.1 개정</span>하루 상한이 없어졌습니다</div>
+    <div class="ba">
+      <div class="ba-r"><span class="ba-l">이전</span><div class="ba-bar"><i style="width:44%"></i><s style="left:44%;width:56%"></s><em>4시간에서 잘림</em></div></div>
+      <div class="ba-r"><span class="ba-l">지금</span><div class="ba-bar now"><i style="width:100%"></i><em>일한 만큼 모두 인정</em></div></div>
+    </div>
+    <p class="ba-note">월 57시간 상한과 평일 1시간 공제는 그대로입니다.</p>
+  </div>
+
+  <div class="panel">
+    <div class="sec-h"><h2>계산 기준</h2></div>
+    <div class="dg flat" aria-label="인정 시간 계산식">
+      <span class="dg-k">평일</span>
+      <div class="eq"><span class="tk ok">퇴근 후 근무</span><span class="op">+</span><span class="tk ok">조기 출근<br><small>1시간 이상일 때만</small></span><span class="op">−</span><span class="tk ded">1시간</span><span class="op">=</span><span class="tk res">인정 시간</span></div>
+      <span class="dg-k">토요일·공휴일</span>
+      <div class="eq"><span class="tk ok">근무 시간</span><span class="op">−</span><span class="tk ded">공제 없음</span><span class="op">=</span><span class="tk res">인정 시간</span></div>
+      <p class="eq-note">어느 경우든 그날 근무가 1시간 미만이면 인정되지 않습니다.</p>
+      <span class="dg-k">한 달</span>
+      <div class="eq"><span class="tk">날마다 인정 시간</span><span class="op">→</span><span class="tk">월 합계에서<br><small>1시간 미만 버림</small></span><span class="op">→</span><span class="tk res">최대 57시간</span></div>
+      <div class="eq"><span class="tk sch">정액분 10시간</span><span class="op eqtxt">은 따로</span><span class="tk">출근 15일 이상이면<br><small>명령 없이 지급</small></span></div>
+    </div>
+    <details class="more"><summary>자세한 기준과 예외 보기</summary>
+    <div class="calc-rows">
+      <div><span>평일 퇴근 후 근무</span><span>1시간 이상일 때 1시간 공제 후 분 단위</span></div>
+      <div><span>평일 조기 출근</span><span>1시간 이상 일찍 온 경우만 퇴근 후와 합산</span></div>
+      <div><span>토요일·공휴일</span><span>1시간 이상일 때 공제 없이 분 단위</span></div>
+      <div><span>1일 상한</span><span>없음 (2026.10.1 폐지, 이전 4시간)</span></div>
+      <div><span>월 상한</span><span>57시간, 월 합산 후 1시간 미만 버림</span></div>
+    </div>
+    <p class="hint">반일연가·외출·육아시간을 쓴 날도 명령을 받고 근무하면 인정됩니다. 1일 연가·공가를 쓴 날은 제외됩니다. 실제 지급은 학교장 명령과 교육청 지침을 따릅니다.</p>
+    <details class="how">
+      <summary>수당을 받을 수 없는 경우</summary>
+      <div class="calc-rows stack">
+        <div><span>다른 보상과 중복</span><span>방과후·보충수업 강사료처럼 같은 시간에 다른 방법으로 금전 보상을 받는 경우</span></div>
+        <div><span>본연의 업무가 아님</span><span>휴일 교육 참가, 시험 감독 등 행사 동원</span></div>
+        <div><span>파견 공무원</span><span>재외·국외 파견, 1개월 이상 장기 파견</span></div>
+        <div><span>위반 적발</span><span>시간외근무수당 지급 방법을 위반해 적발된 사람</span></div>
+        <div><span>대장에 없음</span><span>초과근무 명령 대장(나이스 명령 기록)에 없는 근무</span></div>
+      </div>
+    </details>
+  </details>
+  </div>
+</section>
+
+<!-- LINE -->
+<section class="view" id="v-line" hidden>
+  <div class="ph">
+    <div class="eyebrow">결재라인 한눈에</div>
+    <h1>무엇을, 누구에게 올릴까요?</h1>
+    <p class="lg-legend" id="line-badge"></p>
+  </div>
+
+  <div class="filter">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="line-q" type="search" placeholder="예: 병가, 조퇴, 출장, 41조" aria-label="복무 유형 검색">
+    </div>
+    <div class="cats" id="line-cats" role="group" aria-label="분류"></div>
+  </div>
+
+  <details class="rstrip" id="sec-rules">
+    <summary><span class="rs-n">7</span><span class="rs-t"><b>신청 전에 확인하세요</b><small>허가 · 결재 · 증빙 · 연락</small></span><i aria-hidden="true">›</i></summary>
+    <section class="rules brief" aria-label="복무 신청 전 확인 사항">
+      <div class="rules-h"><span></span><button class="link-btn rules-tg" aria-expanded="false">설명 펼치기</button></div>
+      <ol id="rules"></ol>
+      <p class="src" id="rules-src"></p>
+    </section>
+  </details>
+
+  <div class="lines" id="lines"></div>
+</section>
+
+<!-- TRIP -->
+<section class="view" id="v-trip" hidden>
+  <div class="ph">
+    <div class="eyebrow">출장</div>
+    <h1>이거 출장 되나요?</h1>
+    <p>질문 서너 개에 답하면 출장 구분, 결재, 여비를 알려 드립니다.</p>
+  </div>
+
+  <div class="wiz" id="wiz" aria-live="polite"></div>
+
+  <details class="phr panel"><summary>출장 결과 보고 문구 만들기</summary><div class="phr-box" id="phr-trip"></div></details>
+
+  <section class="rules brief" id="sec-tripcare" aria-labelledby="tc-h">
+    <div class="rules-h"><h2 id="tc-h">출장 중 지킬 것</h2><button class="link-btn rules-tg" aria-expanded="false">설명 펼치기</button></div>
+    <ol>
+      <li><span><b>공무에만 전념합니다.</b><span class="tag law">법령</span><br><span class="sub">사적인 일로 시간을 쓰지 않습니다.</span></span></li>
+      <li><span><b>기간 안에 못 끝내면 바로 보고합니다.</b><span class="tag law">법령</span><br><span class="sub">전화 등으로 학교장에게 보고하고 지시를 받습니다. 긴급하면 사후에 보고할 수 있습니다.</span></span></li>
+      <li><span><b>돌아오면 지체 없이 결과를 보고합니다.</b><span class="tag law">법령</span><br><span class="sub">가벼운 일은 말로 보고할 수 있습니다. 물품 구입 등은 영수증 같은 증빙을 함께 냅니다.</span></span></li>
+      <li><span><b>여비는 출장 시간과 실제 든 비용대로 정산합니다.</b><span class="tag law">법령</span></span></li>
+      <li class="warn"><span><b>출장 중 사무실 일을 한 기록이 있으면 여비가 회수될 수 있습니다.</b><span class="tag bad">주의</span><br><span class="sub">출장 시간에 에듀파인 결재처럼 학교에서 근무한 것으로 볼 수 있는 행위가 확인되면 여비 일부가 조정·회수됩니다.</span></span></li>
+    </ol>
+    <p class="src">근거: 국가공무원 복무규정 제6조, 공무원보수 등의 업무지침</p>
+  </section>
+
+  <div class="panel">
+    <div class="sec-h"><h2>근무지내·근무지외와 여비</h2></div>
+    <div class="nest" aria-label="근무지내와 근무지외 구분">
+      <div class="n3"><span class="nl">다른 시·군</span>
+        <div class="n3r"><span class="far"><b>12km 이상</b> → 근무지외</span><span class="near"><b>12km 미만</b> → 근무지내</span></div>
+        <div class="n2"><span class="nl">같은 시·군 · 광역시 포함</span><span class="n2r">거리와 관계없이 <b>근무지내</b></span>
+          <div class="n1">학교</div>
+        </div>
+      </div>
+    </div>
+    <div class="fare" aria-label="출장 여비">
+      <div class="fc"><span class="amt">0원</span><i style="height:10px"></i><span class="lb">근무지내<br>왕복 2km 이내</span></div>
+      <div class="fc"><span class="amt">1만 원</span><i style="height:40px"></i><span class="lb">근무지내<br>4시간 미만</span></div>
+      <div class="fc"><span class="amt">2만 원</span><i style="height:70px"></i><span class="lb">근무지내<br>4시간 이상</span></div>
+      <div class="fc far"><span class="amt">실비</span><i style="height:100px"></i><span class="lb">근무지외<br>운임·식비·숙박비·일비</span></div>
+    </div>
+    <p class="hint">국외 출장은 운임·식비·숙박비·일비에 준비금이 더해집니다.</p>
+    <p class="hint">출장 명령은 여비 지급의 근거일 뿐, 명령이 있다고 반드시 여비를 주는 것은 아닙니다. 예산 부족 등 충분한 이유가 있으면 학교장은 여비 전부 또는 일부를 지급하지 않을 수 있습니다.</p>
+    <p class="src">근거: 공무원 여비 규정 제2조·제18조, 공무원보수 등의 업무지침</p>
+  </div>
+
+  <details class="panel fold"><summary class="fold-s"><span class="fh">이럴 땐 무엇으로 올리나요?</span><span class="fg">공원 수업, 대학원, 41조와 겹침, 출장 중 초과근무 등 6가지</span></summary>
+    
+    <div class="calc-rows stack">
+      <div><span>학교 옆 공원·마을 탐방 수업</span><span>출장 명령을 받습니다. 여비는 따로 판단합니다.</span></div>
+      <div><span>방학 중 대학원 출석 수업·자율 직무연수</span><span>출장(연수)으로 신청할 수 있습니다. 교육부·교육감 인가 기관 연수가 해당합니다.</span></div>
+      <div><span>야간제·계절제 대학원</span><span>수업에 지장이 없으면 학교장 허가를 받아 출장(연수)으로 처리합니다.</span></div>
+      <div><span>주간 대학원</span><span>외출·조퇴·연가로 처리합니다.</span></div>
+      <div><span>같은 시간의 41조 연수·근무</span><span>출장과 겹쳐 신청할 수 없습니다.</span></div>
+      <div><span>출장 중 정규 시간을 넘긴 근무</span><span>초과근무는 원칙적으로 인정되지 않습니다. 출장 목적상 꼭 필요하면 명령을 받아 인정될 수 있습니다.</span></div>
+    </div>
+  </details>
+
+  <div class="miss boxed"><b>임신 중</b><span>학교장은 임신 중인 공무원의 장거리·장기간 출장을 제한할 수 있고, 본인이 신청하면 명할 수 있습니다. 임신 12주 이내 또는 36주 이후, 의사가 안정이 필요하다고 진단한 경우, 비행기·배를 타거나 도서·벽지로 가는 출장이 제한 예시입니다.</span></div>
+
+  <details class="audits fold"><summary class="fold-s"><span class="fh">감사에서 이렇게 지적됐어요</span><span class="fg">3건 · 눌러서 보기</span></summary><div class="audit-list">
+    <div class="audit"><span class="chip bad">감사 지적</span><p>'물품 구입'으로 출장을 다녀왔지만 영수증 등 증빙이 없어 출장 목적을 수행했는지 확인할 수 없었습니다.</p><p class="lesson">결과 보고에 증빙을 함께 냅니다.</p></div>
+    <div class="audit"><span class="chip bad">감사 지적</span><p>5년 동안 교사 12명의 출장 시간과 보강 수업 시간이 겹친 경우가 27건 있었습니다.</p><p class="lesson">수업이 있는 시간에는 출장 시간을 알맞게 정합니다.</p></div>
+    <div class="audit"><span class="chip bad">감사 지적</span><p>같은 시간에 방과후수업이 계획되어 있었는데 출장을 허가받았고, 돌아와서 임의로 시간을 바꿔 수업했습니다.</p><p class="lesson">출장 전에 그 시간의 다른 일정을 확인합니다.</p></div>
+  </div></details>
+
+  <button class="btn" data-casecat="출장">출장 사례 모아 보기 →</button>
+</section>
+
+<!-- VAC -->
+<section class="view" id="v-vac" hidden>
+  <div class="ph">
+    <div class="eyebrow">방학·휴업일</div>
+    <h1>방학 중 하루, 빈틈없이 겹침없이</h1>
+    <p>방학과 휴업일은 쉬는 날이 아니라 근무일입니다. 하루 근무시간을 근무·41조 연수·출장 등으로 빠짐없이, 서로 겹치지 않게 채웁니다.</p>
+  </div>
+
+  <div class="panel" id="blk">
+    <div class="sec-h"><h2>하루 일정 블록</h2><span class="num" id="blk-day"></span></div>
+    <div class="blk-wrap">
+      <div class="blk-track" id="blk-track"></div>
+      <div class="tl-ticks" id="blk-ticks"></div>
+    </div>
+    <div class="blk-verdict" id="blk-verdict" aria-live="polite"></div>
+    <div class="blk-list" id="blk-list"></div>
+    <div class="blk-add">
+      <span>블록 더하기</span>
+      <div class="pick" id="blk-add">
+        <button data-bt="work">+ 근무</button>
+        <button data-bt="s41">+ 41조 연수</button>
+        <button data-bt="trip">+ 출장</button>
+        <button data-bt="leave">+ 연가·외출 등</button>
+      </div>
+    </div>
+    <div class="samples">
+      <span>예시</span>
+      <button class="btn sm ghost" data-bs="1">오전 근무 + 오후 41조</button>
+      <button class="btn sm ghost" data-bs="2">종일 41조 + 오후 출장</button>
+      <button class="btn sm ghost" data-bs="3">오전 41조 + 오후 출장</button>
+      <button class="btn sm ghost" data-bs="4">오전 근무만</button>
+    </div>
+    <p class="hint">41조 연수는 분 단위로 신청할 수 있습니다. 근무시간은 계산기에서 정한 우리 학교 시각을 따릅니다.</p>
+  </div>
+
+  <details class="phr panel"><summary>41조 연수 계획 문구 만들기</summary><div class="phr-box" id="phr-41"></div><p class="hint">주제 예: 상담을 위한 독서 연수 · 2022 개정 교육과정 연수 · SW교육을 위한 컴퓨터 연수. 장소는 자택·도서관처럼 실제 연수하는 곳을 적습니다. 연수 목적이 아닌 가족여행·개인 용무에는 41조 연수를 신청할 수 없습니다.</p></details>
+
+  <div class="panel" id="vac-menu">
+    <div class="sec-h"><h2>방학 중 무엇으로 올리나요?</h2></div>
+    <ul class="map">
+      <li><span class="map-s">교육청 주관 연수</span><span class="map-a" aria-hidden="true"></span><span class="map-t"><b class="mb trip">국내출장(관내)</b><small>개인출장관리</small></span></li>
+      <li><span class="map-s">자율연수 · 대학원</span><span class="map-a" aria-hidden="true"></span><span class="map-t"><b class="mb trip">출장(연수)</b><small>개인출장관리</small></span></li>
+      <li><span class="map-s">집 · 도서관에서 연수</span><span class="map-a" aria-hidden="true"></span><span class="map-t"><b class="mb t41">41조 연수</b><small>근무상황 · 장소에 자택, 도서관</small></span></li>
+      <li><span class="map-s">국외 자율연수</span><span class="map-a" aria-hidden="true"></span><span class="map-t"><b class="mb t41">41조 연수</b><small>사유 「국외 자율 연수」 · 계획서 첨부</small></span></li>
+      <li><span class="map-s">개인 국외여행</span><span class="map-a" aria-hidden="true"></span><span class="map-t"><b class="mb lv">연가</b><small>41조 아님 · <a href="https://leave-of-absence-nu.vercel.app/" target="_blank" rel="noopener">휴가 규정 도우미 ↗</a></small></span></li>
+    </ul>
+    <div class="map-tips">
+      <p><b>여러 날 같은 시간</b> 신청 화면에서 <b>일반복</b>에 체크하면 한 번에 올라갑니다.</p>
+      <p><b>41조 낸 뒤 출장 공문</b> 결재된 41조를 <b>기결취소</b>하고 출장과 겹치지 않게 다시 올립니다.</p>
+    </div>
+    <p class="src">근거: 교원인사과-8180(2017.7.25.), 2018 유·초등 교육공무원 인사업무 처리 지침 375쪽, 제작자 정리 방학 중 복무 신청 안내</p>
+  </div>
+
+  <details class="panel fold"><summary class="fold-s"><span class="fh">방학·휴업일 복무</span><span class="fg">휴업일·재량휴업일도 근무일 · 41조는 근무·출장과 겹치면 안 됨</span></summary>
+    
+    <div class="calc-rows stack">
+      <div><span>휴업일은 공휴일이 아닙니다</span><span>수업이 없어도 근무일이므로 출근합니다. 학교장의 허가나 정당한 이유 없이 직장을 떠날 수 없습니다.</span></div>
+      <div><span>재량휴업일도 같습니다</span><span>학교운영위원회 심의로 정한 개교기념일·재량휴업일(효도 휴가일, 가정학습 체험일 등)도 관공서 공휴일이 아니므로 정당한 절차로 복무를 처리합니다.</span></div>
+      <div><span>41조 연수</span><span>수업에 지장이 없는 범위에서 학교장 승인을 받아 근무지 밖에서 연수합니다. 학교장은 연수 목적과 적합성을 따져 연수 효과가 나타나도록 승인합니다.</span></div>
+      <div><span>겹침 금지</span><span>41조 연수와 근무, 41조 연수와 출장은 같은 시간에 함께 신청할 수 없습니다.</span></div>
+      <div><span>방학 중 출근일</span><span>학교장 명령으로 출근해 8시간 이상 근무하면 시간외근무수당 정액분의 출근일에 포함됩니다.</span></div>
+    </div>
+    <p class="src">근거: 교육공무원법 제41조, 초·중등교육법 제64조·시행령 제47조</p>
+  </details>
+
+  <div class="panel">
+    <div class="sec-h"><h2>휴업과 휴교</h2></div>
+    <div class="cmp">
+      <div class="cc"><b class="cc-h">휴업</b>
+        <dl><dt>누가</dt><dd>학교장이 학년도 전에 학교운영위원회 심의로 정함 · 급하면 임시휴업 후 관할청 보고 · 관할청이 명하기도 함</dd>
+        <dt>멈추는 것</dt><dd>수업과 학생 등교</dd>
+        <dt>교원</dt><dd class="hl-d">근무일이므로 출근</dd></dl></div>
+      <div class="cc strong"><b class="cc-h">휴교</b>
+        <dl><dt>누가</dt><dd>관할청이 명함 · 휴업 명령 불이행이나 특별히 급한 사유</dd>
+        <dt>멈추는 것</dt><dd>단순 관리 업무 외 학교 기능 전부</dd>
+        <dt>교원</dt><dd class="hl-d">복무는 휴교 명령권자가 정함</dd></dl></div>
+    </div>
+  </div>
+
+  <details class="audits fold"><summary class="fold-s"><span class="fh">감사에서 이렇게 지적됐어요</span><span class="fg">2건 · 눌러서 보기</span></summary><div class="audit-list">
+    <div class="audit"><span class="chip bad">감사 지적</span><p>교사 여러 명이 가족여행, 동호회 여행처럼 연수 목적이 아닌 일로 41조 연수를 신청해 승인받았습니다.</p><p class="lesson">41조 연수는 연수 목적일 때만 신청합니다.</p></div>
+    <div class="audit"><span class="chip bad">감사 지적</span><p>방학 중 방과후학교 강사로 학교에 출근해 수업하면서 같은 시간에 41조 연수를 신청해, 실제 복무와 나이스 근무상황이 맞지 않았습니다.</p><p class="lesson">출근해 일한 시간은 근무로 처리합니다.</p></div>
+  </div></details>
+
+  <button class="btn" data-casecat="방학">방학 사례 모아 보기 →</button>
+</section>
+
+<!-- WORK -->
+<section class="view" id="v-work" hidden>
+  <div class="ph">
+    <div class="eyebrow">근무시간</div>
+    <h1>조퇴·외출·지각</h1>
+    <p>세 가지는 이름은 달라도 같은 주머니에 쌓입니다. 반일연가와 함께 누계 8시간이 되면 연가 1일로 공제됩니다.</p>
+  </div>
+
+  <div class="dg" aria-label="지각, 외출, 조퇴의 위치">
+    <span class="dg-k">한눈에 보기</span>
+    <div class="wd">
+      <div class="wd-bar"><span class="wd-gap"><b>지각</b></span><span class="wd-on"></span><span class="wd-gap"><b>외출</b></span><span class="wd-on"></span><span class="wd-gap"><b>조퇴</b></span></div>
+      <div class="wd-t"><span>출근 시각</span><span>퇴근 시각</span></div>
+      <div class="wd-cap"><span>출근 시각까지<br>오지 못함</span><span>근무 중 나갔다가<br>퇴근 전에 돌아옴</span><span>퇴근 시각 전에<br>떠남</span></div>
+    </div>
+    <span class="dg-k">모두 같은 주머니에</span>
+    <div class="eq"><span class="tk warn">지각 30분</span><span class="op">+</span><span class="tk warn">외출 1시간 30분</span><span class="op">+</span><span class="tk warn">조퇴 2시간</span><span class="op">+</span><span class="tk warn">반일연가 4시간</span><span class="op">=</span><span class="tk">8시간</span><span class="op">→</span><span class="tk res">연가 1일 공제</span></div>
+  </div>
+  <div class="ln-foot"><button class="btn sm" data-line="조퇴·지각·외출">결재라인과 학교 기준 보기</button></div>
+
+  <div class="panel meter" id="sec-meter">
+    <div class="sec-h"><h2>올해 누계</h2><span class="num" id="mt-year"></span></div>
+    <div class="mt-top">
+      <div><span class="lab">지각·조퇴·외출·반일연가</span><span class="big-sm num" id="mt-sum">0:00</span></div>
+      <div class="mt-days"><span class="lab">연가 공제</span><span class="big-sm num" id="mt-days">0일</span></div>
+    </div>
+    <div class="mt-bar" id="mt-bar" aria-hidden="true"></div>
+    <p class="hint" id="mt-left"></p>
+    <div class="mt-form">
+      <div class="seg mt-seg" role="group" aria-label="종류">
+        <button data-mt="지각" aria-pressed="true">지각</button>
+        <button data-mt="조퇴" aria-pressed="false">조퇴</button>
+        <button data-mt="외출" aria-pressed="false">외출</button>
+        <button data-mt="반일연가" aria-pressed="false">반일연가</button>
+      </div>
+      <div class="field-row">
+        <div class="field"><label for="mt-date">날짜</label><input id="mt-date" type="date"></div>
+        <div class="field"><label for="mt-h">사용 시간</label><div class="dur"><select id="mt-h" aria-label="시간"><option value="0">0</option><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select><span>시간</span><input id="mt-m" type="number" min="0" max="59" step="1" value="0" inputmode="numeric" aria-label="분"><span>분</span></div></div>
+      </div>
+      <button class="btn primary" id="mt-add">누계에 더하기</button>
+    </div>
+    <div class="rec-list" id="mt-list"></div>
+    <p class="hint">1년(1.1.~12.31.) 기준이며 이 기기에만 저장됩니다. 병지각·병조퇴·병외출은 병가로 따로 계산합니다. 연가 일수는 휴가 규정 도우미에서 확인하세요.</p>
+  </div>
+
+  <details class="panel fold"><summary class="fold-s"><span class="fh">교원의 근무시간</span><span class="fg">09:00~17:00(점심시간 포함) · 유연근무는 학교 단위로만</span></summary>
+    
+    <div class="calc-rows stack">
+      <div><span>09:00~17:00</span><span>직무의 특수성을 고려한 초·중등 교원의 근무시간입니다. 급식지도와 학생 생활지도를 하므로 점심시간도 근무시간에 포함됩니다.</span></div>
+      <div><span>학교 단위 유연근무(시차출퇴근)</span><span>하루 8시간을 지키면서 구성원 협의를 거쳐 교육과정 운영에 지장이 없는 범위에서 학교 출퇴근 시각을 정합니다(예: 08:30 출근, 16:30 퇴근).</span></div>
+      <div><span>개인별 조정은 안 됩니다</span><span>교원 개인이나 일부 집단의 출퇴근 시각 조정은 할 수 없습니다. 업무 특성상 출퇴근 시각이 다른 영양교사, 유치원 방과후과정 담당교사는 개인별 조정이 가능합니다.</span></div>
+      <div><span>신청</span><span>1주 이상 또는 학년도 단위로 신청합니다. 나이스 [기본 메뉴 › 복무 › 개인유연근무관리]에서 상신하고 결재받습니다.</span></div>
+      <div><span>복무 관리</span><span>나이스에 지정된 학교 출퇴근 시각을 기준으로 관리합니다. 학부모에게 미리 안내하고, 방과후 교육활동과 생활지도에 빈틈이 없게 합니다. 학교운영위원회 필수 심의 사항은 아닙니다.</span></div>
+    </div>
+  </details>
+
+  <details class="audits fold"><summary class="fold-s"><span class="fh">감사에서 이렇게 지적됐어요</span><span class="fg">2건 · 눌러서 보기</span></summary><div class="audit-list">
+    <div class="audit"><span class="chip bad">감사 지적</span><p>교사 3명이 학교장 승인 없이 출근 시간보다 최대 58분 늦게 출근하고, 승인 없이 48분 동안 외출했습니다.</p><p class="lesson">늦어지거나 자리를 비울 때는 먼저 승인을 받습니다.</p></div>
+    <div class="audit"><span class="chip bad">감사 지적</span><p>교직원 22명이 1분에서 1시간 5분까지 출근 시간을 지키지 않았고, 교장·교감은 복무 지도·감독을 소홀히 했습니다.</p><p class="lesson">출근 시간 준수는 관리자 책임이기도 합니다.</p></div>
+  </div></details>
+
+  <button class="btn" data-casecat="근무시간">근무시간 사례 모아 보기 →</button>
+</section>
+
+<!-- KNOW -->
+<section class="view" id="v-know" hidden>
+  <div class="ph">
+    <div class="eyebrow">알아 두기</div>
+    <h1>교원의 임무와 의무</h1>
+    <p>자주 찾지는 않지만 복무의 바탕이 되는 내용입니다. 제목을 누르면 펼쳐집니다.</p>
+  </div>
+
+  <div class="know">
+    <details class="kd" open>
+      <summary>교육공무원의 임무 <span class="src">초·중등교육법 제20조</span></summary>
+      <div class="org">
+        <div class="ob top"><b>교장</b><span>교무 총괄 · 민원 처리 책임 · 교직원 지도·감독 · 학생 교육</span></div>
+        <div class="oa"><span>보좌, 교장이 직무를 못 하면 대행</span></div>
+        <div class="ob"><b>교감</b><span>교무 관리 · 학생 교육</span></div>
+        <div class="org-row">
+          <div class="ob"><b>수석교사</b><span>학생 교육</span></div>
+          <div class="oa side"><span>교수·연구 활동 지원</span></div>
+          <div class="ob"><b>교사</b><span>법령에 따라 학생 교육</span></div>
+        </div>
+        <p class="eq-note">교감이 없는 학교는 교장이 미리 지명한 교사(수석교사 포함)가 교장 직무를 대행합니다.</p>
+      </div>
+    </details>
+
+    <details class="kd">
+      <summary>직무상 의무 <span class="src">국가공무원법 제56~61조</span></summary>
+      <div class="calc-rows stack">
+        <div><span>성실</span><span>법령을 지키며 성실히 직무를 수행합니다.</span></div>
+        <div><span>복종</span><span>직무를 수행할 때 소속 상관의 직무상 명령에 복종합니다.</span></div>
+        <div><span>직장 이탈 금지</span><span>상관의 허가나 정당한 사유 없이 직장을 떠나지 못합니다. 수사기관이 공무원을 구속하려면 소속 기관장에게 미리 알려야 합니다(현행범 제외).</span></div>
+        <div><span>친절·공정</span><span>국민 전체의 봉사자로서 친절하고 공정하게 직무를 수행합니다.</span></div>
+        <div><span>종교 중립</span><span>종교에 따른 차별 없이 직무를 수행하며, 이를 어기는 직무상 명령은 따르지 않을 수 있습니다.</span></div>
+        <div><span>비밀 엄수</span><span>재직 중은 물론 퇴직 후에도 직무상 알게 된 비밀을 지킵니다.</span></div>
+        <div><span>청렴</span><span>직무와 관련해 사례·증여·향응을 주거나 받을 수 없고, 상관에게 증여하거나 소속 공무원에게서 증여를 받아서도 안 됩니다.</span></div>
+      </div>
+    </details>
+
+    <details class="kd">
+      <summary>신분상 의무 <span class="src">국가공무원법 제63~66조</span></summary>
+      <div class="calc-rows stack">
+        <div><span>품위 유지</span><span>직무 안팎을 가리지 않고 품위가 손상되는 행위를 하지 않습니다.</span></div>
+        <div><span>영리 업무·겸직 금지</span><span>공무 외에 영리를 목적으로 하는 업무를 할 수 없고, 소속 기관장의 허가 없이 다른 직무를 겸할 수 없습니다. 외부강의 신고, 겸직 허가, 사교육 관련 판단은 외부강의·겸직 도우미에서 확인하세요. <a class="inl" href="https://external-lecture.vercel.app/" target="_blank" rel="noopener">외부강의·겸직 도우미 ↗</a></span></div>
+        <div><span>정치 운동 금지</span><span>정당이나 정치단체의 결성에 관여하거나 가입할 수 없습니다. 선거에서 특정 정당·특정인을 지지하거나 반대하기 위해 투표 권유, 서명 운동, 문서·도서 게시, 기부금 모집, 정당 가입 권유 운동을 할 수 없고, 다른 공무원에게 이를 요구할 수도 없습니다.</span></div>
+        <div><span>집단 행위 금지</span><span>노동운동이나 공무 외의 일을 위한 집단 행위를 할 수 없습니다(법령에서 정한 경우 제외).</span></div>
+      </div>
+    </details>
+
+    <details class="kd">
+      <summary>과외교습 금지와 예외 <span class="src">학원법 시행령 제3조</span></summary>
+      <div class="calc-rows stack">
+        <div><span>원칙</span><span>현직 교원은 과외교습을 할 수 없습니다.</span></div>
+        <div><span>허용되는 예외</span><span>공익을 위한 봉사활동에 속하는 교습입니다. 근로청소년 교습, 장애인 재활을 위한 교습, 그리고 교육부령으로 정한 봉사활동 교습이 해당합니다.</span></div>
+        <div><span>교육부령의 봉사활동</span><span>읍·면 지역(도서·벽지 교육진흥법 시행규칙 별표의 길·로 지역 포함)에서의 무상 교습, 기초생활보장 수급권자에 대한 무상 교습, 지역적·경제적으로 어려운 사람에게 교육감이 봉사활동으로 인정하는 교습</span></div>
+      </div>
+    </details>
+
+    <details class="kd">
+      <summary>질의회신 <span class="src">교육부 민원 질의·회신 사례집</span></summary>
+      <div class="calc-rows stack">
+        <div><span>정치편향 교육을 한 교원도 징계할 수 있나요?</span><span>교육기본법 제6조와 국가공무원법 제65조가 교원의 정치적 중립 의무를 정하고 있어, 어기면 비위 정도와 과실에 따라 징계나 주의·경고 등을 받을 수 있습니다.</span></div>
+        <div><span>공무원이 지켜야 할 '품위'란?</span><span>국민의 수임자로서 직책을 맡아 수행하기에 손색없는 인품을 말합니다. 기본권을 행사하더라도 그 정도가 지나쳐 국민이 보기에 바람직하지 못하면 품위 손상이 될 수 있으며, 직무와 관련 없는 사적인 부분에도 적용됩니다(대법원 판례).</span></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="view" id="v-tools" hidden>
+  <div class="ph">
+    <div class="eyebrow">도구</div>
+    <h1>계산·판정·문구를 한곳에</h1>
+    <p>입력한 기록은 이 기기의 브라우저에만 저장되고 아무 데도 전송되지 않습니다.</p>
+  </div>
+  <div class="tgroup g-calc"><h2 class="tg-h">계산</h2><div class="tools-g">
+      <button class="tool" data-go="calc" data-tk="calc"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="22" height="8" rx="2"/><path d="M17 10v8" /><rect x="17" y="10" width="8" height="8" rx="2" fill="currentColor" stroke="none" opacity=".35"/><path d="M7 22h4M7 6h8"/></svg></span><span class="tb"><b>초과근무 계산기</b><small>인정 시간, 몇 시까지 있어야 할지</small><span class="tstat" id="ts-calc"></span></span></button>
+      <button class="tool" data-go="work" data-sec="meter" data-tk="work"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 19a9 9 0 1 1 18 0"/><path d="M14 19l5-6"/><circle cx="14" cy="19" r="1.6" fill="currentColor"/></svg></span><span class="tb"><b>조퇴 누계 미터</b><small>지각·조퇴·외출 8시간이면 연가 1일</small><span class="tstat" id="ts-work"></span></span></button>
+  </div></div>
+  <div class="tgroup g-judge"><h2 class="tg-h">판정</h2><div class="tools-g">
+      <button class="tool" data-go="trip" data-tk="trip"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 25V14M14 14 7 7M14 14l7-7"/><path d="M4 7h5V2M24 7h-5V2" opacity=".6"/></svg></span><span class="tb"><b>출장 판정</b><small>질문 몇 개로 근무지내·외 구분, 결재, 여비</small></span></button>
+      <button class="tool" data-go="vac" data-tk="vac"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="13" height="6" rx="2" fill="currentColor" fill-opacity=".25"/><rect x="12" y="16" width="13" height="6" rx="2"/></svg></span><span class="tb"><b>41조 일정 블록</b><small>근무·연수·출장 겹침과 빈 시간 확인</small></span></button>
+  </div></div>
+  <div class="tgroup g-phr"><h2 class="tg-h">문구 만들기</h2><div class="tools-g">
+      <button class="tool" data-phr="phr-trip" data-pv="trip"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l5 5v17H7z"/><path d="M17 3v5h5M11 14h7M11 18h7M11 22h4"/></svg></span><span class="tb"><b>출장 결과 보고</b><small>일시·장소·목적·결과를 채우면 보고 문구 완성</small></span></button>
+      <button class="tool" data-phr="phr-late" data-pv="neis"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l5 5v17H7z"/><path d="M17 3v5h5M11 14h7M11 18h7M11 22h4"/></svg></span><span class="tb"><b>사후결재 사유</b><small>사전 명령을 못 받았을 때 사유 문구</small></span></button>
+      <button class="tool" data-phr="phr-41" data-pv="vac"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l5 5v17H7z"/><path d="M17 3v5h5M11 14h7M11 18h7M11 22h4"/></svg></span><span class="tb"><b>41조 연수 계획</b><small>연수 주제·장소·내용·활용 계획 문구</small></span></button>
+  </div></div>
+  <div class="tgroup g-guide"><h2 class="tg-h">안내</h2><div class="tools-g">
+      <button class="tool" data-go="neis" data-tk="neis"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="7" cy="7" r="2.5"/><circle cx="7" cy="21" r="2.5"/><path d="M7 9.5v9M13 7h11M13 21h11M13 14h8" /></svg></span><span class="tb"><b>나이스 신청 절차</b><small>초과근무 사전 신청부터 월말 확인까지</small></span></button>
+  </div></div>
+</section>
+
+<!-- CASES -->
+<section class="view" id="v-cases" hidden>
+  <div class="ph">
+    <div class="eyebrow">사례</div>
+    <h1>이럴 땐 인정될까요?</h1>
+    <p>상황을 찾아 결론부터 확인하세요. 풀어 보기로 바꾸면 퀴즈처럼 맞혀 볼 수 있습니다.</p>
+  </div>
+  <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="case-q" type="search" placeholder="예: 반일연가, 41조, 여비" aria-label="사례 검색"></div>
+  <div class="case-cats cats" id="case-cats" role="group" aria-label="주제"></div>
+  <div class="case-ans" id="case-ans" role="group" aria-label="결론으로 거르기">
+    <button data-qm="o" aria-pressed="false"><i class="o">○</i>된다</button><button data-qm="x" aria-pressed="false"><i class="x">×</i>안 된다</button><button data-qm="t" aria-pressed="false"><i class="t">△</i>조건부</button><button data-qm="audit" aria-pressed="false"><i class="au">!</i>감사 지적</button>
+  </div>
+  <div class="case-bar">
+    <div class="seg" id="case-mode" role="group" aria-label="보기 방식"><button data-mode="see" aria-pressed="true">바로 보기</button><button data-mode="quiz" aria-pressed="false">풀어 보기</button></div>
+    <span id="case-count"></span>
+  </div>
+  <p class="quiz-prog" id="quiz-prog" hidden></p>
+  <p class="empty" id="case-empty" hidden>찾는 사례가 없습니다. 다른 낱말로 검색하거나 거르기를 풀어 보세요.</p>
+  <div class="qa see" id="qa"></div>
+  <p class="menu-note">찾는 사례가 없나요? <button class="link-btn inl" data-go="line">결재라인</button>에서 유형별 안내를 보거나 <a href="https://leave-of-absence-nu.vercel.app/" target="_blank" rel="noopener">휴가 규정 도우미 ↗</a>에서 휴가 관련 기준을 찾아보세요.</p>
+</section>
+
+<!-- NEIS -->
+<section class="view" id="v-neis" hidden>
+  <div class="subtabs" aria-label="초과근무"><button data-go="calc">계산기</button><button data-go="neis">나이스 신청 절차</button></div>
+  <div class="ph">
+    <div class="eyebrow">초과근무 · 나이스 신청 절차</div>
+    <h1>근무 전 신청, 다음 날 확인</h1>
+    <p>초과근무는 학교장의 사전 명령이 있어야 인정됩니다. 순서대로 따라 하세요.</p>
+  </div>
+
+  <div class="dg" aria-label="초과근무 절차 흐름">
+    <span class="dg-k">한눈에 보기</span>
+    <div class="flow">
+      <div class="fs"><span class="fw">근무 전</span><b>나이스 신청</b><small>오전 권장</small></div><i class="fa" aria-hidden="true"></i>
+      <div class="fs"><span class="fw">근무 전</span><b>학교장 결재</b><small>명령 대장 기록</small></div><i class="fa" aria-hidden="true"></i>
+      <div class="fs"><span class="fw">근무 중</span><b>출퇴근 인식</b><small>휴일은 출근도</small></div><i class="fa" aria-hidden="true"></i>
+      <div class="fs"><span class="fw">다음 날</span><b>실적 확인</b><small>외출 시간 제외</small></div><i class="fa" aria-hidden="true"></i>
+      <div class="fs"><span class="fw">월말</span><b>본인 확인</b><small>수당 지급 요청</small></div>
+    </div>
+    <div class="flow-br"><span class="br-mark" aria-hidden="true">↳</span><span>사전 명령을 못 받았다면 <b>다음 날까지 사후결재</b> (예측하지 못한 경우만)</span></div>
+  </div>
+
+  <ol class="steps">
+    <li class="step">
+      <span class="no">1</span>
+      <div class="step-body">
+        <span class="step-when">근무하기 전 · 가급적 오전</span>
+        <h3>나이스에서 초과근무 신청</h3>
+        <details class="more"><summary>자세히 보기</summary><ul>
+          <li>근무 날짜, 예정 시작·종료 시각을 입력합니다.</li>
+          <li>업무 내용은 "학년말 성적 처리"처럼 구체적으로 씁니다.</li>
+          <li>토요일·공휴일 근무는 신청할 때 휴일 근무로 구분합니다.</li>
+          <li>행사 주관처럼 일정 기간 계속 남아야 하면 기간·부서·담당자를 정해 <b>일괄 명령</b>을 받을 수 있습니다.</li>
+        </ul>
+<div class="miss"><b>임신·출산</b><span>임신 중이거나 출산 후 1년이 지나지 않은 공무원에게는 21시~08시 근무와 토요일·공휴일 근무를 명할 수 없습니다. 임신 중인 본인이 신청하거나, 출산 후 1년 이내인 본인이 동의하면 가능합니다.</span></div>
+        <div class="h24" aria-label="임신·출산 공무원 근무 명령 제한 시간대">
+          <div class="h24-bar"><i class="hb-no" style="left:0;width:33.333%"></i><i class="hb-ok" style="left:33.333%;width:54.167%"></i><i class="hb-no" style="left:87.5%;width:12.5%"></i></div>
+          <div class="h24-t"><span style="left:0">0시</span><span style="left:33.333%">08시</span><span style="left:87.5%">21시</span></div>
+          <div class="legend"><span><i class="h-no"></i>명령 불가 (본인 신청·동의 시 가능)</span><span><i class="h-ok"></i>명령 가능</span><span>토·공휴일은 하루 종일 불가</span></div>
+        </div>
+<div class="miss"><b>자주 하는 실수</b><span>근무를 다 하고 나서 신청하기. 사전 명령이 없는 근무는 원칙적으로 인정되지 않습니다.</span></div></details>
+      </div>
+    </li>
+    <li class="step">
+      <span class="no">2</span>
+      <div class="step-body">
+        <span class="step-when">근무 시작 전까지</span>
+        <h3>명령권자 결재 <span class="stamp">결재</span></h3>
+        <details class="more"><summary>자세히 보기</summary><ul>
+          <li>명령권자는 학교장입니다. 수당 대상자가 50명 이상인 학교는 교감이나 행정실장에게 위임할 수 있습니다.</li>
+          <li>교감과 행정실장의 초과근무 명령권은 언제나 학교장에게 있습니다.</li>
+          <li>명령받은 내역은 근무 시작 전까지(사후결재는 다음 날까지) 초과근무 명령 대장에 올라 있어야 합니다. 대장에 없는 초과근무는 수당을 받을 수 없습니다. 나이스로 관리하는 학교는 나이스의 사전 명령·승인 기록이 이 역할을 합니다.</li>
+        </ul>
+<div class="miss"><b>자주 하는 실수</b><span>상신만 하고 결재 확인을 안 하기. 결재가 늦어지면 결재권자에게 직접 알리세요.</span></div></details>
+      </div>
+    </li>
+    <li class="step">
+      <span class="no">3</span>
+      <div class="step-body">
+        <span class="step-when">근무하는 동안</span>
+        <h3>출퇴근 인식과 근무 확인 <span class="chip rev">10.1 개정</span></h3>
+        <details class="more"><summary>자세히 보기</summary><ul>
+          <li>근무를 마치면 지문인식기 등에서 퇴근 인식을 꼭 합니다.</li>
+          <li>휴일 근무와 조기 출근은 출근할 때도 인식합니다.</li>
+          <li>개정으로 근무 중 일정 간격마다 실제 근무 여부를 시스템에 표시하는 방식이 도입됩니다. 나이스 적용 시기는 교육청 안내를 확인하세요.</li>
+        </ul>
+<div class="miss"><b>자주 하는 실수</b><span>퇴근 인식을 빼먹기. 인식 기록이 없으면 실적을 확인할 근거가 없습니다.</span></div></details>
+      </div>
+    </li>
+    <li class="step">
+      <span class="no">4</span>
+      <div class="step-body">
+        <span class="step-when">다음 날</span>
+        <h3>실적 확인과 제외시간 입력</h3>
+        <details class="more"><summary>자세히 보기</summary><ul>
+          <li>초과근무 실적 화면에서 해당 날짜를 누릅니다.</li>
+          <li>신청 시각과 실제 인식 시각을 비교합니다.</li>
+          <li>근무 중 외출·사적 용무로 자리를 비운 시간이 있으면 <b>제외시간</b>으로 입력하고 저장합니다.</li>
+          <li>저녁 식사·휴식은 평일 1시간 공제에 포함되므로 따로 빼지 않습니다. 학교 지침이 다르면 그에 따릅니다.</li>
+        </ul></details>
+        <div class="miss danger"><b>주의</b><span>외출한 시간을 그대로 두면 부정 수령이 됩니다. 부정 수령액이 50만 원 이상이면 1회만으로도 징계 요구 대상입니다.</span></div>
+        <div><button class="btn sm" data-go="calc">계산기로 미리 확인하기 →</button></div>
+      </div>
+    </li>
+    <li class="step alt" id="sec-late">
+      <span class="no">!</span>
+      <div class="step-body">
+        <span class="step-when">사전 명령을 못 받았다면</span>
+        <h3>다음 날까지 사후결재</h3>
+        <details class="more"><summary>자세히 보기</summary><ul>
+          <li>예측하지 못한 휴일 근무처럼 부득이한 경우에만 사후 승인으로 인정받을 수 있습니다.</li>
+          <li>명령받은 시간보다 더 일한 경우도 같습니다. 근무가 끝난 다음 날까지 명령권자의 사후결재를 받습니다.</li>
+        </ul></details>
+        <details class="phr"><summary>사후결재 사유 문구 만들기</summary><div class="phr-box" id="phr-late"></div></details>
+      </div>
+    </li>
+    <li class="step">
+      <span class="no">5</span>
+      <div class="step-body">
+        <span class="step-when">월말</span>
+        <h3>월별 내역 본인 확인</h3>
+        <details class="more"><summary>자세히 보기</summary><ul>
+          <li>행정실이 교직원별 월 초과근무 내역을 정리하면 본인 기록과 대조해 확인합니다.</li>
+          <li>나이스에는 사전 명령, 사후 승인, 개인별 실적 누계가 모두 반영되어 있어야 합니다.</li>
+          <li>확인이 끝나면 학교가 교육청에 수당 지급을 요청합니다.</li>
+        </ul></details>
+      </div>
+    </li>
+  </ol>
+  <p class="menu-note">나이스 메뉴 이름과 화면 배치는 학교·교육청에 따라 조금씩 다를 수 있습니다. 화면이 다르면 행정실이나 복무 담당자에게 문의하세요.</p>
+
+</section>
+
+<footer class="foot">
+  <div class="disc" role="note"><b>교육청 공식 사이트가 아닙니다.</b><span>교원 개인이 만든 비영리 참고용 안내로, 교육부·교육청과 관계가 없고 법적 효력이 없습니다. 실제 복무 처리는 소속 교육청 지침과 학교장 결정을 따르세요.</span></div>
+  <div class="foot-top"><b>복무 한눈에</b><span>최종 확인 2026.10.13</span></div>
+  <p>법령과 지침은 바뀔 수 있으니 최신 공문을 함께 확인하세요. <span class="tag sch">학교</span> 표시는 학교마다 다를 수 있는 운영 기준입니다.</p>
+  <p class="foot-meta"><span>만든이 2026 최창훈</span><a class="foot-hub" href="https://edu-hub-alpha-ten.vercel.app/" target="_blank" rel="noopener">학교 연장통의 도구</a><span>비영리</span><button class="link-btn" data-oss>출처·라이선스 보기</button></p>
+</footer>
+</main>
+
+<nav class="tabbar" aria-label="하단 메뉴">
+  <div class="wrap">
+    <button data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>홈</button>
+    <button data-go="line"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="12" r="3.5"/><circle cx="17" cy="12" r="3.5"/><path d="M10.5 12h3"/></svg>결재라인</button>
+    <button data-go="tools"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>도구</button>
+    <button data-go="cases"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="12" r="4"/><path d="m14 8 7 8M21 8l-7 8"/></svg>사례</button>
+  </div>
+</nav>
+
+<button class="oss-btn" id="oss-open" aria-haspopup="dialog">ⓘ 오픈소스 라이선스</button>
+<div class="oss-back" id="oss" hidden>
+  <div class="oss-box" role="dialog" aria-modal="true" aria-labelledby="oss-h" tabindex="-1">
+    <div class="oss-head"><h2 id="oss-h">오픈소스 라이선스와 저작권</h2><button class="icon-btn" id="oss-close" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="oss-body">
+      <section>
+        <h3>이 사이트</h3>
+        <p><b>교육부·교육청의 공식 사이트가 아닙니다.</b> 교원 개인이 비영리로 만든 참고용 안내입니다.</p>
+        <p>「복무 한눈에」의 기획·구성·디자인·코드는 제작자의 저작물입니다.</p>
+        <p class="oss-c">© 2026 최창훈 (만든이). All rights reserved.</p>
+        <p>아이콘은 이 사이트를 위해 직접 그린 SVG이며, 외부 아이콘 세트·이미지·이모지 이미지는 사용하지 않았습니다. ○ × △ → ↗ 같은 기호는 유니코드 문자로, 사용자 기기의 글꼴로 표시됩니다.</p>
+      </section>
+      <section>
+        <h3>사용한 오픈소스 구성요소</h3>
+        <table class="oss-t">
+          <thead><tr><th>구성요소</th><th>저작권자</th><th>라이선스</th></tr></thead>
+          <tbody>
+            <tr><td>Pretendard (글꼴)</td><td>Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard), with Reserved Font Name Pretendard</td><td>OFL-1.1</td></tr>
+          </tbody>
+        </table>
+        <p>글꼴은 Google Fonts에서 불러와 쓰며, 글꼴 파일을 수정하거나 함께 배포하지 않습니다.</p>
+        <p>Apache-2.0, MIT, BSD-3-Clause, ISC 라이선스를 따르는 라이브러리나 코드는 사용하지 않았습니다. 외부 자바스크립트·CSS 라이브러리가 없습니다.</p>
+      </section>
+      <section>
+        <h3>내용의 출처와 이용 근거</h3>
+        <p><b>법령·판례</b> 국가공무원법, 국가공무원 복무규정(제11조 등), 공무원수당 등에 관한 규정(2026.10.1 시행 개정 반영), 교육공무원법, 대법원 판례 등은 저작권법 제7조에 따라 저작권 보호 대상이 아닙니다.</p>
+        <p><b>「2026 초등 교육공무원 인사실무」(광주광역시교육청)</b> 지방자치단체가 업무상 작성해 공표한 공공저작물로, 저작권법 제24조의2에 따라 허락 없이 이용할 수 있습니다. 이 사이트는 원문을 그대로 옮기지 않고 제작자가 요약·재구성했으며, 쪽수와 함께 출처를 밝힙니다(저작권법 제37조).</p>
+        <p><b>제작자 정리 복무 Q&amp;A</b> 제작자가 직접 작성한 질문에, 여러 기관의 질의회신·안내 자료를 모아 제작자의 표현으로 정리한 답변입니다. 특정 기관 자료에 근거한 답은 그 자료명을 함께 적었습니다(예: 2026 인천 체험학습 매뉴얼).</p>
+        <p><b>비영리</b> 이 사이트는 수익을 창출하지 않습니다.</p>
+        <p>이 사이트의 안내는 법적 효력이 없습니다. 실제 처리는 소속 교육청 지침과 학교 기준을 따르세요.</p>
+      </section>
+      <details class="oss-lic">
+        <summary>SIL Open Font License 1.1 전문</summary>
+<pre>SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded,
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION &amp; CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) and the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.</pre>
+      </details>
+    </div>
+  </div>
+</div>
+
+<div class="livebar" id="livebar">
+  <button id="lb-btn" aria-label="계산 결과로 이동">
+    <span style="display:grid"><span class="lb-l" id="lb-l">오늘 인정</span><span class="lb-v" id="lb-v">0:00</span></span>
+    <span class="lb-s" id="lb-s"></span>
+  </button>
+</div>
+
+<script>
+/* ==========================================================
+   학교별 설정 — 다른 학교에서 쓸 때는 이 블록만 바꾸면 됩니다.
+   line: 결재 순서 / notes의 k: 'law'(법령·지침), 'sch'(우리 학교 운영 기준)
+   ========================================================== */
+window.SCHOOL={
+  name:'',
+  hours:['08:30','16:30'],   // 기본 출퇴근 시각. 다른 시각을 쓰는 학교는 계산기에서 바꿔 기억합니다.
+  checked:'2026.10.13',
+  links:{ leave:'https://leave-of-absence-nu.vercel.app/', gyeomjik:'https://external-lecture.vercel.app/' },   // 「휴가 규정 도우미」, 겸직 사이트 주소
+  approvals:[
+    {cat:'출장',name:'근무지내 출장',line:['교감'],go:'trip',notes:[
+      {k:'law',t:'왕복 2km 이내는 여비를 지급하지 않습니다.'},
+      {k:'sch',t:'학생을 인솔하는 출장은 교장 결재를 받습니다.'},
+      {k:'sch',t:'자격연수(여비 미지급), 시교육청 주관 직무연수도 근무지내 출장으로 올립니다.'}]},
+    {cat:'출장',name:'관외 출장',line:['교감','교장'],go:'trip',notes:[
+      {k:'law',t:'같은 시·군 밖이거나 왕복 12km 이상이면 근무지외 출장입니다.'},
+      {k:'law',t:'다녀오면 바로 결과를 보고합니다. 가벼운 일은 말로 보고할 수 있습니다.'}]},
+    {cat:'출장',name:'출장(연수)',line:['교감','교장'],notes:[
+      {k:'sch',t:'대학원 수강, 특수분야 자율연수 등이 해당합니다.'},
+      {k:'law',t:'야간제·계절제 대학원은 수업에 지장이 없으면 출장(연수)으로 처리합니다.'}]},
+    {cat:'근무시간',name:'조퇴·지각·외출',line:['교감'],go:'work',notes:[
+      {k:'sch',t:'수업 등 교육활동에 지장이 없으면 사유를 적지 않습니다.'},
+      {k:'sch',t:'조퇴와 병조퇴, 지각과 병지각(08:30 이전), 외출과 병외출을 구분해 올립니다.'},
+      {k:'law',t:'지각·조퇴·외출과 반일연가는 합산해 8시간이 되면 연가 1일로 공제됩니다.'}]},
+    {cat:'근무시간',name:'초과근무',line:['교감','교장'],go:'calc',notes:[
+      {k:'sch',t:'토·일·공휴일 근무는 신청할 때 휴일로 체크합니다.'},
+      {k:'law',t:'사전 명령이 원칙이며, 못 받았으면 다음 날까지 사후결재를 받습니다.'},
+      {k:'rev',t:'2026.10.1부터 1일 4시간 상한이 없어졌습니다. 월 57시간은 그대로입니다.'}]},
+    {cat:'근무시간',name:'41조 연수',go:'vac',line:['교무','교감','교장'],notes:[
+      {k:'law',t:'방학·재량휴업일에 신청하며 분 단위로 신청할 수 있습니다.'},
+      {k:'law',t:'같은 시간에 근무·출장과 겹쳐 신청할 수 없습니다.'},
+      {k:'law',t:'가족여행처럼 연수 목적이 아닌 경우에는 신청할 수 없습니다.'},
+      {k:'sch',t:'예시 학교: 방학 전 신청은 교무–교감(관내)·교무–교감–교장(관외), 방학 중 신청은 교감(관내)·교감–교장(관외)입니다.'},
+      {k:'sch',t:'이미 결재된 41조를 고칠 때는 기결취소 후 다시 올립니다(교감–교장).'}]},
+    {cat:'근무시간',name:'육아시간',line:['교감','교장'],link:'leave',notes:[
+      {k:'sch',t:'하루 4시간 이상 근무하는 날 사용하며, 업무·교육활동·학교 행사에 지장이 없는 범위에서 주 단위로 신청합니다.'}]},
+    {cat:'근무시간',name:'모성보호시간',line:['교감','교장'],link:'leave',proof:'증빙자료',notes:[
+      {k:'sch',t:'하루 4시간 이상 근무하는 날 사용하며 주 단위로 신청합니다.'}]},
+    {cat:'휴가',name:'연가',line:['교감','교장'],link:'leave',notes:[
+      {k:'sch',t:'학기 중에는 연가 사용을 자제합니다.'}]},
+    {cat:'휴가',name:'병가',line:['교감','교장'],link:'leave',proof:'진단서',notes:[]},
+    {cat:'휴가',name:'공가',line:['교감','교장'],link:'leave',notes:[]},
+    {cat:'휴가',name:'특별휴가',line:['교감','교장'],link:'leave',notes:[]},
+    {cat:'기타',name:'EVPN (원격업무지원)',line:['정보부장','교감'],notes:[
+      {k:'sch',t:'원격업무지원서비스 사용 신청은 정보부장을 거쳐 교감 결재를 받습니다.'}]}
+  ],
+  rules:[
+    {k:'law',b:'휴가·지각·조퇴·외출·출장은 미리 허가를 받습니다.',t:'부득이하면 사후에 지체 없이 승인받습니다. 승인 없이 출근하지 않으면 결근으로 처리됩니다.'},
+    {k:'law',b:'결재가 나야 효력이 생깁니다.',t:'승인을 확인한 뒤 움직이고, 계획된 복무는 미리 올립니다.'},
+    {k:'sch',b:'수업·회의·연수·지도 시간을 먼저 확인합니다.',t:'겹치는 일정이 없는지 본 뒤 신청합니다.'},
+    {k:'law',b:'증빙은 나이스 첨부와 서면 제출을 함께 합니다.',t:'근무상황부는 법정 장부로 전자와 서면으로 5년 보존합니다. 증빙 원본은 교무실(복무 담당자)에 제출합니다.'},
+    {k:'sch',b:'학교 밖에서 복무 관련 일이 생기면 교감에게 연락합니다.',t:''},
+    {k:'sch',b:'보결이 필요하면 교무부장에게 연락합니다.',t:''},
+    {k:'sch',b:'출퇴근 시간이 다른 교직원의 근무시간을 지켜 줍니다.',t:''}
+  ],
+  rulesSrc:'근거: 2025·2026학년도 학교업무최적화 종합계획(세계민주시민교육과), 학교 복무 안내'
+};
+</script>
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let GO=null; try{ GO=new URLSearchParams(location.search).get('go') }catch(e){}
+
+/* ---------- 화면 전환 (해시 없이, 뒤로가기로 종료되지 않게) ---------- */
+const views=['home','line','tools','calc','neis','cases','trip','vac','work','know'];
+let cur='home';
+function show(v,sec){
+  if(!views.includes(v)) v='home';
+  cur=v;
+  views.forEach(n=>{$('#v-'+n).hidden=(n!==v)});
+  document.body.classList.toggle('on-calc',v==='calc');
+  if(v==='home'&&typeof renderNow==='function') requestAnimationFrame(renderNow);
+  if(v==='tools'){ try{ renderTools() }catch(e){} }
+  if(['calc','neis','trip','vac','work'].includes(v)){ try{localStorage.setItem('bokmu.tool',v)}catch(e){} }
+  const navKey=['calc','neis','trip','vac','work'].includes(v)?'tools':v;
+  $$('[data-go]').forEach(b=>{ if(b.closest('.topnav,.tabbar')) b.setAttribute('aria-current', b.dataset.go===navKey?'page':'false');
+    else if(b.closest('.subtabs')) b.setAttribute('aria-current', b.dataset.go===v?'page':'false') });
+  if(v!=='home'){ try{localStorage.setItem('bokmu.view',v)}catch(e){} }
+  if(sec){const el=$('#sec-'+sec); if(el){ if(el.tagName==='DETAILS') el.open=true; setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),30);return}}
+  window.scrollTo(0,0);
+}
+function go(v,sec){ if(v===cur&&!sec){window.scrollTo({top:0,behavior:'smooth'});return}
+  try{ history.replaceState(Object.assign({},history.state||{},{y:Math.round(scrollY)}),'',location.pathname); history.pushState({v},'',location.pathname)}catch(e){} show(v,sec) }
+try{
+  history.replaceState({v:'home',root:true},'',location.pathname);
+  history.pushState({v:'home'},'',location.pathname);
+}catch(e){}
+window.addEventListener('popstate',e=>{
+  const st=e.state||{};
+  if(st.root){ try{history.pushState({v:'home'},'',location.pathname)}catch(err){} show('home'); return }
+  show(st.v||'home');
+  if(st.y) requestAnimationFrame(()=>window.scrollTo(0,st.y));
+});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-go]'); if(!b||b.disabled) return;
+  if(b.id==='resume') b.hidden=true;
+  go(b.dataset.go,b.dataset.sec);
+});
+$('#logo').addEventListener('click',()=>go('home'));
+
+$('#lb-btn').addEventListener('click',()=>$('#result').scrollIntoView({behavior:'smooth',block:'start'}));
+
+/* ---------- 시간 유틸 ---------- */
+const toM=t=>{ if(!t) return null; const [h,m]=t.split(':').map(Number); return h*60+m };
+const hm=m=>{ m=Math.max(0,Math.round(m)); return Math.floor(m/60)+':'+String(m%60).padStart(2,'0') };
+const kor=m=>{ m=Math.max(0,Math.round(m)); const h=Math.floor(m/60), mm=m%60;
+  return h&&mm? `${h}시간 ${mm}분` : h? `${h}시간` : `${mm}분` };
+const clock=m=>{ m=((m%1440)+1440)%1440; return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0') };
+const ov=(a1,a2,b1,b2)=>Math.max(0,Math.min(a2,b2)-Math.max(a1,b1));
+
+/* ---------- 계산기 상태 ---------- */
+let holiday=false, mode='calc', target=120, exDur=0;
+let ex=[];
+
+/* 우리 학교 근무시간 (이 기기에 기억) */
+let baseSet=false;
+try{ const b=localStorage.getItem('bokmu.reg'); if(b&&/^\d\d:\d\d-\d\d:\d\d$/.test(b)){ const [s,e]=b.split('-'); $('#r-start').value=s; $('#r-end').value=e; baseSet=true } }catch(e){}
+if(!baseSet&&window.SCHOOL&&SCHOOL.hours){ $('#r-start').value=SCHOOL.hours[0]; $('#r-end').value=SCHOOL.hours[1] }
+function baseSrc(){ $('#base-src').textContent=baseSet?'우리 학교 시각':'기본값' }
+function baseText(){ return $('#r-start').value+'–'+$('#r-end').value }
+function markPreset(){ const v=$('#r-start').value+'-'+$('#r-end').value; $$('#base-pick button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.reg===v)) }
+function openBase(open){ $('#base-editor').hidden=!open; $('#base-view').hidden=open&&!baseSet; markPreset() }
+function saveBase(){
+  try{localStorage.setItem('bokmu.reg',$('#r-start').value+'-'+$('#r-end').value)}catch(e){}
+  baseSet=true; $('#base-q').textContent='출퇴근 시각을 바꾸면 이 기기에 다시 기억합니다.';
+  $('#base-txt').textContent=baseText(); baseSrc(); openBase(false); resetDefaults(); calc(); if(typeof renderDay==='function') renderDay(); if(typeof renderBlk==='function') renderBlk();
+  const m=$('#base-msg'); m.textContent=`${baseText()} 기준으로 다시 계산했습니다`; m.hidden=false;
+  $('#lb-s').textContent=`${$('#r-end').value} 퇴근 기준으로 다시 계산`;
+  clearTimeout(window.__bm); window.__bm=setTimeout(()=>{ m.hidden=true; calc() },3500);
+}
+$('#base-edit').addEventListener('click',()=>openBase($('#base-editor').hidden));
+$$('#base-pick button').forEach(b=>b.addEventListener('click',()=>{ const [s,e]=b.dataset.reg.split('-'); $('#r-start').value=s; $('#r-end').value=e; saveBase() }));
+$('#base-save').addEventListener('click',saveBase);
+['#r-start','#r-end'].forEach(s=>$(s).addEventListener('input',markPreset));
+function resetDefaults(){ const rs=toM($('#r-start').value)??540, re=toM($('#r-end').value)??1020;
+  if(!holiday){ $('#a-start').value=clock(rs); $('#a-end').value=clock(re+150) } }
+
+/* 개인 용무: 빠른 칩 + 정확한 시각 */
+function renderExTotal(){
+  const rangeLen=ex.reduce((s,r)=>{let a=toM(r.s),b=toM(r.e); if(a==null||b==null) return s; if(b<=a)b+=1440; return s+(b-a)},0);
+  const t=exDur+rangeLen;
+  $('#ex-total').textContent=t? kor(t) : '없음';
+  $('#ex-clear').hidden=!t;
+}
+$$('#ex-chips [data-add]').forEach(b=>b.addEventListener('click',()=>{ exDur+=+b.dataset.add; renderExTotal(); calc() }));
+$('#ex-clear').addEventListener('click',()=>{ exDur=0; ex=[]; renderEx(); renderExTotal(); calc() });
+function renderEx(){
+  const box=$('#ex-list'); box.innerHTML='';
+  ex.forEach((r,i)=>{
+    const d=document.createElement('div'); d.className='ex-item';
+    d.innerHTML=`<input type="time" id="ex-s-${i}" aria-label="자리 비운 시작 시각" value="${r.s}"><span>~</span><input type="time" id="ex-e-${i}" aria-label="돌아온 시각" value="${r.e}"><button class="icon-btn" aria-label="이 시간 삭제"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`;
+    d.querySelector(`#ex-s-${i}`).addEventListener('input',e=>{ex[i].s=e.target.value;renderExTotal();calc()});
+    d.querySelector(`#ex-e-${i}`).addEventListener('input',e=>{ex[i].e=e.target.value;renderExTotal();calc()});
+    d.querySelector('button').addEventListener('click',()=>{ex.splice(i,1);renderEx();renderExTotal();calc()});
+    box.appendChild(d);
+  });
+}
+$('#ex-add').addEventListener('click',()=>{
+  const re=toM($('#r-end').value)??1020;
+  ex.push({s:clock(re+60),e:clock(re+90)}); renderEx(); renderExTotal(); calc();
+});
+
+/* 근무일 유형 · 계산 방식 */
+function setType(h){
+  holiday=h;
+  $('#t-wd').setAttribute('aria-pressed',!h); $('#t-hd').setAttribute('aria-pressed',h);
+  $('#l-start').textContent=h?'근무 시작':'실제 출근';
+  $('#l-end').textContent=h?'근무 종료':'실제 퇴근';
+  $('#ex-hint').textContent=h
+    ? '외출·사적 용무처럼 일하지 않은 시간을 넣으세요. 휴일 근무 중 식사 시간 처리는 학교·교육청 지침을 따릅니다. 임신 중이거나 출산 후 1년 이내라면 본인이 신청·동의한 경우에만 휴일 근무를 할 수 있습니다.'
+    : '외출·은행·사적 용무처럼 일하지 않은 시간만 넣으세요. 저녁 식사·휴식은 평일 1시간 공제에 포함되어 따로 빼지 않습니다.';
+  calc();
+}
+function setMode(m){
+  mode=m;
+  $('#m-calc').setAttribute('aria-pressed',m==='calc'); $('#m-until').setAttribute('aria-pressed',m==='until');
+  $('#f-end').hidden=m==='until'; $('#f-target').hidden=m!=='until';
+  $('#calc-h').textContent=m==='until'?'몇 시까지 있어야 할까요?':'오늘 몇 시간 인정될까요?';
+  $('#res-lab').textContent=m==='until'?'이 시각까지 근무하세요':'오늘 인정 시간';
+  $('#lb-l').textContent=m==='until'?'이 시각까지':'오늘 인정';
+  calc();
+}
+$('#t-wd').addEventListener('click',()=>setType(false));
+$('#t-hd').addEventListener('click',()=>setType(true));
+$('#m-calc').addEventListener('click',()=>setMode('calc'));
+$('#m-until').addEventListener('click',()=>setMode('until'));
+$$('#target-pick button').forEach(b=>b.addEventListener('click',()=>{
+  target=+b.dataset.t; $$('#target-pick button').forEach(x=>x.setAttribute('aria-pressed',x===b)); calc() }));
+['#a-start','#a-end','#r-start','#r-end'].forEach(s=>$(s).addEventListener('input',calc));
+
+$$('[data-sample]').forEach(b=>b.addEventListener('click',()=>{
+  const rs=toM($('#r-start').value)??540, re=toM($('#r-end').value)??1020, k=b.dataset.sample;
+  const S={
+    1:{h:false,s:clock(rs),e:'19:30',d:30},
+    2:{h:false,s:clock(rs-90),e:clock(re+80),d:0},
+    3:{h:false,s:clock(rs),e:clock(re+50),d:0},
+    4:{h:true,s:'09:00',e:'13:30',d:0}
+  }[k];
+  $('#a-start').value=S.s; $('#a-end').value=S.e; exDur=S.d; ex=[];
+  renderEx(); renderExTotal(); if(mode!=='calc') setMode('calc'); setType(S.h);
+}));
+
+let lastResult=0, lastNote='';
+
+function calc(){
+  const rs=toM($('#r-start').value)??540, re=toM($('#r-end').value)??1020;
+  $('#base-txt').textContent=baseText();
+  $('#res-base').textContent=holiday?'휴일':(clock(re)+' 퇴근 기준');
+  let as=toM($('#a-start').value), ae=toM($('#a-end').value);
+  const segs=[], rows=[]; let legend=[];
+  let result=0, msg='', state='ok', oldMsg='', ded=false, nR=[], nE=0;
+  const until=mode==='until';
+
+  if(as==null||(!until&&ae==null)){ paint(0,'zero','시각을 입력하세요.',[],[],[],0,1440,'',false,'시각 입력 필요'); if(typeof renderNeis==='function') renderNeis([],0,0); return }
+
+  // 정확한 시각 입력 (몇 시까지 모드에서는 길이만 사용)
+  const rangeLen=ex.reduce((s,r)=>{let a=toM(r.s),b=toM(r.e); if(a==null||b==null) return s; if(b<=a)b+=1440; return s+(b-a)},0);
+  const durAll=exDur+(until?rangeLen:0);
+
+  if(until){
+    if(holiday) ae=as+Math.max(60,target)+durAll;
+    else{ const early=Math.max(0,rs-as), eMin=early>=60?early:0;
+      ae=re+Math.max(0,target+60+durAll-eMin) }
+  }
+  if(ae<=as) ae+=1440; // 자정 넘김
+
+  const exR=until?[]:ex.map(r=>{let s=toM(r.s),e=toM(r.e); if(s==null||e==null) return null; if(e<=s)e+=1440;
+    if(s<as-120){s+=1440;e+=1440} return [s,e]}).filter(Boolean);
+
+  // 길이로만 넣은 용무 시간은 마지막 시간외근무 구간 끝에 표시
+  function placeDur(win,used){
+    let left=durAll; const out=[];
+    for(let i=win.length-1;i>=0&&left>0;i--){ const [a,b]=win[i]; const free=Math.max(0,b-a-(used[i]||0)); const take=Math.min(left,free);
+      if(take>0){ out.push([b-take,b]); left-=take } }
+    return {blocks:out,taken:durAll-left};
+  }
+
+  if(!holiday){
+    const early=Math.max(0,rs-as), earlyOK=early>=60, late=Math.max(0,ae-re);
+    const win=[]; if(earlyOK) win.push([as,rs]); if(late>0) win.push([re,ae]);
+    const used=win.map(([a,b])=>exR.reduce((s,[x,y])=>s+ov(x,y,a,b),0));
+    const P=placeDur(win,used);
+    const exMin=used.reduce((s,v)=>s+v,0)+P.taken;
+    const work=(earlyOK?early:0)+late-exMin;
+    if(earlyOK) nR.push([as,rs]); if(late>0) nR.push([re,ae]); nE=exMin;
+    ded=work>=60;
+    segs.push({c:'reg',s:Math.max(as,rs),e:Math.min(ae,re)});
+    if(early>0) segs.push({c:(earlyOK&&ded)?'ok':'nocount',s:as,e:rs,t:earlyOK?'':'1시간 미만'});
+    if(late>0) segs.push({c:ded?'ok':'nocount',s:re,e:ae,t:'1시간 미만'});
+    exR.forEach(([s,e])=>win.forEach(([a,b])=>{const o1=Math.max(s,a),o2=Math.min(e,b); if(o2>o1) segs.push({c:'ex',s:o1,e:o2})}));
+    P.blocks.forEach(([s,e])=>segs.push({c:'ex',s,e}));
+
+    rows.push(['조기 출근', early? (earlyOK? '+'+kor(early) : kor(early)+' (1시간 미만, 불인정)') : '없음']);
+    rows.push(['퇴근 후 근무', late? '+'+kor(late):'없음']);
+    if(exMin) rows.push(['개인 용무 제외','−'+kor(exMin),'minus']);
+    rows.push(['실제 시간외근무', kor(Math.max(0,work))]);
+    if(ded){ rows.push(['평일 1시간 공제 (식사·휴게)','−1시간','minus']); result=work-60 }
+    rows.push(['인정 시간', kor(result),'total']);
+
+    if(early===0&&late===0){ state='zero'; msg='정규 근무시간 안에서 근무했습니다. 시간외근무가 아닙니다.' }
+    else if(work<60){ state='zero'; msg=`시간외근무가 ${kor(Math.max(0,work))}으로 1시간이 안 되어 인정되지 않습니다.` }
+    else msg=`시간외근무 ${kor(work)}에서 1시간을 공제해 ${kor(result)}이 인정됩니다.`;
+    if(early>0&&!earlyOK) msg+=' 조기 출근은 1시간 이상이어야 합산됩니다.';
+    if(result>240) oldMsg=`개정 전이었다면 하루 4시간까지만 인정되어 ${kor(result-240)}을 받지 못했을 시간입니다. 10월 1일부터는 모두 인정됩니다.`;
+
+    legend=[['reg','정규 근무']];
+    if(segs.some(x=>x.c==='ok')) legend.push(['ok','시간외근무']);
+    if(ded) legend.push(['ded','총량에서 1시간 공제']);
+    if(segs.some(x=>x.c==='nocount')) legend.push(['nocount','불인정']);
+  } else {
+    const used=[exR.reduce((s,[x,y])=>s+ov(x,y,as,ae),0)];
+    const P=placeDur([[as,ae]],used);
+    const exMin=used[0]+P.taken;
+    const work=ae-as-exMin;
+    nR=[[as,ae]]; nE=exMin;
+    segs.push({c:work>=60?'ok':'nocount',s:as,e:ae,t:'1시간 미만'});
+    exR.forEach(([s,e])=>{const o1=Math.max(s,as),o2=Math.min(e,ae); if(o2>o1) segs.push({c:'ex',s:o1,e:o2})});
+    P.blocks.forEach(([s,e])=>segs.push({c:'ex',s,e}));
+    rows.push(['근무 시간', kor(ae-as)]);
+    if(exMin) rows.push(['개인 용무 제외','−'+kor(exMin),'minus']);
+    rows.push(['공제','없음 (휴일)']);
+    if(work>=60) result=work;
+    rows.push(['인정 시간',kor(result),'total']);
+    if(work<60){ state='zero'; msg='휴일 근무가 1시간이 안 되어 인정되지 않습니다.' }
+    else msg=`휴일 근무는 공제 없이 ${kor(result)}이 모두 인정됩니다. 출근할 때도 인식을 꼭 하세요.`;
+    if(result>240) oldMsg=`개정 전에는 휴일도 하루 4시간까지만 인정됐습니다. 10월 1일부터 상한이 없어졌지만, 휴일 근무 적용 방식은 교육청 시행 공문을 함께 확인하세요.`;
+    legend=work>=60?[['ok','휴일 근무 (공제 없음)']]:[['nocount','불인정']];
+  }
+  if(segs.some(x=>x.c==='ex')) legend.push(['ex','개인 용무']);
+
+  const all=segs.flatMap(x=>[x.s,x.e]).concat([as,ae]); if(!holiday) all.push(rs,re);
+  const lo=Math.floor((Math.min(...all)-30)/60)*60, hi=Math.ceil((Math.max(...all)+30)/60)*60;
+  lastResult=result; lastNote=(holiday?'휴일 ':'')+clock(as)+'–'+clock(ae);
+  const outside=segs.some(x=>x.c==='ok'||x.c==='nocount');
+  let sub=!outside? '정규 근무시간 안' : holiday? (result?'휴일 · 공제 없음':'1시간 미만 · 불인정') : (ded? '평일 · 1시간 공제 적용' : '1시간 미만 · 불인정');
+  let big=null;
+  if(until){
+    const next=ae>=1440;
+    big=`${clock(ae)}<small>${next?' (다음 날)':'까지'}</small>`;
+    msg=`${kor(result)}을 인정받으려면 ${next?'다음 날 ':''}${clock(ae)}까지 근무하세요. `+
+      (holiday?'휴일은 공제가 없습니다.':'평일 1시간 공제를 반영했습니다.')+(durAll?` 개인 용무 ${kor(durAll)}도 더했습니다.`:'');
+    sub=`목표 ${kor(target)} 인정`; state='ok';
+  }
+  paint(result,state,msg,segs,rows,legend,lo,hi,oldMsg,ded,sub,big);
+  if(typeof renderNeis==='function') renderNeis(nR,nE,result,holiday,until);
+}
+
+let shown=null;
+if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>document.body.classList.toggle('res-in',e.isIntersecting)),{rootMargin:'0px 0px -120px 0px'}).observe(document.getElementById('result'));
+function paint(result,state,msg,segs,rows,legend,lo,hi,oldMsg,ded,sub,big){
+  const R=$('#result'); R.classList.toggle('zero',state==='zero');
+  const html=big||(hm(result).replace(':','<small>시간</small>')+'<small>분</small>');
+  $('#big').innerHTML=`<span>${html}</span>`;
+  $('#lb-v').innerHTML=html; $('#lb-s').textContent=sub||'';
+  $('#livebar').classList.toggle('zero',state==='zero');
+  const key=html;
+  if(shown!==null&&shown!==key){ [$('#big span'),$('#lb-v')].forEach(el=>{el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop')}) }
+  shown=key;
+  $('#ded-box').hidden=!ded;
+  $('#ticks').style.setProperty('--ded-w',ded?'70px':'0px');
+  const chip=$('#res-chip'); chip.className='chip '+(state==='zero'?'mute':'ok');
+  chip.textContent=big? `목표 ${kor(target)}` : (state==='zero'?'인정 없음':'인정');
+  $('#res-msg').textContent=msg;
+  const span=Math.max(60,hi-lo), pct=m=>((m-lo)/span*100);
+  $('#track').innerHTML=segs.filter(x=>x.e>x.s).map(x=>{const w=(x.e-x.s)/span*100;
+    const lab=(x.c==='nocount'&&x.t&&w>16)?`<em>${x.t}</em>`:'';
+    return `<div class="seg-b ${x.c}" style="left:${pct(x.s)}%;width:${w}%" title="${clock(x.s)}–${clock(x.e)}">${lab}</div>`}).join('');
+  let t=''; for(let m=lo+60;m<hi;m+=60){ const h=(m/60)%24;
+    t+=`<span class="${h%2?'odd':''}" style="left:${pct(m)}%">${String(h).padStart(2,'0')}</span>` }
+  $('#ticks').innerHTML=t;
+  $('#legend').innerHTML=legend.map(([c,l])=>`<span><i class="${c}"></i>${l}</span>`).join('');
+  $('#rows').innerHTML=rows.map(([a,b,c])=>`<div class="${c||''}"><span>${a}</span><span class="${c==='total'?'num':''}">${b}</span></div>`).join('');
+  $('#oldnote').hidden=!oldMsg; $('#oldnote-t').textContent=oldMsg||'';
+}
+
+/* ---------- 이번 달 누적 (이 기기에만 저장) ---------- */
+const LIMIT=57*60;
+const pad=n=>String(n).padStart(2,'0');
+const today=new Date(); const todayStr=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+$('#m-date').value=todayStr;
+let recs=[];
+try{recs=JSON.parse(localStorage.getItem('bokmu.recs')||'[]')||[]}catch(e){recs=[]}
+function saveRecs(){try{localStorage.setItem('bokmu.recs',JSON.stringify(recs))}catch(e){}}
+function renderMonth(){
+  const ym=($('#m-date').value||todayStr).slice(0,7);
+  const [y,m]=ym.split('-');
+  $('#m-label').textContent=`${y}년 ${Number(m)}월`;
+  const list=recs.map((r,i)=>({...r,i})).filter(r=>r.d.startsWith(ym)).sort((a,b)=>a.d<b.d?-1:1);
+  const sum=list.reduce((s,r)=>s+r.m,0);
+  $('#m-sum').innerHTML=`${hm(sum)} <small>/ 57:00</small>`;
+  const bar=$('#m-bar'); bar.style.width=Math.min(100,sum/LIMIT*100)+'%'; bar.classList.toggle('over',sum>LIMIT);
+  const chip=$('#m-chip');
+  if(sum>LIMIT){chip.className='chip bad';chip.textContent=`상한 ${kor(sum-LIMIT)} 초과`}
+  else if(sum>LIMIT*.85){chip.className='chip warn';chip.textContent=`남은 시간 ${kor(LIMIT-sum)}`}
+  else {chip.className='chip ok';chip.textContent=`남은 시간 ${kor(LIMIT-sum)}`}
+  $('#m-pay').textContent=sum? `월 합계에서 1시간 미만은 버리므로 수당 기준은 ${Math.floor(Math.min(sum,LIMIT)/60)}시간입니다. 정액분(월 10시간)은 출근 15일 이상이면 따로 지급됩니다.` : '계산한 결과를 날짜별로 기록하면 월 57시간 중 얼마나 썼는지 보여 줍니다.';
+  $('#m-list').innerHTML=list.map(r=>`<div class="rec"><span class="d">${r.d.slice(5).replace('-','.')}</span><span class="t">${r.t||''}</span><span class="m">${hm(r.m)}</span><button class="icon-btn" data-del="${r.i}" aria-label="${r.d} 기록 삭제"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join('');
+}
+$('#m-list').addEventListener('click',e=>{const b=e.target.closest('[data-del]'); if(!b) return; recs.splice(+b.dataset.del,1); saveRecs(); renderMonth()});
+$('#m-date').addEventListener('input',renderMonth);
+$('#m-add').addEventListener('click',()=>{
+  const d=$('#m-date').value||todayStr;
+  const idx=recs.findIndex(r=>r.d===d);
+  const rec={d,m:lastResult,t:lastNote};
+  if(idx>=0) recs[idx]=rec; else recs.push(rec);
+  saveRecs(); renderMonth();
+  const b=$('#m-add'); b.textContent=idx>=0?'같은 날짜를 새 결과로 바꿨습니다':'기록했습니다';
+  setTimeout(()=>b.textContent='계산 결과 기록하기',1600);
+});
+
+/* ---------- ○/× 사례 ---------- */
+const QA=[
+  {c:'초과근무',q:'오전 반일연가를 쓴 날, 퇴근 시각 이후 초과근무',m:'o',a:'<strong>인정됩니다.</strong> 지각·외출·반일연가·공가를 쓴 날도 명령을 받고 근무하면 평일과 같은 방식으로 계산합니다. 오전 반일연가를 썼다면 정규 퇴근 시각 이후, 오후 반일연가를 썼다면 출근 전 조기 출근 명령이 가능합니다.',s:'인사실무 73쪽 사례 2'},
+  {c:'초과근무',q:'하루 연가(8시간)를 쓴 날 학교에 나와 초과근무',m:'x',a:'<strong>인정되지 않습니다.</strong> 1일 연가나 공가를 쓴 사람은 시간외근무 인정에서 제외됩니다.',s:'인사실무 73쪽 사례 2'},
+  {c:'초과근무',q:'휴일에 연수에 참가하거나 시험 감독에 동원됨',m:'x',a:'<strong>초과근무 명령 대상이 아닙니다.</strong> 초과근무는 본연의 업무에 한해 명하는 것이므로 교육 참가나 행사 동원은 해당하지 않습니다.',s:'인사실무 72·81쪽, 인사혁신처 예규'},
+  {c:'초과근무',q:'방학 중 학교장 명령으로 출근해 근무',m:'o',a:'<strong>인정됩니다.</strong> 방학은 공휴일이 아니라 근무일입니다. 다만 보충수업처럼 별도 수당을 받는 시간은 빼고, 남은 실제 근무가 8시간을 넘는 부분만 시간외근무가 됩니다.',s:'인사실무 82쪽 질의회신 4'},
+  {c:'초과근무',q:'임신 중인데 토요일 학교 행사 근무',m:'t',a:'<strong>본인이 신청해야 가능합니다.</strong> 임신 중이거나 출산 후 1년이 지나지 않은 공무원에게는 21시~08시와 토요일·공휴일 근무를 명할 수 없습니다. 임신 중이면 본인이 신청한 경우, 출산 후 1년 이내면 본인이 동의한 경우에만 근무를 명할 수 있습니다.',s:'인사실무 70쪽, 국가공무원 복무규정 제11조'},
+  {c:'초과근무',q:'방과후학교 강사료를 받는 시간에 초과근무수당도',m:'x',a:'<strong>함께 받을 수 없습니다.</strong> 같은 시간에 다른 방법으로 금전 보상을 받으면 시간외근무수당 지급 대상에서 제외됩니다. 그 시간을 뺀 나머지 근무 시간만 따집니다.',s:'인사실무 72쪽'},
+  {c:'초과근무',q:'학년말 행사 준비로 2주 동안 매일 남아야 함',m:'o',a:'<strong>일괄 명령을 받을 수 있습니다.</strong> 행사 주관 등으로 일정 기간 계속 초과근무를 하게 되면, 기간·부서·담당자를 정해 한꺼번에 명령할 수 있습니다. 날마다 실적 확인은 그대로 합니다.',s:'인사실무 72쪽'},
+  {c:'초과근무',q:'수능일 출근시각이 10시로 늦춰졌는데 8시 30분에 출근',m:'x',a:'<strong>인정되지 않습니다.</strong> 출근시각만 늦춰 준 것이고 기본 근무시간은 그대로이므로 일찍 나온 시간은 시간외근무가 아닙니다.',s:'인사실무 73쪽 사례 1'},
+  {c:'출장',q:'출장 중에 정규 시간을 넘겨 일함',m:'t',a:'<strong>원칙적으로 인정되지 않습니다.</strong> 이동·휴식 시간을 고려해 출장 기간을 주는 것이 원칙입니다. 다만 출장 목적상 시간외근무가 반드시 생기는 경우, 명령을 받고 근무하면 수당 지급이 가능합니다.',s:'인사실무 72·81쪽, 공무원보수 등의 업무지침'},
+  {c:'출장',q:'토요일 출장에 여비와 초과근무수당을 함께',m:'t',a:'<strong>원칙적으로 함께 받을 수 없습니다.</strong> 다만 병급 요건을 갖추면 가능합니다. 복무에서 제외된 사람은 받을 수 없습니다.',s:'제작자 정리 복무 Q&A'},
+  {c:'출장',q:'주말에 수학여행 사전답사',m:'o',a:'<strong>여비와 초과근무수당을 함께 받을 수 있습니다.</strong> 다만 총 근무시간을 확인할 수 있는 객관적인 증빙이 필요합니다.',s:'2026 인천 체험학습 매뉴얼'},
+  {c:'출장',q:'학교 옆 공원으로 학생들과 수업하러 나감',m:'o',a:'<strong>출장 명령을 받아야 합니다.</strong> 교육활동을 위해 학교 밖에서 공무를 수행하면 1km 이내 가까운 곳이라도 출장 명령이 필요합니다. 다만 출장 명령이 있다고 반드시 여비를 지급하는 것은 아닙니다.',s:'인사실무 75쪽 사례 3'},
+  {c:'출장',q:'동료 직원 경조사에 학교 대표로 참석',m:'o',a:'<strong>2명까지 출장 처리가 가능합니다.</strong> 기관을 대표해 조기 전달 등을 위해 참석하는 소수(2명 이내)의 공무원이 해당하며, 경조사가 있는 직원과 같은 기관에 근무해야 합니다.',s:'인사실무 75쪽 사례 1, 제작자 정리 복무 Q&A'},
+  {c:'출장',q:'전임 교장 이·취임식, 정년퇴임식 참석',m:'t',a:'<strong>주관 기관이 참석 범위를 정해 요청한 경우만 출장입니다.</strong> 친분 때문에 개인적으로 참석하는 것은 출장 처리할 수 없습니다.',s:'인사실무 75쪽 사례 2'},
+  {c:'출장',q:'인사발령 후 인수인계하러 다른 학교로 이동',m:'o',a:'<strong>출장 처리가 가능합니다.</strong> 업무 인수인계를 위해 정규 근무지 밖으로 이동해야 하면 출장으로 처리합니다.',s:'인사실무 75쪽 사례 4'},
+  {c:'출장',q:'집에서 바로 출장지로 갈 때 이동시간',m:'x',a:'<strong>출장 시간에 넣지 않습니다.</strong> 이동시간은 학교(근무지)에서 출발하거나 학교로 돌아올 때만 출장 시간에 포함합니다.',s:'제작자 정리 복무 Q&A'},
+  {c:'출장',q:'09시 출장인데 집에서 출발해 가다 08시 40분에 사고',m:'o',a:'<strong>공무상 재해로 인정될 수 있습니다.</strong> 이동시간을 출장 시간에 넣지 않았더라도, 출장지로 가는 이동은 출장이라는 공무를 수행하기 위한 부수적·준비적 행위이므로 공무수행 중 사고(가목)에 해당합니다.',s:'공무원 재해보상법 제4조 제1항 제1호 가목, 제작자 정리 복무 Q&A'},
+  {c:'출장',q:'물품을 사러 출장 갔는데 맞는 물건이 없음',m:'o',a:'<strong>사유를 적어 보고합니다.</strong> 결과 보고에 "맞는 물품 없음" 또는 "품절"처럼 사유를 쓰고 내부결재를 받습니다.',s:'제작자 정리 복무 Q&A'},
+  {c:'출장',q:'교직원 동호회 교외 활동',m:'x',a:'<strong>출장으로 처리할 수 없습니다.</strong>',s:'제작자 정리 복무 Q&A'},
+  {c:'출장',q:'교직원 배구 연습, 학교 대표로 교직원 대회 출전',m:'x',a:'<strong>출장으로 처리할 수 없습니다.</strong> 연습과 대회 출전 모두 해당합니다.',s:'제작자 정리 복무 Q&A'},
+  {c:'출장',q:'출장 중 휴대폰으로 에듀파인 결재',m:'x',a:'<strong>여비가 조정·회수될 수 있습니다.</strong> 출장 시간에 사무실에서 근무한 것으로 볼 수 있는 행위가 확인되면 여비 일부를 조정하거나 회수합니다.',s:'출장 복무 유의사항'},
+  {c:'기타',q:'다른 학교의 학교운영위원으로 활동',m:'o',a:'<strong>가능합니다.</strong> 교원이 다른 학교의 학교운영위원회 위원이 되는 것은 허용됩니다.',s:'제작자 정리 복무 Q&A'},
+  {c:'방학',q:'오전 기초학력 지도 근무, 오후 41조 연수',m:'o',a:'<strong>가능합니다.</strong> 예를 들어 08:30~13:30 근무, 13:30~16:30 41조 연수처럼 시간이 겹치지 않게 나누면 됩니다. 08:30~16:30 전체를 41조로 신청하면서 오전에 근무하는 것은 안 됩니다.',s:'인사실무 78쪽 사례 1'},
+  {c:'방학',q:'종일 41조 연수를 신청하고 오후에 교육청 출장',m:'x',a:'<strong>안 됩니다.</strong> 41조 연수와 출장은 같은 시간에 함께 신청할 수 없습니다. 오전 41조 연수, 오후 근무지내 출장처럼 시간을 나눕니다.',s:'인사실무 78쪽 사례 2'},
+  {c:'방학',q:'방학 중 가족여행을 41조 연수로',m:'x',a:'<strong>안 됩니다.</strong> 연수 목적이 아닌 가족여행·동호회 여행은 41조 연수로 신청할 수 없으며, 감사에서 지적된 사례가 있습니다.',s:'인사실무 79쪽 감사 사례 1, 제작자 정리 복무 Q&A'},
+  {c:'방학',q:'방학 중 방과후 강사로 출근해 수업하면서 41조 연수 신청',m:'x',a:'<strong>안 됩니다.</strong> 학교에 출근해 일한 시간에 41조 연수를 신청하면 실제 복무와 나이스 근무상황이 맞지 않아 감사에서 지적됩니다.',s:'인사실무 79쪽 감사 사례 2'},
+  {c:'방학',q:'학교 재량휴업일(효도 휴가일)은 출근하지 않아도 되나요',m:'x',a:'<strong>출근하는 날입니다.</strong> 학교운영위원회가 휴업일로 정했어도 관공서 공휴일이 아니므로 근무일입니다. 출근하지 않으려면 41조 연수·연가 등 정당한 절차를 밟습니다.',s:'인사실무 78쪽'},
+  {c:'방학',q:'41조 연수를 결재받은 뒤 같은 날 출장 공문이 왔어요',m:'t',a:'<strong>41조를 기결취소하고 다시 올립니다.</strong> 41조 연수와 출장은 같은 시간에 겹칠 수 없으므로, 결재된 41조를 취소한 뒤 출장 시간을 뺀 나머지 시간으로 다시 신청합니다.',s:'교원인사과-8180(2017.7.25.), 2018 유·초등 교육공무원 인사업무 처리 지침 375쪽'},
+  {c:'방학',q:'방학 중 교육청 연수는 41조로 올리나요',m:'x',a:'<strong>출장으로 올립니다.</strong> 교육청 주관 연수는 개인출장관리의 국내출장(관내)으로, 자율연수·대학원은 출장(연수)으로 신청합니다. 41조 연수는 자택·도서관처럼 근무지 밖에서 스스로 하는 연수입니다.',s:'제작자 정리 방학 중 복무 신청 안내'},
+  {c:'방학',q:'방학 중 국외 자율연수',m:'o',a:'<strong>41조 연수로 신청할 수 있습니다.</strong> 사유를 「국외 자율 연수」로 적고 국외 연수 계획서를 나이스에 첨부합니다. 연수 목적이 아닌 개인 국외여행은 41조가 아니라 연가로 처리합니다.',s:'제작자 정리 방학 중 복무 신청 안내'},
+  {c:'방학',q:'41조 연수를 여러 날 같은 시간으로 신청',m:'o',a:'<strong>일반복에 체크해 한 번에 올립니다.</strong> 날마다 따로 올리지 않아도 됩니다. 중간에 근무·출장이 있는 날은 빼고 신청합니다.',s:'제작자 정리 방학 중 복무 신청 안내'},
+  {c:'방학',q:'방학 중 학교장 명령으로 하루 출근',m:'o',a:'<strong>정액분 출근일로 인정됩니다.</strong> 학교장 명령으로 출근해 복무규정상 근무시간(8시간) 이상 근무하면 정규 근무일로 보아 월 출근일수에 포함합니다.',s:'인사실무 71쪽'},
+  {c:'근무시간',q:'지각·조퇴·외출을 여러 번 써서 합계 8시간',m:'o',a:'<strong>연가 1일이 공제됩니다.</strong> 지각·조퇴·외출과 반일연가는 종류를 구분하지 않고 시간을 누계하며, 누계 8시간을 연가 1일로 계산합니다.',s:'인사실무 76쪽'},
+  {c:'근무시간',q:'교사 개인별로 출퇴근 시각을 조정',m:'x',a:'<strong>안 됩니다.</strong> 유연근무는 학교 단위로 운영합니다. 다만 업무 특성상 출퇴근 시각이 다른 영양교사, 유치원 방과후과정 담당교사는 개인별 조정이 가능합니다.',s:'인사실무 77쪽'},
+  {c:'근무시간',q:'국가직 영양교사의 유연근무 출퇴근 기록',m:'o',a:'<strong>나이스, 지문 등록, 수기 대장 중 하나로 관리할 수 있습니다.</strong> 지방직 공무원은 지문 인식으로 관리합니다.',s:'제작자 정리 복무 Q&A'},
+  {c:'근무시간',q:'유연근무하는 날 출장',m:'o',a:'<strong>출장 갈 수 있습니다.</strong> 출퇴근 시각을 따로 밝히는 대신 부서장에게 보고하는 것으로 갈음할 수 있습니다.',s:'제작자 정리 복무 Q&A'},
+  {c:'근무시간',q:'수업이 없어서 승인 없이 잠깐 외출',m:'x',a:'<strong>복무 위반입니다.</strong> 수업이 없어도 근무시간 중 외출은 학교장 승인을 받아야 합니다. 승인 없이 48분 외출한 사례가 감사에서 지적됐습니다.',s:'인사실무 77쪽 감사 사례'}
+];
+const qe=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const QORD=['초과근무','출장','근무시간','방학','기타'];
+const QCATS=['전체',...QORD.filter(c=>QA.some(x=>x.c===c)),...[...new Set(QA.map(x=>x.c))].filter(c=>!QORD.includes(c))];
+const VL={o:['○','된다'],x:['×','안 된다'],t:['△','조건부']};
+const QTOOL={초과근무:['calc','','초과근무 계산기'],출장:['trip','','출장 판정'],근무시간:['work','meter','조퇴 누계 미터'],방학:['vac','','41조 일정 블록'],기타:['line','','결재라인']};
+const isAudit=x=>/감사/.test(x.s||'');
+let qCat='전체', qMode='see', qAns='';
+const SVK='bokmu.solved';
+let solved={}; try{ solved=JSON.parse(localStorage.getItem(SVK)||'{}')||{} }catch(e){ solved={} }
+function recordSolved(q,ok){ solved[q]=ok?1:0; try{ localStorage.setItem(SVK,JSON.stringify(solved)) }catch(e){} if(typeof renderProg==='function') renderProg() }
+const LNK='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
+function qRow(x,i){
+  const mm=/^<strong>([\s\S]*?)<\/strong>\s*([\s\S]*)$/.exec(x.a)||[null,'',x.a], v=VL[x.m]||VL.t, t=QTOOL[x.c];
+  return `<div class="q" id="qa-${i}" data-c="${qe(x.c)}"><button class="qh" aria-expanded="false" aria-controls="qa-a-${i}">
+    <span class="vb ${x.m}"><i>${v[0]}</i>${v[1]}</span>
+    <span class="qq"><small class="qc">${qe(x.c)}</small>${x.q}${isAudit(x)?'<span class="aud">감사 지적</span>':''}</span>
+    <span class="mark ${x.m}" aria-hidden="true">?</span></button>
+    <div class="a" id="qa-a-${i}" hidden>
+      <div class="qz"><p>어떻게 될까요?</p><div class="tc-btns">${['o','x','t'].map(k=>`<button data-qz="${k}"><i>${VL[k][0]}</i>${VL[k][1]}</button>`).join('')}</div></div>
+      <div class="ans">
+        <p class="qres"></p>
+        <p class="vl ${x.m}"><i>${v[0]}</i><span>${mm[1]}</span></p>
+        ${mm[2]?`<p class="why">${mm[2]}</p>`:''}
+        <p class="src"><span class="src-k">출처</span>${x.s||''}</p>
+        <div class="a-foot">${t?`<button class="btn sm" data-go="${t[0]}"${t[1]?` data-sec="${t[1]}"`:''}>${t[2]} ›</button>`:''}<button class="share-q qs-btn" data-share="case-${i}" title="이 사례 링크 복사" aria-label="이 사례 링크 복사">${LNK}<span class="lbl">링크</span></button></div>
+      </div>
+    </div></div>` }
+$('#qa').innerHTML=QCATS.filter(c=>c!=='전체').map(c=>`<section class="qg" data-g="${qe(c)}"><h3 class="qg-h">${qe(c)} <span class="num"></span></h3><div class="qg-rows">${QA.map((x,i)=>x.c===c?qRow(x,i):'').join('')}</div><button class="qg-more" hidden></button></section>`).join('');
+const QFOLD=4; const qOpenG=new Set();
+$('#case-cats').innerHTML=QCATS.map(c=>`<button data-qc="${c}" aria-pressed="${c==='전체'}">${c} <span class="num">${c==='전체'?QA.length:QA.filter(x=>x.c===c).length}</span></button>`).join('');
+function setCaseCat(c){ qCat=c; $$('#case-cats button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.qc===c)); filterCases() }
+function filterCases(){ const q=($('#case-q').value||'').trim(), vs=q?qVariants(q):[]; let n=0;
+  $$('#qa .q').forEach(el=>{ const x=QA[+el.id.split('-')[1]];
+    const am=!qAns||(qAns==='audit'?isAudit(x):x.m===qAns);
+    const hit=(qCat==='전체'||x.c===qCat)&&am&&(!q||hitAny(x.q+x.a.replace(/<[^>]+>/g,'')+x.c+(x.s||''),vs)); el.hidden=!hit; el.classList.remove('fold'); if(hit)n++ });
+  const plain=qCat==='전체'&&!q&&!qAns;
+  $$('#qa .qg').forEach(g=>{ const vis=[...g.querySelectorAll('.q:not([hidden])')], k=vis.length; g.hidden=!k; g.querySelector('.qg-h .num').textContent=k;
+    const mb=g.querySelector('.qg-more'), fold=plain&&!qOpenG.has(g.dataset.g)&&k>QFOLD+1;
+    if(fold) vis.slice(QFOLD).forEach(el=>{ if(!el.classList.contains('open')) el.classList.add('fold') });
+    const nf=g.querySelectorAll('.q.fold').length; mb.hidden=!nf&&!(plain&&qOpenG.has(g.dataset.g)&&k>QFOLD+1);
+    mb.textContent=nf?`${g.dataset.g} ${nf}개 더 보기`:'접기'; });
+  $('#qa').classList.toggle('searching',!!q||qCat==='전체'&&!!qAns);
+  $('#case-empty').hidden=n>0; $('#case-count').textContent=`${n}개 사례` }
+$('#case-q').addEventListener('input',()=>filterCases());
+function revealQ(el,on){ el.classList.toggle('rev',on) }
+function setQ(el,open,reveal){ el.classList.toggle('open',open); el.querySelector('.qh').setAttribute('aria-expanded',open); el.querySelector('.a').hidden=!open;
+  if(reveal) revealQ(el,true);
+  const x=QA[+el.id.split('-')[1]];
+  if(open&&!el.dataset.ll){ el.dataset.ll='1'; lawLinks(el) }
+  if(qMode==='quiz'&&x.q in solved&&!el.classList.contains('rev')){ revealQ(el,true); el.querySelector('.qres').innerHTML=solved[x.q]?'<b class="ok">이미 맞힌 사례</b>':'<b class="no">지난번에 틀린 사례</b>' } }
+function renderProg(){ const P=$('#quiz-prog'); if(qMode!=='quiz'){ P.hidden=true; return }
+  const keys=QA.filter(x=>x.q in solved), ok=keys.filter(x=>solved[x.q]).length;
+  P.hidden=false; P.innerHTML=`<span class="qp-bar"><i style="width:${keys.length/QA.length*100}%"></i></span><span><b>${QA.length}개 중 ${keys.length}개</b> 풀었어요 · 맞힘 ${ok}</span>${keys.length?'<button class="link-btn inl" id="qp-reset">처음부터</button>':''}` }
+function setMode(m){ qMode=m; $$('#case-mode button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
+  $('#qa').classList.toggle('see',m==='see'); $('#qa').classList.toggle('quiz',m==='quiz');
+  $$('#qa .q').forEach(el=>{ setQ(el,false); revealQ(el,false); el.querySelector('.qres').innerHTML='' }); renderProg() }
+$('#case-mode').addEventListener('click',e=>{ const b=e.target.closest('[data-mode]'); if(b) setMode(b.dataset.mode) });
+$('#case-ans').addEventListener('click',e=>{ const b=e.target.closest('[data-qm]'); if(!b) return; qAns=qAns===b.dataset.qm?'':b.dataset.qm;
+  $$('#case-ans button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.qm===qAns)); filterCases() });
+$('#quiz-prog').addEventListener('click',e=>{ if(e.target.id!=='qp-reset') return; solved={}; try{localStorage.removeItem(SVK)}catch(x){} setMode('quiz') });
+$('#case-cats').addEventListener('click',e=>{const b=e.target.closest('[data-qc]'); if(b) setCaseCat(b.dataset.qc)});
+$('#qa').addEventListener('click',e=>{
+  const mo=e.target.closest('.qg-more'); if(mo){ const g=mo.closest('.qg').dataset.g; qOpenG.has(g)?qOpenG.delete(g):qOpenG.add(g); filterCases(); return }
+  const z=e.target.closest('[data-qz]');
+  if(z){ const el=z.closest('.q'), x=QA[+el.id.split('-')[1]], ok=z.dataset.qz===x.m;
+    recordSolved(x.q,ok); revealQ(el,true);
+    el.querySelector('.qres').innerHTML=ok?'<b class="ok">맞혔어요!</b>':`<b class="no">아쉬워요. 정답은 ${VL[x.m][0]} ${VL[x.m][1]}입니다.</b>`; return }
+  const b=e.target.closest('.qh'); if(!b) return;
+  const el=b.parentElement; setQ(el,!el.classList.contains('open'));
+});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-casecat]'); if(!b) return; go('cases'); setCaseCat(b.dataset.casecat)});
+
+/* ---------- 결재라인 ---------- */
+const S=window.SCHOOL||{approvals:[],rules:[],hours:['09:00','17:00'],links:{}};
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TAG={law:'법령',sch:'학교',rev:'개정'};
+$('#line-badge').innerHTML=`<span class="tag law">법령</span>전국 공통 <span class="tag sch">학교</span>학교마다 다를 수 있음 <span class="lg-chk">확인 ${esc(S.checked||'')}</span>`;
+const CATS=['전체',...new Set(S.approvals.map(a=>a.cat))];
+let lineCat='전체';
+$('#line-cats').innerHTML=CATS.map(c=>`<button data-cat="${esc(c)}" aria-pressed="${c==='전체'}">${esc(c)}</button>`).join('');
+$('#line-cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]'); if(!b) return;
+  lineCat=b.dataset.cat; $$('#line-cats button').forEach(x=>x.setAttribute('aria-pressed',x===b)); renderLines()});
+$('#line-q').addEventListener('input',renderLines);
+const chain=l=>`<span class="chain" aria-label="결재: ${esc(l.join(', '))}, 최종 ${esc(l[l.length-1])}">`+l.map((p,i)=>`${i?'<i></i>':''}<span class="st${p.length>2?' wide':''}${i===l.length-1?' fin':''}">${esc(p)}</span>`).join('')+'</span>';
+function renderLines(){
+  const q=$('#line-q').value.trim(), vs=q?qVariants(q):[];
+  const list=S.approvals.map((a,i)=>({...a,i})).filter(a=>(lineCat==='전체'||a.cat===lineCat)&&
+    (!q||hitAny(a.name+a.cat+a.line.join('')+(a.proof||'')+a.notes.map(n=>n.t).join(''),vs)));
+  if(!list.length){ $('#lines').innerHTML=`<p class="empty">찾는 유형이 없습니다. 다른 낱말로 검색해 보세요.</p>`; return }
+  const groups=[]; list.forEach(a=>{ const k=a.line.join('→'); let g=groups.find(x=>x.k===k); if(!g){ g={k,line:a.line,items:[]}; groups.push(g) } g.items.push(a) });
+  groups.sort((x,y)=>x.line.length-y.line.length||y.items.length-x.items.length);
+  const row=a=>{
+    let act='';
+    if(a.go==='vac') act+=`<button class="btn sm" data-go="vac">41조 일정 블록</button>`;
+    if(a.go==='work') act+=`<button class="btn sm" data-go="work" data-sec="meter">조퇴 누계 미터</button>`;
+    if(a.go==='trip') act+=`<button class="btn sm" data-go="trip">출장 판정하기</button>`;
+    if(a.go==='calc') act+=`<button class="btn sm" data-go="calc">초과근무 계산기</button><button class="btn sm ghost" data-go="neis">나이스 절차</button>`;
+    if(a.link&&S.links&&S.links[a.link]) act+=`<a class="btn sm primary" href="${esc(S.links[a.link])}" target="_blank" rel="noopener">휴가 규정 도우미에서 보기 ↗</a>`;
+    act+=`<button class="link-btn" data-share="line-${esc(a.name)}">링크 복사</button>`;
+    const tags=(a.proof?`<span class="lt proof-t">${a.proof==='증빙자료'?'증빙 필요':'증빙 '+esc(a.proof)}</span>`:'')+(a.link==='leave'?`<span class="lt ext-t">휴가 도우미 ↗</span>`:'');
+    return `<div class="ln" id="ln-${a.i}" aria-expanded="false">
+      <button class="ln-h" aria-controls="ln-b-${a.i}"><span class="ln-n"><b>${esc(a.name)}</b>${tags?`<span class="ln-tags">${tags}</span>`:''}</span><i class="chev" aria-hidden="true">›</i></button>
+      <div class="ln-b" id="ln-b-${a.i}" hidden>
+        ${a.notes.length?`<ul>${a.notes.map(n=>`<li><span class="tag ${n.k}">${TAG[n.k]||''}</span><span>${esc(n.t)}</span></li>`).join('')}</ul>`:''}
+        ${a.link==='leave'?`<p class="hint">사용 조건과 일수 계산 등 세부 기준은 휴가 규정 도우미에서 확인하세요.</p>`:''}
+        <div class="ln-foot">${a.proof?`<span class="proof">증빙 <b>${esc(a.proof)}</b></span>`:''}${act}</div>
+      </div></div>` };
+  $('#lines').innerHTML=groups.map(g=>{ const L=g.line, fin=L[L.length-1];
+    const title=L.length===1?`${esc(L[0])} 결재로 끝`:`${esc(L.slice(0,-1).join('·'))} 거쳐 ${esc(fin)}까지`;
+    return `<section class="lg" aria-label="${title}"><div class="lg-h"><span><b>${title}</b><small>${g.items.length}개 유형</small></span><span class="lg-flow"><span class="me">신청</span><i class="fl" aria-hidden="true"></i>${chain(L)}</span></div>
+      <div class="lg-rows${g.items.length%2?' odd':''}">${g.items.map(row).join('')}</div></section>` }).join('');
+}
+$('#lines').addEventListener('click',e=>{const h=e.target.closest('.ln-h'); if(!h) return;
+  const ln=h.parentElement, open=ln.getAttribute('aria-expanded')!=='true';
+  ln.setAttribute('aria-expanded',open); ln.querySelector('.ln-b').hidden=!open});
+$('#rules').innerHTML=S.rules.map(r=>`<li><span><b>${esc(r.b)}</b><span class="tag ${r.k}">${TAG[r.k]}</span>${r.t?`<br><span class="sub">${esc(r.t)}</span>`:''}</span></li>`).join('');
+$('#rules-src').textContent=S.rulesSrc||'';
+$('#sec-rules .rs-n').textContent=S.rules.length; $('#sec-rules .rs-t b').textContent=`신청 전 ${S.rules.length}가지 확인`;
+renderLines();
+
+/* ---------- 출장 판정 ---------- */
+const STEPS={
+  why:{q:'무슨 일로 가나요?',opts:[
+    {t:'공무',d:'회의·연수·업무 협의·학생 인솔·물품 구입 등',next:'where'},
+    {t:'방학 중 대학원 출석·자율 직무연수',d:'교육부·교육감 인가 기관 연수',end:'study'},
+    {t:'교직원 동호회·친목·운동 경기',end:'noClub'},
+    {t:'개인적인 경조사·친분 행사',d:'기관을 대표해 가는 경우(2명 이내)는 공무입니다',end:'noPrivate'}]},
+  where:{q:'어디로 가나요?',opts:[
+    {t:'학교와 같은 시·군 안',d:'특별시·광역시 포함, 거리와 관계없음',next:'len',set:{type:'in'}},
+    {t:'다른 시·군',next:'dist'}]},
+  dist:{q:'여행 거리가 12km 이상인가요?',opts:[
+    {t:'12km 이상',end:'out'},
+    {t:'12km 미만',next:'len',set:{type:'in'}}]},
+  len:{q:'출장에 걸리는 시간은?',opts:[
+    {t:'4시간 미만',set:{len:'short'},next:'kids'},
+    {t:'4시간 이상',set:{len:'long'},next:'kids'},
+    {t:'왕복 2km 이내의 아주 가까운 곳',set:{len:'near'},next:'kids'}]},
+  kids:{q:'학생을 인솔하나요?',opts:[
+    {t:'예',set:{kids:true},end:'in'},
+    {t:'아니요',set:{kids:false},end:'in'}]}
+};
+let wpath=[];
+const lineOf=n=>{const a=S.approvals.find(x=>x.name===n); return a?a.line.slice():['교감','교장']};
+const CARE=`<ul><li>돌아오면 지체 없이 결과를 보고합니다.</li><li>수업·방과후 등 같은 시간의 다른 일정과 겹치지 않는지 확인합니다.</li><li>출장 중 사무실 일(에듀파인 결재 등)을 하면 여비가 회수될 수 있습니다.</li></ul>`;
+function tripResult(end,st){
+  const no=end==='noClub'||end==='noPrivate';
+  let h='',rows='',body='',act='';
+  if(end==='in'){
+    let l=lineOf('근무지내 출장'), kidTag='';
+    if(st.kids&&!l.includes('교장')){ l.push('교장'); kidTag='<span class="tag sch">학교</span>' }
+    const fee={short:'1만 원',long:'2만 원',near:'지급하지 않음 (왕복 2km 이내)'}[st.len];
+    h='근무지내 출장';
+    rows=`<dt>결재</dt><dd>${chain(l)}${kidTag}</dd><dt>여비</dt><dd><b>${fee}</b></dd>`;
+    body=(st.kids?'<p class="hint">학생 인솔 출장은 학교장 결재를 받는 학교가 많습니다. 학교 기준을 따르세요.</p>':'')+CARE;
+    act=`<button class="btn sm" data-line="근무지내 출장">결재라인 보기</button>`;
+  } else if(end==='out'){
+    h='근무지외 출장';
+    rows=`<dt>결재</dt><dd>${chain(lineOf('관외 출장'))}</dd><dt>여비</dt><dd><b>운임·식비·숙박비·일비</b></dd>`;
+    body=`<p class="hint">같은 시·군 밖이면서 여행 거리가 12km 이상인 출장입니다. 여비는 실제 든 비용을 기준으로 정산합니다.</p>`+CARE;
+    act=`<button class="btn sm" data-line="관외 출장">결재라인 보기</button>`;
+  } else if(end==='study'){
+    h='출장(연수)';
+    rows=`<dt>결재</dt><dd>${chain(lineOf('출장(연수)'))}</dd>`;
+    body=`<ul><li>같은 시간에 41조 연수나 근무를 겹쳐 신청할 수 없습니다.</li><li>야간제·계절제 대학원은 수업에 지장이 없으면 출장(연수)으로 처리합니다.</li><li>학기 중 주간 대학원은 외출·조퇴·연가로 처리합니다.</li></ul>`;
+    act=`<button class="btn sm" data-line="출장(연수)">결재라인 보기</button>`;
+  } else if(end==='noClub'){
+    h='출장으로 처리할 수 없습니다';
+    body=`<p>교직원 동호회의 교외 활동, 교직원 배구 연습이나 교직원 대회 출전은 출장으로 처리할 수 없습니다.</p>`;
+  } else {
+    h='출장으로 처리할 수 없습니다';
+    body=`<p>친분 때문에 개인적으로 참석하는 행사는 출장이 아닙니다.</p><ul><li>같은 학교 직원의 경조사에 <b>기관 대표</b>로 참석하는 2명 이내는 출장 처리가 가능합니다.</li><li>주관 기관이 참석 범위를 정해 요청한 이·취임식, 정년퇴임식은 출장 처리가 가능합니다.</li></ul>`;
+  }
+  return `<article class="tres ${no?'no':''}"><span class="lab">판정 결과</span><h2>${h}</h2>${rows?`<dl class="tres-grid">${rows}</dl>`:''}${body}
+    <div class="tres-act">${act}<button class="btn sm ghost" id="wiz-reset">처음부터 다시</button><button class="btn sm ghost" data-casecat="출장">출장 사례 보기</button></div></article>`;
+}
+function renderWiz(){
+  let id='why', st={}, html='', n=1, end=null;
+  for(const p of wpath){
+    const s=STEPS[p.id], o=s.opts[p.k];
+    html+=`<div class="wq done"><span class="a"><span>${n}. ${esc(s.q)}</span><b>${esc(o.t)}</b></span><button class="link-btn" data-wback="${n-1}">바꾸기</button></div>`;
+    Object.assign(st,o.set||{}); n++;
+    if(o.end){ end=o.end; break } id=o.next;
+  }
+  if(end) html+=tripResult(end,st);
+  else{ const s=STEPS[id];
+    html+=`<div class="wq"><div class="wq-q"><span class="n">${n}</span>${esc(s.q)}</div><div class="opts">${s.opts.map((o,k)=>`<button class="opt" data-wopt="${k}" data-wid="${id}">${esc(o.t)}${o.d?`<small>${esc(o.d)}</small>`:''}</button>`).join('')}</div></div>` }
+  $('#wiz').innerHTML=html;
+}
+$('#wiz').addEventListener('click',e=>{
+  const o=e.target.closest('[data-wopt]'); if(o){ wpath.push({id:o.dataset.wid,k:+o.dataset.wopt}); renderWiz();
+    const t=$('#wiz .tres')||[...$$('#wiz .wq')].pop(); if(t) setTimeout(()=>t.scrollIntoView({behavior:'smooth',block:'start'}),40); return }
+  const b=e.target.closest('[data-wback]'); if(b){ wpath=wpath.slice(0,+b.dataset.wback); renderWiz(); return }
+  if(e.target.closest('#wiz-reset')){ wpath=[]; renderWiz(); $('#wiz').scrollIntoView({behavior:'smooth',block:'start'}) }
+});
+renderWiz();
+
+/* ---------- 방학: 하루 일정 블록 ---------- */
+const BT={work:'근무',s41:'41조 연수',trip:'출장',leave:'연가·외출 등'};
+let blocks=[];
+const dayRange=()=>{const s=toM($('#r-start').value)??540, e=toM($('#r-end').value)??1020; return [s,e]};
+function blkSample(k){
+  const [s,e]=dayRange(), m=s+300>e?Math.round((s+e)/2):s+300;
+  blocks={1:[{t:'work',s,e:m},{t:'s41',s:m,e}],2:[{t:'s41',s,e},{t:'trip',s:m,e}],3:[{t:'s41',s,e:m},{t:'trip',s:m,e}],4:[{t:'work',s,e:m}]}[k].map(b=>({...b}));
+  renderBlk();
+}
+function renderBlk(){
+  const [ds,de]=dayRange(); const span=Math.max(60,de-ds), pct=m=>(Math.min(de,Math.max(ds,m))-ds)/span*100;
+  $('#blk-day').textContent=`${clock(ds)}–${clock(de)}`;
+  const lanes=Math.max(1,blocks.length);
+  const tr=$('#blk-track'); tr.style.height=(lanes*30+10)+'px';
+  // 겹침
+  const ovs=[];
+  for(let i=0;i<blocks.length;i++)for(let j=i+1;j<blocks.length;j++){const a=blocks[i],b=blocks[j];const s=Math.max(a.s,b.s),e=Math.min(a.e,b.e); if(e>s) ovs.push({s,e,a:a.t,b:b.t})}
+  // 빈 시간
+  const cov=blocks.filter(b=>b.e>b.s).map(b=>[Math.max(ds,b.s),Math.min(de,b.e)]).filter(x=>x[1]>x[0]).sort((x,y)=>x[0]-y[0]);
+  const gaps=[]; let c=ds; cov.forEach(([s,e])=>{ if(s>c) gaps.push([c,s]); c=Math.max(c,e) }); if(c<de) gaps.push([c,de]);
+  tr.innerHTML=gaps.map(([s,e])=>`<div class="bgap" style="left:${pct(s)}%;width:${pct(e)-pct(s)}%" title="빈 시간 ${clock(s)}–${clock(e)}"></div>`).join('')+
+    ovs.map(o=>`<div class="bov" style="left:${pct(o.s)}%;width:${pct(o.e)-pct(o.s)}%" title="겹침 ${clock(o.s)}–${clock(o.e)}"></div>`).join('')+
+    blocks.map((b,i)=>`<div class="bk ${b.t}" style="top:${6+i*30}px;left:${pct(b.s)}%;width:${Math.max(0,pct(b.e)-pct(b.s))}%">${BT[b.t]}</div>`).join('');
+  let t=''; for(let m=Math.ceil(ds/60)*60;m<=de;m+=60){ const h=(m/60)%24, x=pct(m); if(x<4||x>96) continue; t+=`<span class="${h%2?'odd':''}" style="left:${x}%">${String(h).padStart(2,'0')}</span>` }
+  $('#blk-ticks').innerHTML=t;
+  const v=$('#blk-verdict');
+  if(!blocks.length){ v.className='blk-verdict warn'; v.innerHTML='<b>비어 있음</b><span>아래에서 근무·41조 연수·출장 블록을 더하거나 예시를 눌러 보세요.</span>' }
+  else if(ovs.length){ const o=ovs[0]; v.className='blk-verdict bad';
+    v.innerHTML=`<b>겹침 ✕</b><span>${BT[o.a]}와(과) ${BT[o.b]}이(가) ${clock(o.s)}–${clock(o.e)}에 겹칩니다. 같은 시간에 두 가지를 신청할 수 없습니다.${ovs.length>1?` 이 밖에 ${ovs.length-1}곳이 더 겹칩니다.`:''}</span>` }
+  else if(gaps.length){ v.className='blk-verdict warn';
+    v.innerHTML=`<b>빈 시간 !</b><span>${gaps.map(([s,e])=>clock(s)+'–'+clock(e)).join(', ')}이 비어 있습니다. 방학도 근무일이므로 근무·연수·휴가 등으로 처리해야 합니다.</span>` }
+  else { v.className='blk-verdict ok'; v.innerHTML='<b>문제 없음 ○</b><span>겹침 없이 하루 근무시간을 모두 채웠습니다.</span>' }
+  $('#blk-list').innerHTML=blocks.map((b,i)=>`<div class="bl"><span class="dot"><i class="bk-dot" style="background:var(--${{work:'accent',s41:'sch',trip:'ok',leave:'warn'}[b.t]})"></i>${BT[b.t]}</span>
+    <input type="time" id="bl-s-${i}" value="${clock(b.s)}" aria-label="${BT[b.t]} 시작"><span class="til">~</span><input type="time" id="bl-e-${i}" value="${clock(b.e)}" aria-label="${BT[b.t]} 끝">
+    <button class="icon-btn" data-bdel="${i}" aria-label="${BT[b.t]} 블록 삭제"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join('');
+}
+$('#blk-list').addEventListener('input',e=>{const m=e.target.id.match(/^bl-([se])-(\d+)$/); if(!m) return; const v=toM(e.target.value); if(v==null) return;
+  blocks[+m[2]][m[1]]=v; renderBlk(); const el=$('#'+e.target.id); if(el){el.focus()} });
+$('#blk-list').addEventListener('click',e=>{const b=e.target.closest('[data-bdel]'); if(!b) return; blocks.splice(+b.dataset.bdel,1); renderBlk()});
+$('#blk-add').addEventListener('click',e=>{const b=e.target.closest('[data-bt]'); if(!b) return; const [ds,de]=dayRange();
+  const s=blocks.length?Math.min(de-30,Math.max(...blocks.map(x=>x.e))):ds; blocks.push({t:b.dataset.bt,s:Math.max(ds,s),e:Math.min(de,Math.max(ds,s)+120)}); renderBlk()});
+$$('[data-bs]').forEach(b=>b.addEventListener('click',()=>blkSample(b.dataset.bs)));
+
+/* ---------- 조퇴·외출·지각 누계 ---------- */
+let mt=[]; let mtType='지각';
+try{ mt=JSON.parse(localStorage.getItem('bokmu.mt')||'[]')||[] }catch(e){ mt=[] }
+const saveMt=()=>{ try{localStorage.setItem('bokmu.mt',JSON.stringify(mt))}catch(e){} };
+$('#mt-date').value=todayStr;
+$$('.mt-seg button').forEach(b=>b.addEventListener('click',()=>{ mtType=b.dataset.mt; $$('.mt-seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  if(mtType==='반일연가'){ $('#mt-h').value='4'; $('#mt-m').value='0' } }));
+function renderMt(){
+  const y=($('#mt-date').value||todayStr).slice(0,4);
+  $('#mt-year').textContent=`${y}년`;
+  const list=mt.map((r,i)=>({...r,i})).filter(r=>r.d.startsWith(y)).sort((a,b)=>a.d<b.d?-1:1);
+  const sum=list.reduce((s,r)=>s+r.m,0), days=Math.floor(sum/480), rem=sum%480;
+  $('#mt-sum').textContent=hm(sum); $('#mt-days').textContent=days+'일';
+  $('#mt-bar').innerHTML=Array.from({length:8},(_,k)=>{const f=Math.min(60,Math.max(0,rem-k*60)); return f>=60?'<i class="on"></i>':f>0?`<i class="half" style="--p:${f/60*100}%"></i>`:'<i></i>'}).join('');
+  $('#mt-left').textContent=sum? `다음 연가 1일 공제까지 ${kor(480-rem)} 남았습니다. 한 칸이 1시간입니다.` : '사용한 지각·조퇴·외출·반일연가를 더하면 연가 1일(8시간)까지 얼마나 남았는지 보여 줍니다.';
+  $('#mt-list').innerHTML=list.map(r=>`<div class="rec"><span class="d">${r.d.slice(5).replace('-','.')}</span><span class="t">${r.t}</span><span class="m">${hm(r.m)}</span><button class="icon-btn" data-mdel="${r.i}" aria-label="${r.d} ${r.t} 삭제"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join('');
+}
+$('#mt-add').addEventListener('click',()=>{ const m=(+$('#mt-h').value||0)*60+Math.min(59,Math.max(0,Math.round(+$('#mt-m').value||0))); if(!m) return;
+  mt.push({d:$('#mt-date').value||todayStr,t:mtType,m}); saveMt(); renderMt();
+  const b=$('#mt-add'); b.textContent='더했습니다'; setTimeout(()=>b.textContent='누계에 더하기',1400) });
+$('#mt-list').addEventListener('click',e=>{const b=e.target.closest('[data-mdel]'); if(!b) return; mt.splice(+b.dataset.mdel,1); saveMt(); renderMt()});
+$('#mt-date').addEventListener('input',renderMt);
+
+/* ---------- 홈 연결: 결재라인 열기 · 사례 열기 · 통합 검색 ---------- */
+function openLine(name,cat){
+  go('line');
+  lineCat=cat||'전체'; $('#line-q').value='';
+  $$('#line-cats button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.cat===lineCat));
+  renderLines();
+  if(name){ const i=S.approvals.findIndex(a=>a.name===name), ln=$('#ln-'+i);
+    if(ln){ ln.setAttribute('aria-expanded','true'); ln.querySelector('.ln-b').hidden=false;
+      setTimeout(()=>ln.scrollIntoView({behavior:'smooth',block:'center'}),80) } }
+}
+function openCase(i){
+  go('cases'); $('#case-q').value=''; qAns=''; $$('#case-ans button').forEach(x=>x.setAttribute('aria-pressed','false')); setCaseCat('전체');
+  const q=$('#qa-'+i); if(!q) return;
+  q.classList.remove('fold'); setQ(q,true,true);
+  setTimeout(()=>q.scrollIntoView({behavior:'smooth',block:'center'}),80);
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-line],[data-linecat]'); if(!b) return;
+  openLine(b.dataset.line,b.dataset.linecat);
+});
+
+const IDX=[
+  ...S.approvals.map(a=>({t:a.name,k:'결재라인',s:a.name+a.cat+a.line.join('')+a.notes.map(n=>n.t).join(''),run:()=>openLine(a.name)})),
+  ...QA.map((x,i)=>({t:x.q,k:'사례',s:x.q+x.a.replace(/<[^>]+>/g,''),run:()=>openCase(i)})),
+  {t:'교원의 임무와 의무',k:'안내',s:'임무 의무 성실 복종 직장이탈 친절 공정 종교중립 비밀엄수 청렴 품위 정치운동 집단행위 과외교습 정치편향',run:()=>go('know')},
+  {t:'과외교습 금지와 예외',k:'안내',s:'과외 과외교습 무상 교습 봉사활동 근로청소년 장애인 읍면',run:()=>go('know')},
+  {t:'방학·41조 일정 블록',k:'도구',s:'방학 41조 연수 휴업일 재량휴업일 겹침 중복 출장 근무 빈 시간 가족여행',run:()=>go('vac')},
+  {t:'휴업·휴교 복무',k:'안내',s:'휴업 휴교 휴업일 공휴일 출근 재량휴업 개교기념일',run:()=>go('vac')},
+  {t:'조퇴·외출·지각 누계 미터',k:'도구',s:'조퇴 외출 지각 반일연가 누계 8시간 연가 공제',run:()=>go('work','meter')},
+  {t:'교원 근무시간·유연근무',k:'안내',s:'근무시간 9시 17시 점심시간 유연근무 시차출퇴근 탄력근무 영양교사 개인유연근무관리',run:()=>go('work')},
+  {t:'출장 판정 (이거 출장 되나요?)',k:'도구',s:'출장 근무지내 근무지외 관외 여비 12km 2km 4시간 학생 인솔 동호회 경조사',run:()=>go('trip')},
+  {t:'출장 중 지킬 것',k:'안내',s:'출장 사적 용무 결과보고 증빙 영수증 에듀파인 여비 회수 정산 감사',run:()=>go('trip','tripcare')},
+  {t:'출장 여비',k:'안내',s:'여비 1만원 2만원 운임 식비 숙박비 일비 준비금',run:()=>go('trip','tripcare')},
+  {t:'초과근무 계산기',k:'도구',s:'초과근무 야근 계산 인정 시간 몇시까지 퇴근 공제 57시간 개인용무 제외 휴일',run:()=>go('calc')},
+  {t:'나이스 초과근무 신청 절차',k:'안내',s:'나이스 초과근무 신청 결재 실적 제외시간 사전 명령 지문 인식 월말',run:()=>go('neis')},
+  {t:'사후결재 (신청 못 하고 일했을 때)',k:'안내',s:'사후결재 사후승인 사전명령 못받음 다음날 초과근무',run:()=>go('neis','late')},
+  {t:'복무 신청 전 체크',k:'안내',s:S.rules.map(r=>r.b+r.t).join('')+'증빙 서면 보존 결재 효력 보결',run:()=>go('line','rules')},
+  ...(S.links&&S.links.gyeomjik?[{t:'외부강의·겸직 도우미',k:'외부',s:'외부강의 겸직 영리 영리업무 사교육 학원 강의 사례금 신고 허가 유튜브 개인미디어 다단계 임대업',href:S.links.gyeomjik}]:[]),
+  ...(S.links&&S.links.leave?[{t:'휴가 규정 도우미',k:'외부',s:'휴가 연가 병가 공가 특별휴가 육아시간 모성보호 진단서 경조사 가족돌봄',href:S.links.leave}]:[])
+];
+const norm=t=>String(t).replace(/\s+/g,'').toLowerCase();
+let gHits=[];
+const RQK='bokmu.qs';
+const recentQ=()=>{ try{ return JSON.parse(localStorage.getItem(RQK)||'[]').slice(0,3) }catch(e){ return [] } };
+function saveQ(v){ v=String(v||'').trim(); if(!v) return; try{ const a=recentQ().filter(x=>x!==v); a.unshift(v); localStorage.setItem(RQK,JSON.stringify(a.slice(0,3))) }catch(e){} }
+function gSearch(){
+  const q=norm($('#g-q').value), box=$('#g-res');
+  if(!q){ const r=recentQ();
+    if(r.length&&document.activeElement===$('#g-q')){ box.innerHTML=`<p class="g-rec-h">최근 검색</p><div class="pick sm g-sug">${r.map(w=>`<button data-gs="${esc(w)}">${esc(w)}</button>`).join('')}</div>`; box.hidden=false }
+    else { box.hidden=true; box.innerHTML='' }
+    return }
+  const vs=qVariants($('#g-q').value);
+  gHits=IDX.map(it=>{const base=hitAny(it.t,vs)?2:(hitAny(it.s,vs)?1:0); return {it,sc:base?base+({도구:.6,결재라인:.4,안내:.3}[it.k]||0):0}}).filter(x=>x.sc).sort((a,b)=>b.sc-a.sc).slice(0,7).map(x=>x.it);
+  box.innerHTML=gHits.length? gHits.map((it,i)=>it.href
+      ? `<a class="g-it" href="${esc(it.href)}" target="_blank" rel="noopener"><span class="k">${it.k}</span><span>${esc(it.t)} ↗</span></a>`
+      : `<button class="g-it" data-gi="${i}"><span class="k">${it.k}</span><span>${esc(it.t)}</span></button>`).join('')
+    : `<p class="g-none">찾는 내용이 없습니다. 이런 말로 찾아보세요.</p><div class="pick sm g-sug">${['초과근무','출장','41조','조퇴','결재라인','사후결재'].map(w=>`<button data-gs="${w}">${w}</button>`).join('')}</div>`;
+  box.hidden=false;
+}
+$('#g-q').addEventListener('input',gSearch);
+$('#g-q').addEventListener('keydown',e=>{ if(e.key==='Escape'){ e.target.value=''; gSearch() }
+  if(e.key==='Enter'&&gHits[0]&&!gHits[0].href){ e.preventDefault(); const it=gHits[0]; saveQ(e.target.value); e.target.value=''; gSearch(); it.run() } });
+$('#g-q').addEventListener('focus',()=>{ if(!$('#g-q').value) gSearch() });
+$('#g-res').addEventListener('click',e=>{ const b=e.target.closest('[data-gi]'); if(!b) return;
+  const it=gHits[+b.dataset.gi]; saveQ($('#g-q').value); $('#g-q').value=''; gSearch(); it.run() });
+document.addEventListener('click',e=>{ if(!e.target.closest('.gsearch')) $('#g-res').hidden=true });
+
+function renderDay(){
+  $('#day-s').textContent=$('#r-start').value; $('#day-e').textContent=$('#r-end').value;
+  $('#day-src').textContent=$('#r-start').value+'–'+$('#r-end').value+' 기준';
+  if(typeof renderNow==='function') renderNow();
+}
+function renderNow(){
+  const L=$('#now-l'), T=$('#day-now'), din=$('.day-in'); if(!L||!din) return;
+  const d=new Date(), wd=d.getDay(), m=d.getHours()*60+d.getMinutes();
+  const toM=v=>{const [h,mm]=String(v).split(':').map(Number);return h*60+(mm||0)};
+  const st=toM($('#r-start').value), en=toM($('#r-end').value);
+  const hhmm=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  const dur=x=>{const h=Math.floor(x/60),r=x%60;return (h?h+'시간 ':'')+(r?r+'분':'')||'0분'};
+  if(wd===0||wd===6){ L.hidden=true; T.hidden=false; T.innerHTML=`오늘은 주말입니다 · 근무한다면 <b>토요일·공휴일</b>로 계산하세요`; return }
+  if(!(en>st)||m<st-120){ L.hidden=true; T.hidden=true; return }
+  if(m>en+120){ L.hidden=true; T.hidden=false; T.innerHTML='오늘 근무시간이 끝났습니다. 내일 확인할 복무가 있다면 아래에서 찾아보세요.'; return }
+  let x;
+  if(m<=st) x=din.offsetLeft;
+  else if(m<=en) x=din.offsetLeft+din.offsetWidth*(m-st)/(en-st);
+  else { const otEl=din.nextElementSibling; x=otEl.offsetLeft+otEl.offsetWidth*(m-en)/120 }
+  L.style.left=x+'px'; L.hidden=false; T.hidden=false;
+  T.innerHTML= m<st?`지금 <b>${hhmm}</b> · 출근까지 ${dur(st-m)} · 늦으면 <button class="link-btn inl" data-go="work">지각으로 올려요</button>`
+    : m<=en?`지금 <b>${hhmm}</b> · 퇴근까지 ${dur(en-m)}`
+    : `지금 <b>${hhmm}</b> · 남아서 일하고 있다면 <button class="link-btn inl" data-go="calc">초과근무 계산 ›</button>`;
+}
+setInterval(renderNow,60000); window.addEventListener('resize',renderNow);
+
+/* ---------- 오픈소스 라이선스 팝업 ---------- */
+let ossFrom=null;
+function ossOpen(){ ossFrom=document.activeElement; $('#oss').hidden=false; document.body.style.overflow='hidden'; $('#oss .oss-box').focus() }
+function ossClose(){ $('#oss').hidden=true; document.body.style.overflow=''; if(ossFrom&&ossFrom.focus) ossFrom.focus() }
+$('#oss-open').addEventListener('click',ossOpen);
+$('#oss-close').addEventListener('click',ossClose);
+$('#oss').addEventListener('click',e=>{ if(e.target.id==='oss') ossClose() });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!$('#oss').hidden) ossClose() });
+$$('[data-oss]').forEach(b=>b.addEventListener('click',ossOpen));
+
+/* ---------- 웹 전용 기능: 복사 · 문구 만들기 · 법령 링크 · 링크 공유 · 유의어 ---------- */
+function copyText(t,btn){
+  const done=ok=>{ if(!btn) return; const el=btn.querySelector('.lbl')||btn; const o=btn.dataset.label||el.textContent; btn.dataset.label=o;
+    el.textContent=ok?'복사했습니다':'복사하지 못했습니다'; setTimeout(()=>el.textContent=o,1600) };
+  const fb=()=>{ const ta=document.createElement('textarea'); ta.value=t; ta.setAttribute('readonly',''); ta.style.cssText='position:fixed;top:0;left:0;opacity:0';
+    document.body.appendChild(ta); ta.select(); let ok=false; try{ok=document.execCommand('copy')}catch(e){} document.body.removeChild(ta); done(ok) };
+  try{ navigator.clipboard.writeText(t).then(()=>done(true),fb) }catch(e){ fb() }
+}
+
+/* 나이스 입력값 카드 */
+const WORK_EX=['학년말 성적 처리 및 학교생활기록부 점검','학교 행사 준비(물품 정리·안전 점검)','교육과정 운영 계획 수립','공문 처리 및 업무 보고서 작성','학부모 상담 및 상담 기록 정리','학교폭력 사안 처리 및 관련 서류 작성'];
+$('#neis-ex').innerHTML=WORK_EX.map(t=>`<button data-copy="${esc(t)}">${esc(t)}</button>`).join('');
+let neisText='';
+function renderNeis(ranges,ex,result,isHoliday,until){
+  const card=$('#neis-card');
+  if(!ranges.length){ card.hidden=true; return } card.hidden=false;
+  const rs=ranges.map(([a,b])=>`${clock(a)}~${clock(b)}`).join(', ');
+  const rows=[[isHoliday?'휴일 근무 시각':'신청 시각',rs],['다음 날 제외시간',ex?kor(ex):'없음']];
+  $('#neis-dl').innerHTML=rows.map(([k,v])=>`<dt>${k}</dt><dd class="num">${v}</dd>`).join('');
+  neisText=`초과근무 ${isHoliday?'(휴일) ':''}${rs} / 제외시간 ${ex?kor(ex):'없음'} / ${until?'목표':'예상'} 인정 ${kor(result)}`;
+}
+$('#neis-copy').addEventListener('click',e=>copyText(neisText,e.currentTarget));
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-copy]'); if(b) copyText(b.dataset.copy,b) });
+
+/* 문구 만들기 */
+function phraseBox(id,cfg){
+  const box=$('#'+id); if(!box) return;
+  box.innerHTML=cfg.fields.map(f=>f.opts
+    ? `<div class="field"><label>${f.label}</label><div class="pick sm" data-f="${f.id}">${f.opts.map((o,k)=>`<button aria-pressed="${k===0}" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div></div>`
+    : `<div class="field"><label for="${id}-${f.id}">${f.label}</label><input class="txt" id="${id}-${f.id}" data-f="${f.id}" type="text" placeholder="${esc(f.ph)}"></div>`).join('')+
+    `<div class="phr-out"><pre id="${id}-out"></pre><button class="btn sm primary" id="${id}-copy">문구 복사</button></div>`;
+  const val=()=>{ const v={}; cfg.fields.forEach(f=>{ if(f.opts){ const b=box.querySelector(`[data-f="${f.id}"] [aria-pressed="true"]`); v[f.id]=b?b.dataset.v:'' }
+    else { const el=box.querySelector(`input[data-f="${f.id}"]`); v[f.id]=(el.value.trim()||f.ph) } }); return v };
+  const upd=()=>{ $('#'+id+'-out').textContent=cfg.make(val()) };
+  box.addEventListener('input',upd);
+  box.addEventListener('click',e=>{ const b=e.target.closest('.pick [data-v]'); if(b){ b.parentElement.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b)); upd() } });
+  $('#'+id+'-copy').addEventListener('click',e=>copyText($('#'+id+'-out').textContent,e.currentTarget));
+  upd();
+}
+phraseBox('phr-trip',{fields:[
+  {id:'when',label:'일시',ph:'2026. 10. 13.(화) 14:00~16:00'},
+  {id:'where',label:'장소',ph:'○○교육지원청 대회의실'},
+  {id:'why',label:'목적',ph:'2학기 교육과정 협의회 참석'},
+  {id:'res',label:'결과',ph:'학년별 교육과정 운영 사례를 공유하고 학교 적용 방안을 협의함'},
+  {id:'proof',label:'증빙',opts:['없음','회의 자료','영수증','사진']}],
+  make:v=>`출장 결과 보고\n\n1. 일시: ${v.when}\n2. 장소: ${v.where}\n3. 목적: ${v.why}\n4. 결과: ${v.res}`+(v.proof!=='없음'?`\n\n붙임  ${v.proof} 1부.  끝.`:`  끝.`)});
+phraseBox('phr-late',{fields:[
+  {id:'when',label:'근무 일시',ph:'10. 13.(화) 16:30~19:00'},
+  {id:'work',label:'업무 내용',ph:'학교폭력 사안 긴급 대응 및 관련 서류 작성'},
+  {id:'why',label:'사후결재 사유',opts:['예측하지 못한 긴급 업무가 생겨','휴일에 갑자기 근무가 필요해','명령받은 시간보다 업무가 길어져']}],
+  make:v=>`○ 근무 일시: ${v.when}\n○ 업무 내용: ${v.work}\n○ 사유: ${v.why} 사전 초과근무 명령을 받지 못하여 사후결재를 요청합니다.`});
+phraseBox('phr-41',{fields:[
+  {id:'when',label:'연수 기간',ph:'2027. 1. 6.(수) 08:30~16:30'},
+  {id:'topic',label:'연수 주제',ph:'2022 개정 교육과정에 따른 수업 설계'},
+  {id:'where',label:'연수 장소',opts:['자택','도서관','○○도서관(직접 고쳐 쓰기)']},
+  {id:'what',label:'연수 내용',ph:'교과서·지도서 분석, 새 학기 단원별 수업 계획 작성'},
+  {id:'use',label:'활용 계획',ph:'새 학년 교육과정 수립과 수업에 반영'}],
+  make:v=>`○ 연수 기간: ${v.when}\n○ 연수 주제: ${v.topic}\n○ 연수 장소: ${v.where}\n○ 연수 내용: ${v.what}\n○ 활용 계획: ${v.use}`});
+
+/* 법령 → 국가법령정보센터 링크 */
+const LAWS=[['공무원 재해보상법','공무원재해보상법'],['국가공무원 복무규정','국가공무원복무규정'],['국가공무원법','국가공무원법'],['공무원수당 등에 관한 규정','공무원수당등에관한규정'],['공무원 여비 규정','공무원여비규정'],['교육공무원법','교육공무원법'],['초·중등교육법','초ㆍ중등교육법'],['교육기본법','교육기본법'],['저작권법','저작권법'],['학원법 시행령','학원의설립ㆍ운영및과외교습에관한법률시행령']];
+function lawLinks(root){
+  root.querySelectorAll('.src,.q .src').forEach(el=>{ if(el.dataset.ll) return; el.dataset.ll='1';
+    let h=el.innerHTML;
+    LAWS.forEach(([n,u])=>{ const re=new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(\\s*제\\s*(\\d+)조(의\\d+)?)?(?![^<]*</a>)','g');
+      h=h.replace(re,(m,art,no,sub)=>`<a class="law" href="https://www.law.go.kr/법령/${u}${no?'/제'+no+'조'+(sub||''):''}" target="_blank" rel="noopener">${m}</a>`) });
+    el.innerHTML=h });
+}
+
+/* 링크 공유 (?go=) */
+const shareURL=k=>location.origin+location.pathname+'?go='+encodeURIComponent(k);
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-share]'); if(b) copyText(shareURL(b.dataset.share),b) });
+
+
+/* 유의어 */
+function nrm(t){ return String(t).replace(/\s+/g,'').toLowerCase() }
+function qVariants(q){
+  const SYN={'야근':['초과근무'],'시간외':['초과근무'],'초근':['초과근무'],'반차':['반일연가'],'관외':['관외출장','근무지외'],'근무지외':['관외출장'],'관내':['근무지내'],'시내':['근무지내'],'출장비':['여비'],'연수':['41조','출장(연수)'],'유연':['유연근무'],'시차':['유연근무'],'늦게':['지각'],'일찍':['조퇴'],'사후':['사후결재'],'과외':['과외교습'],'겸직':['겸직'],'결재':['결재라인']};
+  const n=nrm(q), out=[n];
+  Object.entries(SYN).forEach(([k,vs])=>{ if(n.includes(nrm(k))) vs.forEach(v=>out.push(nrm(v))) });
+  return [...new Set(out)];
+}
+const hitAny=(hay,vars)=>{ const h=nrm(hay); return vars.some(v=>h.includes(v)) };
+
+document.addEventListener('click',e=>{ const b=e.target.closest('.rules-tg'); if(!b) return; const r=b.closest('.rules'); const open=r.classList.toggle('brief')===false;
+  b.setAttribute('aria-expanded',open); b.textContent=open?'설명 접기':'설명 펼치기' });
+/* ---------- 사용성 ---------- */
+$('#hdr-search').addEventListener('click',()=>{ if(cur!=='home') go('home'); else window.scrollTo({top:0,behavior:'smooth'}); setTimeout(()=>$('#g-q').focus(),cur==='home'?60:120) });
+function atEnd(){ document.body.classList.toggle('at-end', window.innerHeight+scrollY >= document.documentElement.scrollHeight-160) }
+window.addEventListener('scroll',atEnd,{passive:true}); window.addEventListener('resize',atEnd);
+new MutationObserver(()=>requestAnimationFrame(atEnd)).observe(document.querySelector('main'),{attributes:true,subtree:true,attributeFilter:['hidden','open']});
+
+/* 상위 화면 링크 */
+{ const PARENT={calc:['tools','도구'],neis:['tools','도구'],trip:['tools','도구'],vac:['tools','도구'],work:['tools','도구'],know:['home','홈']};
+  const SHI='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
+  ['line','tools','calc','neis','cases','trip','vac','work','know'].forEach(v=>{ const sec=$('#v-'+v); if(!sec) return; const p=PARENT[v];
+    const sb=`<button class="share-btn" data-share="${v}" title="이 화면 링크 복사" aria-label="이 화면 링크 복사">${SHI}<span class="lbl">링크 복사</span></button>`;
+    const eb=!p&&sec.querySelector('.ph .eyebrow');
+    if(eb){ eb.classList.add('has-share'); eb.innerHTML=`<span>${eb.innerHTML}</span>`+sb; return }
+    const row=document.createElement('div'); row.className='ph-top';
+    row.innerHTML=(p?`<button class="crumb" data-go="${p[0]}"><span aria-hidden="true">‹</span> ${p[1]}</button>`:'<span></span>')+sb;
+    sec.insertBefore(row,sec.firstElementChild) }) }
+/* ---------- 도구 화면 ---------- */
+function renderTools(){
+  const ym=todayStr.slice(0,7), y=todayStr.slice(0,4);
+  const ms=recs.filter(r=>r.d.startsWith(ym)).reduce((a,r)=>a+r.m,0);
+  const ws=mt.filter(r=>r.d.startsWith(y)).reduce((a,r)=>a+r.m,0), wr=ws%480, wd=Math.floor(ws/480);
+  const bar=(p,c)=>`<span class="tbar ${c||''}"><i style="width:${Math.min(100,p)}%"></i></span>`;
+  $('#ts-calc').innerHTML=ms?bar(ms/LIMIT*100,ms>LIMIT?'bad':ms>LIMIT*.85?'warn':'')+`<span>이번 달 ${hm(ms)} / 57:00</span>`:'<span>아직 기록 없음</span>';
+  $('#ts-work').innerHTML=ws?bar(wr/480*100)+`<span>올해 ${hm(ws)}${wd?` · 연가 ${wd}일 공제`:''} · 남은 ${hm(480-wr)}</span>`:'<span>아직 기록 없음</span>';
+  let last=''; try{ last=localStorage.getItem('bokmu.tool')||'' }catch(e){}
+  $$('#v-tools .tnew').forEach(x=>x.remove());
+  const t=last&&$(`#v-tools [data-tk="${last}"] .tb b`); if(t) t.insertAdjacentHTML('beforeend','<span class="tnew">최근 사용</span>');
+}
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-phr]'); if(!b) return;
+  go(b.dataset.pv); setTimeout(()=>{ const box=document.getElementById(b.dataset.phr); if(!box) return;
+    let d=box.closest('details'); while(d){ d.open=true; d=d.parentElement&&d.parentElement.closest('details') }
+    box.closest('details').scrollIntoView({behavior:'smooth',block:'start'}) },60) });
+/* ---------- 홈: 결재라인 미리보기 ---------- */
+const RL=['조퇴·지각·외출','근무지내 출장','관외 출장','41조 연수','초과근무','병가'];
+function rlShow(name){ const a=(S.approvals||[]).find(x=>x.name===name); if(!a) return;
+  $$('#rl-pick button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.rl===name));
+  const n=(a.notes||[])[0];
+  $('#rl-out').innerHTML=chain(a.line)+`<span class="rl-t">${esc(a.name)}<small>${a.line.length===1?esc(a.line[0])+' 결재로 끝':esc(a.line.join(' → '))}${a.proof?' · 증빙 '+esc(a.proof):''}</small></span>`
+    +(n?`<span class="rl-n">${n.t}</span>`:'<span></span>')+`<button class="link-btn rl-more" data-line="${esc(a.name)}">${esc(a.name)} 자세히 ›</button>` }
+$('#rl-pick').innerHTML=RL.filter(n=>(S.approvals||[]).some(a=>a.name===n)).map(n=>`<button data-rl="${esc(n)}" aria-pressed="false">${esc(n)}</button>`).join('');
+$('#rl-pick').addEventListener('click',e=>{ const b=e.target.closest('[data-rl]'); if(b) rlShow(b.dataset.rl) });
+rlShow(RL[0]);
+/* ---------- 홈: 출장 이동시간 ---------- */
+const MV_SCH='<path d="M3 23V11h22v12z"/><path d="M14 11V2"/><path d="M14 2h6l-1.5 2L20 6h-6"/><path d="M12 23v-5h4v5M6.5 15h2M19.5 15h2"/>';
+const MV_HOME='<path d="M4 13 14 5l10 8"/><path d="M7 11v12h14V11"/><path d="M12 23v-6h4v6"/>';
+function mvDraw(mode){
+  const home=mode==='home', ic=home?MV_HOME:MV_SCH, end=home?'귀가':'복귀', who=home?'집':'학교';
+  const X0=40,X1=118,X2=222,X3=300, seg=(x,w,c)=>`<rect x="${x}" y="20" width="${w}" height="18" rx="4" class="${c}"/>`;
+  const tr=home?'mv-out':'mv-in';
+  const br=home?[X1,X2]:[X0,X3];
+  const svg=`<svg viewBox="0 0 340 100" width="100%" aria-hidden="true">
+    <defs><pattern id="mvh" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" class="mv-bg"/><line x1="0" y1="0" x2="0" y2="6" class="mv-hl"/></pattern></defs>
+    <g class="mv-ic" transform="translate(4,13) scale(1.1)">${ic}</g>
+    <g class="mv-ic" transform="translate(305,13) scale(1.1)">${ic}</g>
+    <text x="19" y="56" class="mv-t">${who}</text><text x="320" y="56" class="mv-t">${who}</text>
+    ${seg(X0,X1-X0-3,tr)}${seg(X1,X2-X1,'mv-main')}${seg(X2+3,X3-X2-3,tr)}
+    <text x="${(X1+X2)/2}" y="34" class="mv-tw">연수지</text>
+    <text x="${(X0+X1)/2}" y="54" class="mv-t">이동</text><text x="${(X1+X2)/2}" y="54" class="mv-t">출장 기준시간</text><text x="${(X2+X3)/2}" y="54" class="mv-t">${end}</text>
+    <path d="M${br[0]} 64v6H${br[1]}v-6" class="mv-br"/>
+    <text x="${(br[0]+br[1])/2}" y="88" class="mv-tb">출장 신청 시간</text>
+  </svg>`;
+  $('#mv-fig').innerHTML=svg;
+  $('#mv-fig').setAttribute('aria-label',home?'집에서 출발하면 이동시간은 출장 시간에서 빠지고 출장 기준시간만 신청합니다':'학교에서 출발하면 이동과 복귀 시간까지 출장 시간에 포함합니다');
+  $('#mv-v').innerHTML=home?`<b class="no">× 이동시간은 출장 시간에 넣을 수 없어요</b> 집에서 바로 가거나 집으로 바로 오면 출장 기준시간만 신청합니다.`
+    :`<b class="ok">○ 이동시간까지 포함해 신청할 수 있어요</b> 학교(근무지)에서 출발하거나 학교로 돌아오면 이동시간을 출장 시간에 넣습니다.`;
+  $('#mv-safe').hidden=!home;
+  $$('#mv-seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mv===mode));
+}
+$('#mv-seg').addEventListener('click',e=>{ const b=e.target.closest('[data-mv]'); if(b) mvDraw(b.dataset.mv) });
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-qcase]'); if(!b) return; const i=QA.findIndex(x=>x.q===b.dataset.qcase); if(i>=0) openCase(i) });
+mvDraw('sch');
+/* ---------- 홈: 오늘의 사례 ---------- */
+let tcI=(()=>{ const d=new Date(); return Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-Date.UTC(d.getFullYear(),0,0))/864e5)%QA.length })();
+const MK={o:['○','된다','ok'],x:['×','안 된다','no'],t:['△','조건부','t']};
+function renderTC(pick){ const c=QA[tcI], box=$('#tcase'), real=MK[c.m]||MK.t;
+  let h=`<div class="tc-top"><span class="tc-k" id="tcase-h">오늘의 사례<span>${esc(c.c)}</span></span><button class="link-btn" data-tc="next">다른 사례 ›</button></div><p class="tc-q">${esc(c.q)}</p>`;
+  if(!pick){ h+=`<div class="tc-btns">${['o','x','t'].map(k=>`<button data-tc="${k}"><i>${MK[k][0]}</i>${MK[k][1]}</button>`).join('')}</div>` }
+  else { const hit=pick===c.m; if(typeof recordSolved==='function') recordSolved(c.q,hit);
+    h+=`<div class="tc-btns">${['o','x','t'].map(k=>`<button disabled class="${k===c.m?'pick-ok':(k===pick?'pick-no':'')}"><i>${MK[k][0]}</i>${MK[k][1]}</button>`).join('')}</div>`
+      +`<div class="tc-ans"><span class="v ${hit?'ok':'no'}">${hit?'맞혔어요':'정답은 '+real[0]+' '+real[1]+'입니다'}</span><span>${c.a}</span><span class="src">${esc(c.s||'')}</span></div>`
+      +`<div class="tc-foot"><button class="link-btn" data-tcopen="${tcI}">사례 화면에서 보기 ›</button><button class="link-btn" data-go="cases">사례 ${QA.length}건 모두 보기</button></div>` }
+  box.innerHTML=h; if(pick) lawLinks(box) }
+$('#tcase').addEventListener('click',e=>{ const b=e.target.closest('[data-tc],[data-tcopen]'); if(!b) return;
+  if(b.dataset.tcopen) return openCase(+b.dataset.tcopen);
+  if(b.dataset.tc==='next'){ tcI=(tcI+1)%QA.length; renderTC() } else renderTC(b.dataset.tc) });
+renderTC(); $('#tile-case-n').textContent=`○/× 사례 ${QA.length}건`;
+/* ---------- 시작 ---------- */
+$('#base-txt').textContent=baseText(); baseSrc();
+resetDefaults(); renderEx(); renderExTotal(); setType(false); renderMonth(); renderDay(); renderNow(); blkSample('1'); renderMt();
+lawLinks(document); filterCases();
+$('#g-res').addEventListener('click',e=>{ const b=e.target.closest('[data-gs]'); if(!b) return; e.stopPropagation(); $('#g-q').value=b.dataset.gs; gSearch() });
+if(GO){
+  if(/^case-\d+$/.test(GO)) openCase(+GO.slice(5));
+  else if(GO.startsWith('line-')) openLine(GO.slice(5));
+  else if(views.includes(GO)) go(GO);
+  else show('home');
+} else {
+  let last='home'; try{last=localStorage.getItem('bokmu.view')||'home'}catch(e){}
+  show('home'); atEnd();
+  const NAME={line:'결재라인',tools:'도구',calc:'초과근무 계산기',neis:'나이스 신청 절차',cases:'사례',trip:'출장',vac:'방학·휴업일',work:'조퇴·외출·지각',know:'교원의 임무와 의무'};
+  if(NAME[last]){ const c=$('#resume'); c.dataset.go=last; c.querySelector('b').textContent=NAME[last]; c.hidden=false }
+}
+})();
+</script>
