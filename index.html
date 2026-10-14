@@ -1310,7 +1310,7 @@ footer.foot .disc b{color:var(--ink)}
   <div class="ext">
     <a class="ext-card" href="https://leave-of-absence-nu.vercel.app/" target="_blank" rel="noopener"><span class="ex-i" aria-hidden="true">휴</span><span class="ex-t"><b>휴가 규정 도우미</b><small>연가·병가·공가·특별휴가·육아시간</small></span><span class="ex-n">새 창에서 열림 ↗</span></a>
     <a class="ext-card" href="https://external-lecture.vercel.app/" target="_blank" rel="noopener"><span class="ex-i" aria-hidden="true">겸</span><span class="ex-t"><b>외부강의·겸직 도우미</b><small>외부강의 신고, 겸직 허가 판단</small></span><span class="ex-n">새 창에서 열림 ↗</span></a>
-    <a class="ext-card" href="https://edu-hub-alpha-ten.vercel.app/" target="_blank" rel="noopener"><span class="ex-i" aria-hidden="true">연</span><span class="ex-t"><b>학교 연장통</b><small>학교 업무 도구 37개 모음</small></span><span class="ex-n">새 창에서 열림 ↗</span></a>
+    <a class="ext-card" href="https://edu-hub-alpha-ten.vercel.app/" target="_blank" rel="noopener"><span class="ex-i" aria-hidden="true">연</span><span class="ex-t"><b>학교 연장통</b><small>학교 업무 웹 도구 모음</small></span><span class="ex-n">새 창에서 열림 ↗</span></a>
   </div>
 </section>
 
@@ -1956,7 +1956,7 @@ footer.foot .disc b{color:var(--ink)}
 <footer class="foot">
   <div class="foot-brand"><span class="logo-mark"><svg viewBox="0 0 28 28" aria-hidden="true"><rect class="lm-bg" x="0" y="0" width="28" height="28" rx="7"/><rect class="lm-reg" x="4" y="10" width="5" height="8" rx="1.5"/><rect class="lm-reg" x="10" y="10" width="5" height="8" rx="1.5"/><rect class="lm-reg" x="16" y="10" width="3.5" height="8" rx="1.5"/><rect class="lm-ot" x="20.5" y="10" width="3.5" height="8" rx="1.5"/><path class="lm-tick" d="M4 21.5h20"/></svg></span><b>복무 한눈에</b><span>교육공무원 복무를 한눈에</span></div>
   <p class="disc" role="note"><i aria-hidden="true">ⓘ</i><span><b>교육청 공식 사이트가 아닙니다.</b> 교원 개인이 만든 비영리 참고용 안내로, 교육부·교육청과 관계가 없고 법적 효력이 없습니다. 실제 복무 처리는 소속 교육청 지침과 학교장 결정을 따르세요. 법령과 지침은 바뀔 수 있으니 최신 공문을 함께 확인하세요.</span></p>
-  <p class="foot-meta"><span>최종 확인 2026.10.13</span><span>만든이 2026 최창훈</span><a class="foot-hub" href="https://edu-hub-alpha-ten.vercel.app/" target="_blank" rel="noopener">학교 연장통의 도구</a><span>비영리</span><button class="link-btn" data-oss>출처·라이선스 보기</button></p>
+  <p class="foot-meta"><span>만든이 2026 최창훈</span><a class="foot-hub" href="https://edu-hub-alpha-ten.vercel.app/" target="_blank" rel="noopener">학교 연장통의 도구</a><span>비영리</span><button class="link-btn" data-oss>출처·라이선스 보기</button></p>
 </footer>
 </main>
 
@@ -2619,7 +2619,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-casecat]')
 const S=window.SCHOOL||{approvals:[],rules:[],hours:['09:00','17:00'],links:{}};
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const TAG={law:'법령',sch:'학교',rev:'개정',gd:'지침'};
-$('#line-badge').innerHTML=`<span class="tag law">법령</span>전국 공통 <span class="tag sch">학교</span>학교마다 다를 수 있음 <span class="lg-chk">확인 ${esc(S.checked||'')}</span>`;
+$('#line-badge').innerHTML=`<span class="tag law">법령</span>전국 공통 <span class="tag sch">학교</span>학교마다 다를 수 있음`;
 const CATS=['전체',...new Set(S.approvals.map(a=>a.cat))];
 let lineCat='전체';
 $('#line-cats').innerHTML=CATS.map(c=>`<button data-cat="${esc(c)}" aria-pressed="${c==='전체'}">${esc(c)}</button>`).join('');
