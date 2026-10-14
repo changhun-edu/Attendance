@@ -732,13 +732,12 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
   #v-calc .ph-top{order:-4}
   #v-calc .subtabs{order:-3}
   #v-calc .ph{order:-2}
-  #v-calc .result{order:-1}
 }
 @media (max-width:640px){
   .topnav{display:none}
   nav.tabbar{display:block}
   body.on-calc:not(.res-in) .livebar{display:block}
-  body.on-calc main{padding-bottom:180px}
+  body.on-calc main{padding-bottom:150px}
   .tl-ticks span.odd{opacity:0}
 }
 @media (max-width:420px){
@@ -1064,6 +1063,89 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
 .pchip:hover{border-color:var(--accent);color:var(--accent)}
 .ps{color:var(--ink-3);font-size:15px}
 .preset{margin-left:auto;min-height:34px;font-size:13px;text-decoration:none}
+.big-wait{color:var(--ink-3)}
+#result.waiting #res-chip,#result.waiting .tl,#result.waiting .how,#result.waiting .oldnote{display:none}
+
+/* ---- 계산기 v39 ---- */
+#v-calc .panel>.base{order:0}
+.day-type{justify-self:start}
+.base-view{flex-wrap:nowrap!important;white-space:nowrap}
+.base-view>span:first-child{flex:0 0 auto}
+.base-pen{display:inline-flex;align-items:center;gap:4px;text-decoration:none;margin-left:auto;font-size:13.5px}
+@media (max-width:420px){ .base-view{gap:6px!important;font-size:13px} .base-view b{font-size:15px!important} .base-view .sch-badge{padding:2px 8px;font-size:12px} }
+.t-now{display:flex;gap:6px;min-width:0}
+.t-now input{flex:1;min-width:0}
+#v-calc .field-row .field>label{min-height:28px;display:flex;align-items:center}
+.lab-row{min-height:28px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.now-btn{border:1px solid color-mix(in srgb,var(--accent) 40%,var(--line));background:var(--accent-soft);color:var(--accent);border-radius:999px;font-weight:700;font-size:12.5px;padding:0 10px;min-height:28px;line-height:1}
+.now-btn:hover{background:var(--accent);color:var(--bg)}
+details.ex-block>summary{list-style:none;cursor:pointer;min-height:40px}
+details.ex-block>summary::-webkit-details-marker{display:none}
+.ex-plus{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:6px;background:var(--sunken);color:var(--ink-2);margin-right:8px;font-size:14px;transition:transform .15s}
+details.ex-block[open] .ex-plus{transform:rotate(45deg)}
+.ex-head b{font-size:15px;font-weight:650;display:inline-flex;align-items:center}
+.ex-sum .num{color:var(--ink-3)!important;font-weight:600}
+#ex-chips button{border-color:var(--line)!important;color:var(--ink)!important}
+.ex-block.has .ex-sum .num{color:var(--warn)!important}
+.ex-block.has #ex-chips button{border-color:color-mix(in srgb,var(--warn) 45%,var(--line))!important;color:var(--warn)!important}
+.mode-link{justify-self:start;text-decoration:none;font-size:14px;padding:4px 0}
+.res-rule{font-size:12.5px;font-weight:700;color:var(--ink-2);background:var(--sunken);border-radius:999px;padding:3px 10px;justify-self:start;margin-top:-4px}
+#result.waiting .res-rule{display:none}
+#neis-ex button:nth-child(n+4){display:none}
+#neis-ex.all button{display:inline-flex}
+.neis-more{justify-self:start;font-size:13px;min-height:30px;padding:2px 0;text-decoration:none}
+.m-empty{display:none;margin:0;font-size:14px;color:var(--ink-2)}
+.month.empty .m-empty{display:block}
+.month.empty .gauge,.month.empty .rec-list,.month.empty>.how,.month.empty>.hint{display:none}
+.livebar button{padding:9px 16px;margin-bottom:6px}
+.livebar button>span:first-child{display:flex!important;align-items:baseline;gap:10px}
+.livebar .lb-v{font-size:18px}
+.livebar .lb-s::after{content:" ›";font-size:15px}
+
+.tag.gd{background:var(--accent-soft);color:var(--accent)}
+.ln-roles{display:grid;gap:6px;background:var(--bg);border-radius:10px;padding:12px 14px}
+.lr-k{font-size:12.5px;font-weight:700;color:var(--ink-3)}
+.lr{display:grid;grid-template-columns:88px 18px 1fr;align-items:center;gap:6px;font-size:14px}
+.lr-w{font-weight:600;color:var(--ink-2)}
+.lr-a{color:var(--ink-3);text-align:center}
+.lr-who{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px}
+.lr-who b{font-weight:700;color:var(--accent)}
+.lr-who small{font-size:12.5px;color:var(--ink-2)}
+
+/* ---- 시각 입력 ---- */
+.tin{display:flex;align-items:stretch;height:48px;border:1px solid var(--line);border-radius:10px;background:var(--bg);overflow:hidden;transition:border-color .15s,box-shadow .15s}
+.tin:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+.tin.bad{border-color:var(--bad)}
+.tin-t{flex:1;min-width:0;border:0;background:transparent;padding:0 12px;font-family:var(--f-num);font-size:20px;font-weight:700;letter-spacing:.02em;color:var(--ink);outline:none}
+.tin-t::placeholder{font-size:15px;font-weight:500;color:var(--ink-3);letter-spacing:0}
+.tin-s{flex:0 0 auto;border:0;border-left:1px solid var(--line);background:transparent;padding:0 9px;font-size:12.5px;font-weight:700;color:var(--ink-2);min-width:48px}
+.tin-s:hover{background:var(--accent-soft);color:var(--accent)}
+.tin-chips{display:flex;gap:6px;overflow-x:auto;padding:6px 0 2px;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.tin-chips::-webkit-scrollbar{display:none}
+.tin-chips button{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);border-radius:999px;min-height:34px;padding:0 11px;font-size:13px;font-weight:600;font-family:var(--f-num);color:var(--ink-2);white-space:nowrap}
+.tin-chips button:hover{border-color:var(--accent);color:var(--accent)}
+.tin-chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+@media (max-width:520px){ #v-calc .field-row{grid-template-columns:1fr;gap:14px} }
+@media (max-width:420px){ .tin-s{min-width:40px;padding:0 6px;font-size:12px} .tin-t{font-size:18px;padding:0 10px} }
+
+/* ---- 나이스에 올리기 전 확인 ---- */
+.chk{gap:12px}
+.chk-list{display:grid;gap:8px}
+.chk-r{border:1px solid var(--line);border-radius:12px;background:var(--bg);overflow:hidden;transition:border-color .15s}
+.chk-r.ok{border-color:color-mix(in srgb,var(--ok) 35%,var(--line))}
+.chk-r.bad{border-color:color-mix(in srgb,var(--warn) 55%,var(--line))}
+.chk-q{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:center;padding:10px 12px;font-size:15px;font-weight:600;line-height:1.45}
+.chk-n{width:22px;height:22px;border-radius:50%;background:var(--sunken);color:var(--ink-2);display:grid;place-items:center;font-size:12px;font-weight:800}
+.chk-r.ok .chk-n{background:var(--ok-soft);color:var(--ok)}.chk-r.bad .chk-n{background:var(--warn-soft);color:var(--warn)}
+.chk-yn{display:inline-flex;background:var(--sunken);border-radius:9px;padding:3px;gap:3px}
+.chk-yn button{border:0;background:none;border-radius:7px;min-height:34px;min-width:52px;padding:0 10px;font-size:13.5px;font-weight:700;color:var(--ink-2)}
+.chk-yn button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgb(0 0 0 / .1)}
+.chk-msg{display:grid;gap:6px;justify-items:start;padding:10px 12px 12px 46px;background:var(--warn-soft);font-size:14px;line-height:1.6;color:var(--ink-2)}
+.chk-msg p{margin:0}
+.chk-msg .link-btn{min-height:30px;padding:0;font-size:13.5px;text-decoration:none}
+.chk-sum{margin:0;font-size:14px;color:var(--ink-2);padding:10px 12px;border-radius:10px;background:var(--bg)}
+.chk-sum.ok{background:var(--ok-soft);color:var(--ok)}.chk-sum.bad{background:var(--warn-soft);color:var(--warn)}
+@media (max-width:480px){ .chk-q{grid-template-columns:24px 1fr;row-gap:8px} .chk-yn{grid-column:2;justify-self:start} .chk-msg{padding-left:12px} }
 </style>
 
 <header class="top">
@@ -1178,7 +1260,7 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
         <b class="num" id="base-txt">09:00–17:00</b>
         <span class="sch-badge" id="base-src"></span>
         <span class="base-msg" id="base-msg" role="status" hidden></span>
-        <button class="link-btn" id="base-edit">바꾸기</button>
+        <button class="link-btn base-pen" id="base-edit" aria-label="근무시간 바꾸기"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m14 6 4 4"/></svg>바꾸기</button>
       </div>
       <div class="base-editor" id="base-editor" hidden>
         <p class="base-q" id="base-q">우리 학교 출퇴근 시각을 한 번만 골라 주세요. 이 기기에 기억해 두고 계산에 씁니다.</p>
@@ -1196,18 +1278,18 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
       </div>
     </div>
 
-    <div class="seg" role="group" aria-label="계산 방식">
+    <div class="seg" role="group" aria-label="계산 방식" hidden>
       <button id="m-calc" aria-pressed="true">몇 시간 인정?</button>
       <button id="m-until" aria-pressed="false">몇 시까지?</button>
     </div>
-    <div class="seg seg-sm" role="group" aria-label="근무일 유형">
+    <div class="seg seg-sm day-type" role="group" aria-label="근무일 유형">
       <button id="t-wd" aria-pressed="true">평일</button>
       <button id="t-hd" aria-pressed="false">토요일·공휴일</button>
     </div>
 
     <div class="field-row">
       <div class="field"><label for="a-start" id="l-start">실제 출근</label><input id="a-start" type="time" value="09:00"></div>
-      <div class="field" id="f-end"><label for="a-end" id="l-end">실제 퇴근</label><input id="a-end" type="time" value="19:30"></div>
+      <div class="field" id="f-end"><div class="lab-row"><label for="a-end" id="l-end">실제 퇴근</label><button type="button" class="now-btn" id="now-btn" title="지금 시각 넣기">지금</button></div><input id="a-end" type="time" value=""></div>
     </div>
     <div class="field" id="f-target" hidden>
       <label>받고 싶은 인정 시간</label>
@@ -1220,11 +1302,11 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
       </div>
     </div>
 
-    <div class="ex-block">
-      <div class="ex-head">
-        <b>개인 용무로 자리 비운 시간</b>
+    <details class="ex-block" id="ex-fold">
+      <summary class="ex-head">
+        <b><span class="ex-plus" aria-hidden="true">＋</span>개인 용무로 자리 비운 시간</b>
         <span class="ex-sum"><span class="num" id="ex-total">없음</span><button class="link-btn" id="ex-clear" hidden>지우기</button></span>
-      </div>
+      </summary>
       <div class="pick" id="ex-chips">
         <button data-add="10">+10분</button>
         <button data-add="30">+30분</button>
@@ -1236,7 +1318,9 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
         <button class="btn sm ghost" id="ex-add">+ 시각 추가</button>
       </details>
       <p class="hint" id="ex-hint">외출·은행·사적 용무처럼 일하지 않은 시간만 넣으세요. 저녁 식사·휴식은 평일 1시간 공제에 포함되어 따로 빼지 않습니다.</p>
-    </div>
+    </details>
+
+    <button class="link-btn mode-link" id="m-toggle" type="button">몇 시까지 있어야 할지 거꾸로 계산하기 ›</button>
 
     <div class="samples">
       <span>예시</span>
@@ -1255,11 +1339,13 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
       </div>
       <span class="res-chips"><span class="chip mute" id="res-base"></span><span class="chip ok" id="res-chip">인정</span></span>
     </div>
+    <div class="res-rule" id="res-rule">1일 상한 없음 · 평일만 1시간 공제
+    </div>
     <p class="res-msg" id="res-msg"></p>
     <div class="neis-card" id="neis-card">
       <div class="neis-h"><span class="chip">나이스에 이렇게 입력</span><button class="btn sm" id="neis-copy">복사</button></div>
       <dl class="neis-dl" id="neis-dl"></dl>
-      <div class="neis-ex"><span>업무 내용 예시 · 누르면 복사됩니다</span><div class="pick sm" id="neis-ex"></div></div>
+      <div class="neis-ex"><span>업무 내용 예시 · 누르면 복사됩니다</span><div class="pick sm" id="neis-ex"></div><button class="link-btn neis-more" id="neis-more" type="button">예시 더 보기</button></div>
     </div>
 
     <div class="tl">
@@ -1278,46 +1364,14 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
     <div class="oldnote" id="oldnote" hidden><span class="chip rev">개정</span><span id="oldnote-t"></span></div>
   </div>
 
-  <div class="panel month">
-    <div class="sec-h"><h2>이번 달 누적</h2><span class="num" id="m-label"></span></div>
-    <div class="gauge">
-      <div class="gauge-top">
-        <span class="num" id="m-sum">0:00 <small>/ 57:00</small></span>
-        <span class="chip ok" id="m-chip">여유 57시간</span>
-      </div>
-      <div class="gauge-bar"><div id="m-bar" style="width:0%"></div></div>
-      <p class="hint" id="m-pay"></p>
-    </div>
-    <div class="add-row">
-      <div class="field"><label for="m-date">근무 날짜</label><input id="m-date" type="date"></div>
-      <button class="btn primary" id="m-add">계산 결과 기록하기</button>
-    </div>
-    <div class="rec-list" id="m-list"></div>
-    <details class="how">
-      <summary>정액분(월 10시간)은 어떻게 받나요?</summary>
-      <div class="calc-rows stack">
-        <div><span>받는 사람</span><span>정규 근무일 기준 월 출근(출장 포함) 15일 이상</span></div>
-        <div><span>금액</span><span>명령 없이 월 10시간분. 15일에 못 미치면 하루마다 1/15씩 줄어듦</span></div>
-        <div><span>출근일로 인정</span><span>반일연가·외출을 쓴 날도 나머지를 채워 하루 8시간 근무하면 출근일</span></div>
-        <div><span>출근일에서 제외</span><span>연가·병가·공가·특별휴가·휴직·방학·결근 등으로 근무하지 않은 날, 조퇴 등으로 8시간을 채우지 못한 날</span></div>
-        <div><span>육아·모성보호시간</span><span>하루 2시간을 써도 나머지를 근무했다면 영향 없음</span></div>
-        <div><span>방학 중</span><span>학교장 명령으로 출근해 8시간 이상 근무하면 출근일에 포함</span></div>
-      </div>
-    </details>
-    <p class="hint">기록은 이 기기의 브라우저에만 저장되며 다른 사람이나 학교에 전송되지 않습니다. 수당은 나이스 실적 기준으로 지급됩니다.</p>
+  <div class="panel chk" id="chk">
+    <div class="sec-h"><h2>나이스에 올리기 전 확인</h2></div>
+    <div class="chk-list" id="chk-list"></div>
+    <p class="chk-sum" id="chk-sum" aria-live="polite"></p>
   </div>
 
-  <div class="notice">
-    <div class="notice-h"><span class="chip">10.1 개정</span>하루 상한이 없어졌습니다</div>
-    <div class="ba">
-      <div class="ba-r"><span class="ba-l">이전</span><div class="ba-bar"><i style="width:44%"></i><s style="left:44%;width:56%"></s><em>4시간에서 잘림</em></div></div>
-      <div class="ba-r"><span class="ba-l">지금</span><div class="ba-bar now"><i style="width:100%"></i><em>일한 만큼 모두 인정</em></div></div>
-    </div>
-    <p class="ba-note">월 57시간 상한과 평일 1시간 공제는 그대로입니다.</p>
-  </div>
 
-  <div class="panel">
-    <div class="sec-h"><h2>계산 기준</h2></div>
+  <details class="panel fold" id="sec-basis"><summary class="fold-s"><span class="fh">계산 기준</span><span class="fg">평일 1시간 공제 · 휴일 공제 없음 · 1일 상한 없음 · 월 57시간</span></summary>
     <div class="dg flat" aria-label="인정 시간 계산식">
       <span class="dg-k">평일</span>
       <div class="eq"><span class="tk ok">퇴근 후 근무</span><span class="op">+</span><span class="tk ok">조기 출근<br><small>1시간 이상일 때만</small></span><span class="op">−</span><span class="tk ded">1시간</span><span class="op">=</span><span class="tk res">인정 시간</span></div>
@@ -1337,6 +1391,17 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
       <div><span>월 상한</span><span>57시간, 월 합산 후 1시간 미만 버림</span></div>
     </div>
     <p class="hint">반일연가·외출·육아시간을 쓴 날도 명령을 받고 근무하면 인정됩니다. 1일 연가·공가를 쓴 날은 제외됩니다. 실제 지급은 학교장 명령과 교육청 지침을 따릅니다.</p>
+<details class="how" id="jeong">
+      <summary>정액분(월 10시간)은 어떻게 받나요?</summary>
+      <div class="calc-rows stack">
+        <div><span>받는 사람</span><span>정규 근무일 기준 월 출근(출장 포함) 15일 이상</span></div>
+        <div><span>금액</span><span>명령 없이 월 10시간분. 15일에 못 미치면 하루마다 1/15씩 줄어듦</span></div>
+        <div><span>출근일로 인정</span><span>반일연가·외출을 쓴 날도 나머지를 채워 하루 8시간 근무하면 출근일</span></div>
+        <div><span>출근일에서 제외</span><span>연가·병가·공가·특별휴가·휴직·방학·결근 등으로 근무하지 않은 날, 조퇴 등으로 8시간을 채우지 못한 날</span></div>
+        <div><span>육아·모성보호시간</span><span>하루 2시간을 써도 나머지를 근무했다면 영향 없음</span></div>
+        <div><span>방학 중</span><span>학교장 명령으로 출근해 8시간 이상 근무하면 출근일에 포함</span></div>
+      </div>
+    </details>
     <details class="how">
       <summary>수당을 받을 수 없는 경우</summary>
       <div class="calc-rows stack">
@@ -1348,7 +1413,7 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
       </div>
     </details>
   </details>
-  </div>
+  </details>
 </section>
 
 <!-- LINE -->
@@ -1665,10 +1730,10 @@ nav.tabbar button[aria-current="page"]{color:var(--accent);font-weight:600}
   <div class="ph">
     <div class="eyebrow">도구</div>
     <h1>계산·판정·문구를 한곳에</h1>
-    <p>입력한 기록은 이 기기의 브라우저에만 저장되고 아무 데도 전송되지 않습니다.</p>
+    <p>입력한 내용은 저장되지 않고 이 화면에서만 계산합니다. 우리 학교 근무시간 설정만 이 기기에 기억합니다.</p>
   </div>
   <div class="tgroup g-calc"><h2 class="tg-h">계산</h2><div class="tools-g">
-      <button class="tool" data-go="calc" data-tk="calc"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="22" height="8" rx="2"/><path d="M17 10v8" /><rect x="17" y="10" width="8" height="8" rx="2" fill="currentColor" stroke="none" opacity=".35"/><path d="M7 22h4M7 6h8"/></svg></span><span class="tb"><b>초과근무 계산기</b><small>인정 시간, 몇 시까지 있어야 할지</small><span class="tstat" id="ts-calc"></span></span></button>
+      <button class="tool" data-go="calc" data-tk="calc"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="22" height="8" rx="2"/><path d="M17 10v8" /><rect x="17" y="10" width="8" height="8" rx="2" fill="currentColor" stroke="none" opacity=".35"/><path d="M7 22h4M7 6h8"/></svg></span><span class="tb"><b>초과근무 계산기</b><small>인정 시간, 몇 시까지 있어야 할지</small></span></button>
   </div></div>
   <div class="tgroup g-judge"><h2 class="tg-h">판정</h2><div class="tools-g">
       <button class="tool" data-go="trip" data-tk="trip"><span class="ti" aria-hidden="true"><svg viewBox="0 0 28 28" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 25V14M14 14 7 7M14 14l7-7"/><path d="M4 7h5V2M24 7h-5V2" opacity=".6"/></svg></span><span class="tb"><b>출장 판정</b><small>질문 몇 개로 근무지내·외 구분, 결재, 여비</small></span></button>
@@ -2010,7 +2075,9 @@ window.SCHOOL={
     {cat:'휴가',name:'공가',line:['교감','교장'],link:'leave',notes:[]},
     {cat:'휴가',name:'특별휴가',line:['교감','교장'],link:'leave',notes:[]},
     {cat:'기타',name:'EVPN (원격업무지원)',line:['정보부장','교감'],notes:[
-      {k:'sch',t:'원격업무지원서비스 사용 신청은 정보부장을 거쳐 교감 결재를 받습니다.'}]}
+      {k:'sch',t:'원격업무지원서비스 사용 신청은 정보부장을 거쳐 교감 결재를 받습니다.'},
+      {k:'gd',t:'교육부 보안 지침: 외부에서 교육기관 내부망에 접속하려면 소속 기관장(학교장) 또는 관리자의 승인을 받아야 하며, 보안 담당자가 비인가 접속 여부를 통제·관리해야 합니다.'}],
+      roles:[{w:'보안 담당자',who:'정보부장',d:'교내 정보보안책임자 · 비인가 접속 통제·관리'},{w:'관리자 승인',who:'교감(또는 교장)',d:'내부망 외부 접속 승인'}]}
   ],
   rules:[
     {k:'law',b:'휴가·지각·조퇴·외출·출장은 미리 허가를 받습니다.',t:'부득이하면 사후에 지체 없이 승인받습니다. 승인 없이 출근하지 않으면 결근으로 처리됩니다.'},
@@ -2078,6 +2145,42 @@ const ov=(a1,a2,b1,b2)=>Math.max(0,Math.min(a2,b2)-Math.max(a1,b1));
 
 /* ---------- 계산기 상태 ---------- */
 let holiday=false, mode='calc', target=120, exDur=0;
+/* ---------- 시각 입력: 숫자로 바로(24시간) + 자주 쓰는 시각 칩 + ±10분 ---------- */
+const TIN=[];
+const hhmm=v=>{ v=((v%1440)+1440)%1440; return String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0') };
+function parseT(raw){ const t=String(raw||'').trim(); if(!t) return '';
+  let d=t.replace(/[^0-9]/g,''); if(!d) return null;
+  let h,m;
+  if(/[:시]/.test(t)&&t.replace(/\s/g,'').match(/^(\d{1,2})[:시](\d{0,2})/)){ const g=t.replace(/\s/g,'').match(/^(\d{1,2})[:시](\d{0,2})/); h=+g[1]; m=+(g[2]||0) }
+  else if(d.length<=2){ h=+d; m=0 } else if(d.length===3){ h=+d[0]; m=+d.slice(1) } else { h=+d.slice(0,2); m=+d.slice(2,4) }
+  if(h>24||m>59||(h===24&&m>0)) return null; return hhmm(h*60+m) }
+function enhanceTime(id,chipsFn){
+  const h=$('#'+id), lab=document.querySelector(`label[for="${id}"]`);
+  const box=document.createElement('div'); box.className='tin';
+  box.innerHTML=`<input type="text" class="tin-t" id="${id}-t" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="예: 1930"><button type="button" class="tin-s" data-d="-10" aria-label="10분 빼기">−10분</button><button type="button" class="tin-s" data-d="10" aria-label="10분 더하기">+10분</button>`;
+  const chips=document.createElement('div'); chips.className='tin-chips'; chips.setAttribute('role','group');
+  h.type='hidden'; h.after(box); box.after(chips);
+  if(lab) lab.setAttribute('for',id+'-t');
+  const t=box.querySelector('.tin-t');
+  t.addEventListener('input',()=>{ const v=parseT(t.value); box.classList.toggle('bad',v===null&&t.value.trim().length>=3);
+    if(v!==null){ h.value=v; calc() } });
+  t.addEventListener('blur',()=>{ const v=parseT(t.value); if(v===null){ t.value=h.value; box.classList.remove('bad') } else t.value=v });
+  t.addEventListener('focus',()=>t.select());
+  box.addEventListener('click',e=>{ const b=e.target.closest('.tin-s'); if(!b) return;
+    const cur=toM(h.value); const base=cur!=null?cur:(toM(chipsFn()[0]?.[1])||540); h.value=hhmm(base+ +b.dataset.d); calc() });
+  chips.addEventListener('click',e=>{ const b=e.target.closest('[data-tv]'); if(!b) return; h.value=b.dataset.tv; calc() });
+  TIN.push({h,t,chips,chipsFn});
+}
+function syncTimes(){ TIN.forEach(o=>{ if(document.activeElement!==o.t) o.t.value=o.h.value||'';
+  const list=o.chipsFn(); const key=list.map(x=>x.join()).join('|');
+  if(o.chips.dataset.k!==key){ o.chips.dataset.k=key; o.chips.innerHTML=list.map(([l,v])=>`<button type="button" data-tv="${v}">${l}</button>`).join('') }
+  o.chips.querySelectorAll('[data-tv]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.tv===o.h.value)) }) }
+enhanceTime('a-start',()=>{ const rs=toM($('#r-start').value)??540;
+  return holiday?[[ '08:00','08:00'],['09:00','09:00'],['10:00','10:00'],['13:00','13:00'],['14:00','14:00']]
+    :[[`정시 ${hhmm(rs)}`,hhmm(rs)],[`1시간 일찍 ${hhmm(rs-60)}`,hhmm(rs-60)],[`1시간 30분 일찍 ${hhmm(rs-90)}`,hhmm(rs-90)],[`2시간 일찍 ${hhmm(rs-120)}`,hhmm(rs-120)]] });
+enhanceTime('a-end',()=>{ const re=toM($('#r-end').value)??1020, as=toM($('#a-start').value)??540;
+  const b=holiday?as:re, step=holiday?60:30, n=holiday?8:9;
+  return Array.from({length:n},(_,k)=>{ const v=hhmm(b+step*(k+1)); return [v,v] }) });
 let ex=[];
 
 /* 우리 학교 근무시간 (이 기기에 기억) */
@@ -2101,16 +2204,18 @@ $$('#base-pick button').forEach(b=>b.addEventListener('click',()=>{ const [s,e]=
 $('#base-save').addEventListener('click',saveBase);
 ['#r-start','#r-end'].forEach(s=>$(s).addEventListener('input',markPreset));
 function resetDefaults(){ const rs=toM($('#r-start').value)??540, re=toM($('#r-end').value)??1020;
-  if(!holiday){ $('#a-start').value=clock(rs); $('#a-end').value=clock(re+150) } }
+  if(!holiday){ $('#a-start').value=clock(rs) } }   /* 실제 퇴근은 사용자가 직접 넣습니다(예시 값 자동 입력 안 함) */
 
 /* 개인 용무: 빠른 칩 + 정확한 시각 */
 function renderExTotal(){
   const rangeLen=ex.reduce((s,r)=>{let a=toM(r.s),b=toM(r.e); if(a==null||b==null) return s; if(b<=a)b+=1440; return s+(b-a)},0);
   const t=exDur+rangeLen;
   $('#ex-total').textContent=t? kor(t) : '없음';
+  $('#ex-fold').classList.toggle('has',!!t); if(t) $('#ex-fold').open=true;
   $('#ex-clear').hidden=!t;
 }
 $$('#ex-chips [data-add]').forEach(b=>b.addEventListener('click',()=>{ exDur+=+b.dataset.add; renderExTotal(); calc() }));
+$('#neis-more').addEventListener('click',e=>{ const on=$('#neis-ex').classList.toggle('all'); e.currentTarget.textContent=on?'예시 접기':'예시 더 보기' });
 $('#ex-clear').addEventListener('click',()=>{ exDur=0; ex=[]; renderEx(); renderExTotal(); calc() });
 function renderEx(){
   const box=$('#ex-list'); box.innerHTML='';
@@ -2146,12 +2251,15 @@ function setMode(m){
   $('#calc-h').textContent=m==='until'?'몇 시까지 있어야 할까요?':'오늘 몇 시간 인정될까요?';
   $('#res-lab').textContent=m==='until'?'이 시각까지 근무하세요':'오늘 인정 시간';
   $('#lb-l').textContent=m==='until'?'이 시각까지':'오늘 인정';
+  $('#m-toggle').textContent=m==='until'?'‹ 인정 시간 계산으로 돌아가기':'몇 시까지 있어야 할지 거꾸로 계산하기 ›';
   calc();
 }
 $('#t-wd').addEventListener('click',()=>setType(false));
 $('#t-hd').addEventListener('click',()=>setType(true));
 $('#m-calc').addEventListener('click',()=>setMode('calc'));
 $('#m-until').addEventListener('click',()=>setMode('until'));
+$('#m-toggle').addEventListener('click',()=>setMode(mode==='until'?'calc':'until'));
+$('#now-btn').addEventListener('click',()=>{ const d=new Date(); $('#a-end').value=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); calc() });
 $$('#target-pick button').forEach(b=>b.addEventListener('click',()=>{
   target=+b.dataset.t; $$('#target-pick button').forEach(x=>x.setAttribute('aria-pressed',x===b)); calc() }));
 ['#a-start','#a-end','#r-start','#r-end'].forEach(s=>$(s).addEventListener('input',calc));
@@ -2171,15 +2279,18 @@ $$('[data-sample]').forEach(b=>b.addEventListener('click',()=>{
 let lastResult=0, lastNote='';
 
 function calc(){
+  if(typeof syncTimes==='function') syncTimes();
   const rs=toM($('#r-start').value)??540, re=toM($('#r-end').value)??1020;
   $('#base-txt').textContent=baseText();
   $('#res-base').textContent=holiday?'휴일':(clock(re)+' 퇴근 기준');
+  $('#res-rule').textContent=holiday?'1일 상한 없음 · 휴일은 1시간 공제 없음':'1일 상한 없음 · 평일만 1시간 공제';
   let as=toM($('#a-start').value), ae=toM($('#a-end').value);
   const segs=[], rows=[]; let legend=[];
   let result=0, msg='', state='ok', oldMsg='', ded=false, nR=[], nE=0;
   const until=mode==='until';
 
-  if(as==null||(!until&&ae==null)){ paint(0,'zero','시각을 입력하세요.',[],[],[],0,1440,'',false,'시각 입력 필요'); if(typeof renderNeis==='function') renderNeis([],0,0); return }
+  $('#result').classList.remove('waiting');
+  if(as==null||(!until&&ae==null)){ $('#result').classList.add('waiting'); paint(0,'zero',as==null?'출근 시각을 넣으면 바로 계산합니다.':(holiday?'근무 종료 시각을 넣으면 바로 계산합니다.':'실제 퇴근 시각을 넣으면 바로 계산합니다. 입력란 아래 예시를 눌러 볼 수도 있어요.'),[],[],[],0,1440,'',false,'퇴근 시각 입력 전','<span class="big-wait">—</span>'); if(typeof renderNeis==='function') renderNeis([],0,0); return }
 
   // 정확한 시각 입력 (몇 시까지 모드에서는 길이만 사용)
   const rangeLen=ex.reduce((s,r)=>{let a=toM(r.s),b=toM(r.e); if(a==null||b==null) return s; if(b<=a)b+=1440; return s+(b-a)},0);
@@ -2301,40 +2412,28 @@ function paint(result,state,msg,segs,rows,legend,lo,hi,oldMsg,ded,sub,big){
   $('#oldnote').hidden=!oldMsg; $('#oldnote-t').textContent=oldMsg||'';
 }
 
-/* ---------- 이번 달 누적 (이 기기에만 저장) ---------- */
+/* ---------- 나이스에 올리기 전 확인 ---------- */
 const LIMIT=57*60;
 const pad=n=>String(n).padStart(2,'0');
 const today=new Date(); const todayStr=`${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
-$('#m-date').value=todayStr;
-let recs=[];
-try{recs=JSON.parse(localStorage.getItem('bokmu.recs')||'[]')||[]}catch(e){recs=[]}
-function saveRecs(){try{localStorage.setItem('bokmu.recs',JSON.stringify(recs))}catch(e){}}
-function renderMonth(){
-  const ym=($('#m-date').value||todayStr).slice(0,7);
-  const [y,m]=ym.split('-');
-  $('#m-label').textContent=`${y}년 ${Number(m)}월`;
-  const list=recs.map((r,i)=>({...r,i})).filter(r=>r.d.startsWith(ym)).sort((a,b)=>a.d<b.d?-1:1);
-  const sum=list.reduce((s,r)=>s+r.m,0);
-  $('#m-sum').innerHTML=`${hm(sum)} <small>/ 57:00</small>`;
-  const bar=$('#m-bar'); bar.style.width=Math.min(100,sum/LIMIT*100)+'%'; bar.classList.toggle('over',sum>LIMIT);
-  const chip=$('#m-chip');
-  if(sum>LIMIT){chip.className='chip bad';chip.textContent=`상한 ${kor(sum-LIMIT)} 초과`}
-  else if(sum>LIMIT*.85){chip.className='chip warn';chip.textContent=`남은 시간 ${kor(LIMIT-sum)}`}
-  else {chip.className='chip ok';chip.textContent=`남은 시간 ${kor(LIMIT-sum)}`}
-  $('#m-pay').textContent=sum? `월 합계에서 1시간 미만은 버리므로 수당 기준은 ${Math.floor(Math.min(sum,LIMIT)/60)}시간입니다. 정액분(월 10시간)은 출근 15일 이상이면 따로 지급됩니다.` : '계산한 결과를 날짜별로 기록하면 월 57시간 중 얼마나 썼는지 보여 줍니다.';
-  $('#m-list').innerHTML=list.map(r=>`<div class="rec"><span class="d">${r.d.slice(5).replace('-','.')}</span><span class="t">${r.t||''}</span><span class="m">${hm(r.m)}</span><button class="icon-btn" data-del="${r.i}" aria-label="${r.d} 기록 삭제"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join('');
+try{ localStorage.removeItem('bokmu.recs') }catch(e){}
+const CHK=[
+  {q:'근무 전에 초과근무 명령(결재)을 받았나요?',bad:'n',msg:'다음 날까지 명령권자의 사후결재를 받습니다. 예측하지 못한 긴급 업무처럼 부득이한 경우에만 사후 승인으로 인정받을 수 있습니다.',act:'<button class="link-btn" data-phr="phr-late" data-pv="neis">사후결재 사유 문구 만들기 ›</button>'},
+  {q:'같은 시간에 강사료 등 다른 보상을 받나요?',bad:'y',msg:'방과후·보충수업 강사료처럼 같은 시간에 다른 방법으로 금전 보상을 받으면 그 시간은 수당을 받을 수 없습니다. 그 시간을 빼고 신청하세요.'},
+  {q:'오늘 1일 연가·공가를 썼나요?',bad:'y',msg:'1일 연가나 공가를 쓴 날은 초과근무로 인정되지 않습니다. 반일연가·외출을 쓴 날은 명령을 받고 근무하면 인정됩니다.'}];
+const chkA=CHK.map(()=>null);
+function renderChk(){
+  $('#chk-list').innerHTML=CHK.map((c,i)=>{ const a=chkA[i], bad=a!==null&&a===c.bad;
+    return `<div class="chk-r${bad?' bad':a!==null?' ok':''}"><div class="chk-q"><span class="chk-n">${i+1}</span><span>${c.q}</span>
+      <span class="chk-yn" role="group" aria-label="${c.q}"><button data-ci="${i}" data-cv="y" aria-pressed="${a==='y'}">예</button><button data-ci="${i}" data-cv="n" aria-pressed="${a==='n'}">아니요</button></span></div>
+      ${bad?`<div class="chk-msg"><p>${c.msg}</p>${c.act||''}</div>`:''}</div>` }).join('');
+  const n=chkA.filter(x=>x!==null).length, bads=CHK.filter((c,i)=>chkA[i]===c.bad).length, S=$('#chk-sum');
+  S.className='chk-sum'+(bads?' bad':n===CHK.length?' ok':'');
+  S.innerHTML=bads?`확인할 것이 <b>${bads}개</b> 있어요. 위 안내대로 처리한 뒤 신청하세요.`
+    :n===CHK.length?'✓ <b>모두 괜찮아요.</b> 위 「나이스에 이렇게 입력」대로 신청하세요.'
+    :'세 가지에 답하면 그대로 신청해도 되는지 알려 드립니다. 답은 저장되지 않습니다.';
 }
-$('#m-list').addEventListener('click',e=>{const b=e.target.closest('[data-del]'); if(!b) return; recs.splice(+b.dataset.del,1); saveRecs(); renderMonth()});
-$('#m-date').addEventListener('input',renderMonth);
-$('#m-add').addEventListener('click',()=>{
-  const d=$('#m-date').value||todayStr;
-  const idx=recs.findIndex(r=>r.d===d);
-  const rec={d,m:lastResult,t:lastNote};
-  if(idx>=0) recs[idx]=rec; else recs.push(rec);
-  saveRecs(); renderMonth();
-  const b=$('#m-add'); b.textContent=idx>=0?'같은 날짜를 새 결과로 바꿨습니다':'기록했습니다';
-  setTimeout(()=>b.textContent='계산 결과 기록하기',1600);
-});
+$('#chk-list').addEventListener('click',e=>{ const b=e.target.closest('[data-ci]'); if(!b) return; const i=+b.dataset.ci; chkA[i]=chkA[i]===b.dataset.cv?null:b.dataset.cv; renderChk() });
 
 /* ---------- ○/× 사례 ---------- */
 const QA=[
@@ -2429,13 +2528,13 @@ function setQ(el,open,reveal){ el.classList.toggle('open',open); el.querySelecto
 function renderProg(){ const P=$('#quiz-prog'); if(qMode!=='quiz'){ P.hidden=true; return }
   const keys=QA.filter(x=>x.q in solved), ok=keys.filter(x=>solved[x.q]).length;
   P.hidden=false; P.innerHTML=`<span class="qp-bar"><i style="width:${keys.length/QA.length*100}%"></i></span><span><b>${QA.length}개 중 ${keys.length}개</b> 풀었어요 · 맞힘 ${ok}</span>${keys.length?'<button class="link-btn inl" id="qp-reset">처음부터</button>':''}` }
-function setMode(m){ qMode=m; $$('#case-mode button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
+function setCaseMode(m){ qMode=m; $$('#case-mode button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
   $('#qa').classList.toggle('see',m==='see'); $('#qa').classList.toggle('quiz',m==='quiz');
   $$('#qa .q').forEach(el=>{ setQ(el,false); revealQ(el,false); el.querySelector('.qres').innerHTML='' }); renderProg() }
-$('#case-mode').addEventListener('click',e=>{ const b=e.target.closest('[data-mode]'); if(b) setMode(b.dataset.mode) });
+$('#case-mode').addEventListener('click',e=>{ const b=e.target.closest('[data-mode]'); if(b) setCaseMode(b.dataset.mode) });
 $('#case-ans').addEventListener('click',e=>{ const b=e.target.closest('[data-qm]'); if(!b) return; qAns=qAns===b.dataset.qm?'':b.dataset.qm;
   $$('#case-ans button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.qm===qAns)); filterCases() });
-$('#quiz-prog').addEventListener('click',e=>{ if(e.target.id!=='qp-reset') return; solved={}; try{localStorage.removeItem(SVK)}catch(x){} setMode('quiz') });
+$('#quiz-prog').addEventListener('click',e=>{ if(e.target.id!=='qp-reset') return; solved={}; try{localStorage.removeItem(SVK)}catch(x){} setCaseMode('quiz') });
 $('#case-cats').addEventListener('click',e=>{const b=e.target.closest('[data-qc]'); if(b) setCaseCat(b.dataset.qc)});
 $('#qa').addEventListener('click',e=>{
   const mo=e.target.closest('.qg-more'); if(mo){ const g=mo.closest('.qg').dataset.g; qOpenG.has(g)?qOpenG.delete(g):qOpenG.add(g); filterCases(); return }
@@ -2451,7 +2550,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-casecat]')
 /* ---------- 결재라인 ---------- */
 const S=window.SCHOOL||{approvals:[],rules:[],hours:['09:00','17:00'],links:{}};
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const TAG={law:'법령',sch:'학교',rev:'개정'};
+const TAG={law:'법령',sch:'학교',rev:'개정',gd:'지침'};
 $('#line-badge').innerHTML=`<span class="tag law">법령</span>전국 공통 <span class="tag sch">학교</span>학교마다 다를 수 있음 <span class="lg-chk">확인 ${esc(S.checked||'')}</span>`;
 const CATS=['전체',...new Set(S.approvals.map(a=>a.cat))];
 let lineCat='전체';
@@ -2480,6 +2579,7 @@ function renderLines(){
       <button class="ln-h" aria-controls="ln-b-${a.i}"><span class="ln-n"><b>${esc(a.name)}</b>${tags?`<span class="ln-tags">${tags}</span>`:''}</span><i class="chev" aria-hidden="true">›</i></button>
       <div class="ln-b" id="ln-b-${a.i}" hidden>
         ${a.notes.length?`<ul>${a.notes.map(n=>`<li><span class="tag ${n.k}">${TAG[n.k]||''}</span><span>${esc(n.t)}</span></li>`).join('')}</ul>`:''}
+        ${a.roles?`<div class="ln-roles"><span class="lr-k">지침 속 역할은 학교에서 이렇게 맡습니다</span>${a.roles.map(r=>`<div class="lr"><span class="lr-w">${esc(r.w)}</span><span class="lr-a" aria-hidden="true">→</span><span class="lr-who"><b>${esc(r.who)}</b><small>${esc(r.d)}</small></span></div>`).join('')}</div>`:''}
         ${a.link==='leave'?`<p class="hint">사용 조건과 일수 계산 등 세부 기준은 휴가 규정 도우미에서 확인하세요.</p>`:''}
         <div class="ln-foot">${a.proof?`<span class="proof">증빙 <b>${esc(a.proof)}</b></span>`:''}${act}</div>
       </div></div>` };
@@ -2929,9 +3029,7 @@ new MutationObserver(()=>requestAnimationFrame(atEnd)).observe(document.querySel
 /* ---------- 도구 화면 ---------- */
 function renderTools(){
   const ym=todayStr.slice(0,7), y=todayStr.slice(0,4);
-  const ms=recs.filter(r=>r.d.startsWith(ym)).reduce((a,r)=>a+r.m,0);
   const bar=(p,c)=>`<span class="tbar ${c||''}"><i style="width:${Math.min(100,p)}%"></i></span>`;
-  $('#ts-calc').innerHTML=ms?bar(ms/LIMIT*100,ms>LIMIT?'bad':ms>LIMIT*.85?'warn':'')+`<span>이번 달 ${hm(ms)} / 57:00</span>`:'<span>아직 기록 없음</span>';
   let last=''; try{ last=localStorage.getItem('bokmu.tool')||'' }catch(e){}
   $$('#v-tools .tnew').forEach(x=>x.remove());
   const t=last&&$(`#v-tools [data-tk="${last}"] .tb b`); if(t) t.insertAdjacentHTML('beforeend','<span class="tnew">최근 사용</span>');
@@ -2996,7 +3094,7 @@ $('#tcase').addEventListener('click',e=>{ const b=e.target.closest('[data-tc],[d
 renderTC(); $('#tile-case-n').textContent=`○/× 사례 ${QA.length}건`;
 /* ---------- 시작 ---------- */
 $('#base-txt').textContent=baseText(); baseSrc();
-resetDefaults(); renderEx(); renderExTotal(); setType(false); renderMonth(); renderDay(); renderNow(); blkSample('1'); renderLJ();
+resetDefaults(); renderEx(); renderExTotal(); setType(false); renderChk(); renderDay(); renderNow(); blkSample('1'); renderLJ();
 lawLinks(document); filterCases();
 $('#g-res').addEventListener('click',e=>{ const b=e.target.closest('[data-gs]'); if(!b) return; e.stopPropagation(); $('#g-q').value=b.dataset.gs; gSearch() });
 if(GO){
